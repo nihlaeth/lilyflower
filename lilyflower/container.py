@@ -76,7 +76,7 @@ class Container(object):
         """Set item at index."""
         self.container[index] = value
 
-    def __delitem__(self, index, value):
+    def __delitem__(self, index):
         """Delete item at index."""
         del self.container[index]
 

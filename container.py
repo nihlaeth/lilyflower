@@ -99,7 +99,7 @@ class Container(object):
         indent_level = 0
         if format_spec is not "":
             indent_level = int(format_spec)
-        result = "  " * indent_level
+        result = "\n%s" % ("  " * indent_level)
         if self.command != "":
             result += "%s %s %s\n" % (
                 self.command,
@@ -116,7 +116,7 @@ class Container(object):
                     str(indent_level + 1))
             else:
                 result += "%s " % format(item)
-        result += "\n%s%s" % ("  " * indent_level, self.delimiter_post)
+        result += "\n%s%s\n" % ("  " * indent_level, self.delimiter_post)
 
         return result
 

@@ -176,3 +176,35 @@ class Repeat(Container):
     max_arguments = 2
 
     # TODO: we need argument validation here!
+
+
+class Measure(Container):
+
+    """
+    Contains one measure.
+
+    This does not have knowledge of note duration, or time signature.
+    It's simply a collection of music that ends with a bar check
+    and a newline. Useful for organization, and error checking,
+    but not much else.
+    """
+
+    max_arguments = 1
+    delimiter_pre = ""
+    delimiter_post = ""
+
+    # TODO: argument validation! make sure we got 0 or 1 bar objects.
+
+    def __format__(self, format_spec):
+        """Return lilypond code."""
+        indent_level = 0
+        if format_spec is not "":
+            indent_level = int(format_spec)
+        result = "\n%s" % ("  " * indent_level)
+        result += " ".join([
+            format(item, str(indent_level + 1)) for item in self.container])
+        if len(self.arguments) < 1:
+            result += " |\n"
+        else:
+            result += " %s\n" % format(self.arguments[0])
+        return result

@@ -62,3 +62,15 @@ class With(Container):
         if len(self.arguments) > 0:
             raise InvalidArgument("No arguments allowed!")
         self.command = "\\with"
+
+
+class Score(Container):
+
+    """Score block."""
+
+    def __init__(self, contents, arguments=None):
+        """Set correct command."""
+        Container.__init__(self, contents, arguments)
+        if len(self.arguments) > 0:
+            raise InvalidArgument("No arguments allowed!")
+        self.command = "\\score"

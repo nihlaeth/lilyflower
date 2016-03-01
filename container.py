@@ -5,9 +5,19 @@ class Container(object):
 
     """Contain leafs and other containers."""
 
-    def __init__(self, contents):
-        """Create container."""
+    def __init__(self, contents, arguments=None):
+        """
+        Create container.
+
+        contents -> (list) objects that make up the contents of container
+        arguments -> (list) depending on subclass, this container
+            might require arguments, or have optional arguments.
+        """
         self.command = ""
+        if arguments is None:
+            self.arguments = []
+        else:
+            self.arguments = arguments
         self.delimiter_pre = "{"
         self.delimiter_post = "}"
         self.container = contents
@@ -74,16 +84,39 @@ class Container(object):
         """Return length of container."""
         return len(self.container)
 
+    def _format_arguments(self):
+        """
+        Format arguments.
+
+        Subclass overwrites this if there are any required
+        arguments. Otherwise it assumes the order given is fine.
+        """
+        # TODO: support for indents, so \with blocks are indented properly
+        return " ".join(format(self.arguments))
+
     def __format__(self, format_spec):
         """Return lilypond code."""
-        result = ""
+        indent_level = 0
+        if format_spec is not "":
+            indent_level = int(format_spec)
+        result = "  " * indent_level
         if self.command != "":
-            result = "%s %s" % (self.command, self.delimiter_pre)
+            result += "%s %s %s\n" % (
+                self.command,
+                self._format_arguments(),
+                self.delimiter_pre)
         else:
-            result = self.delimiter_pre
+            result += "%s\n" % self.delimiter_pre
 
+        result += "  " * (indent_level + 1)
         for item in self.container:
-            result += " %s" % format(item)
+            if isinstance(item, Container):
+                result += format(
+                    item,
+                    str(indent_level + 1))
+            else:
+                result += "%s " % format(item)
+        result += "\n%s%s" % ("  " * indent_level, self.delimiter_post)
 
         return result
 

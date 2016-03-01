@@ -1,5 +1,6 @@
 """Tests for lilyflower.Container."""
 from lilyflower import Container
+# pylint: disable=no-name-in-module
 from nose.tools import assert_equals, assert_list_equal
 
 
@@ -56,3 +57,21 @@ def test_list():
     del container[1]
     assert_list_equal(container.container, [0, 4, 5])
 
+
+def test_format():
+    """Test Container formatting."""
+    container = Container([0, 1, 2])
+    result = format(container)
+    expected = "\n{\n  0 1 2 \n}\n"
+    assert_equals(result, expected)
+
+    # increase indent
+    result = format(container, "1")
+    expected = "\n  {\n    0 1 2 \n  }\n"
+    assert_equals(result, expected)
+
+    # test nesting
+    container = Container([0, 1, Container(["test"])])
+    result = format(container)
+    expected = "\n{\n  0 1 \n  {\n    test \n  }\n\n}\n"
+    assert_equals(result, expected)

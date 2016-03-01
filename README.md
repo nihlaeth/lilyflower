@@ -20,3 +20,17 @@ phrasing slurs, make sure that inherited durations are known by the notes
 in question, and have notes know if they are being transposed somehow.
 
 For now I'll settle for awesome iterables and easy extensibility.
+
+## TODO
+- [ ] improve newline situation (too many newlines!)
+- [ ] add commands and text note attachments
+- [ ] have containers check if content is even remotely valid (class checking)
+- [ ] implement lyrics mode
+- [ ] add comments
+- [ ] add more containers
+- [ ] have containers validate arguments
+- [ ] implement lilypond variables & tags (more readable source code)
+- [ ] improve reverse function (nested reverse)
+
+## Planned features
+- [ ] transpose and reverse by having lilypond interpret and parsing result

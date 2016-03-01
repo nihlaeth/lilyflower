@@ -38,6 +38,20 @@ class Container(object):
                 num_with += 1
         if num_with > 1:
             raise InvalidArgument("Only one \\with block allowed.")
+        self.validate_arguments()
+
+    def validate_arguments(self):
+        """
+        Do some in-depth argument validation.
+        
+        This method is meant to be overwritten, so child
+        classes can validate beyond number of arguments with
+        little duplicate code.
+
+        Note: this method should not return anything. If something's
+        up, raise an exception.
+        """
+        pass
 
     def append(self, value):
         """Add to the end of the container."""

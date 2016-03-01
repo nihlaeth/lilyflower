@@ -12,9 +12,9 @@ class Note(object):
             duration="",
             division=None,
             tie=False,
-            attached=[],
-            commands=[],
-            phrasing=[]):
+            attached=None,
+            commands=None,
+            phrasing=None):
         """
         Initialize note data.
 
@@ -30,13 +30,24 @@ class Note(object):
         phrasing -> (list) slurs and phrasing
         """
         self.pitch = pitch
+        # TODO: determine if pitch is actually a pitch, or if it's a
+        # lilypond string that we need to parse
         self.octave = octave
         self.duration = duration
         self.division = division
         self.tie = tie
-        self.attached = [] + attached
-        self.commands = [] + commands
-        self.phrasing = [] + phrasing
+        if attached is None:
+            self.attached = []
+        else:
+            self.attached = [] + attached
+        if commands is None:
+            self.commands = []
+        else:
+            self.commands = [] + commands
+        if phrasing is None:
+            self.phrasing = []
+        else:
+            self.phrasing = [] + phrasing
 
     def get_duration(self, context=None):
         """

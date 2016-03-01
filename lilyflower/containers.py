@@ -2,20 +2,14 @@
 import datetime
 
 from container import Container
-from errors import InvalidArgument
 
 
 class LilyFile(Container):
 
     """Container for a single lilypond file."""
 
-    def __init__(self, contents, arguments=None):
-        """Set delimiters as empty and make sure there are no arguments."""
-        Container.__init__(self, contents, arguments)
-        if len(self.arguments) > 0:
-            raise InvalidArgument("No arguments allowed!")
-        self.delimiter_pre = ""
-        self.delimiter_post = ""
+    delimiter_pre = ""
+    delimiter_post = ""
 
     def __format__(self, _):
         """Return lilypond code."""
@@ -32,45 +26,25 @@ class Book(Container):
 
     """Book container."""
 
-    def __init__(self, contents, arguments=None):
-        """Set correct command."""
-        Container.__init__(self, contents, arguments)
-        if len(self.arguments) > 0:
-            raise InvalidArgument("No arguments allowed!")
-        self.command = "\\book"
+    command = "\\book"
 
 
 class BookPart(Container):
 
     """Book subdivision."""
 
-    def __init__(self, contents, arguments=None):
-        """Set correct command."""
-        Container.__init__(self, contents, arguments)
-        if len(self.arguments) > 0:
-            raise InvalidArgument("No arguments allowed!")
-        self.command = "\\bookpart"
+    command = "\\bookpart"
 
 
 class With(Container):
 
     """With block."""
 
-    def __init__(self, contents, arguments=None):
-        """Set correct command."""
-        Container.__init__(self, contents, arguments)
-        if len(self.arguments) > 0:
-            raise InvalidArgument("No arguments allowed!")
-        self.command = "\\with"
+    command = "\\with"
 
 
 class Score(Container):
 
     """Score block."""
 
-    def __init__(self, contents, arguments=None):
-        """Set correct command."""
-        Container.__init__(self, contents, arguments)
-        if len(self.arguments) > 0:
-            raise InvalidArgument("No arguments allowed!")
-        self.command = "\\score"
+    command = "\\score"

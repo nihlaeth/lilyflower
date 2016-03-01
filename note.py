@@ -49,29 +49,6 @@ class Note(object):
         else:
             self.phrasing = [] + phrasing
 
-    def get_duration(self, context=None):
-        """
-        Return duration of note.
-
-        Duration can be set directly, or inherited implicitly.
-        If duration is not set directly, Note needs the iterable
-        that it is itself a part of to determine note duration.
-        """
-        if self.duration != "":
-            return self.duration
-        elif context is None:
-            # TODO: raise error - no duration and no context
-            pass
-        try:
-            i = context.index(self)
-        except ValueError:
-            # TODO: raise error - self not found in context
-            pass
-        if i == 0:
-            # TODO: raise error - no previous notes to inherit from
-            pass
-        return context[i-1].get_duration(context)
-
     def __repr__(self):
         """Print note as it should appear in lilypond file."""
         note = "%s%s%s" % (

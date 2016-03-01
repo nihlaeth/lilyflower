@@ -35,7 +35,7 @@ class Container(object):
         # check if there is more than one with block (only one allowed)
         num_with = 0
         for argument in self.arguments:
-            if argument.__name__ == "With":
+            if argument.__class__== "With":
                 num_with += 1
         if num_with > 1:
             raise InvalidArgument("Only one \\with block allowed.")

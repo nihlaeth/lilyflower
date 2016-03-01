@@ -1,4 +1,5 @@
 """Container type - can contain leafs and other containers."""
+from errors import InvalidArgument
 
 
 class Container(object):
@@ -18,6 +19,13 @@ class Container(object):
             self.arguments = []
         else:
             self.arguments = arguments
+        # check if there is more than one with block (only one allowed)
+        num_with = 0
+        for argument in self.arguments:
+            if argument.__name__ == "With":
+                num_with += 1
+        if num_with > 1:
+            raise InvalidArgument("Only one \\with block allowed.")
         self.delimiter_pre = "{"
         self.delimiter_post = "}"
         self.container = contents

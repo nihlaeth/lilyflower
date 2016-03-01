@@ -117,7 +117,7 @@ class Note(Tone):
             self.phrasing = [] + phrasing
             # TODO: validate contents of phrasing
 
-    def __format__(self):
+    def __format__(self, _):
         """Return note as it should appear in lilypond file."""
         note = "%s%s%s" % (
             self.pitch,
@@ -127,7 +127,7 @@ class Note(Tone):
             note += ":%d" % self.division
         if self.tie:
             note += "~"
-        note += + "".join([
+        note += "".join([
             "".join(self.attached),
             "".join(self.commands),
             "".join(self.phrasing)])
@@ -185,7 +185,7 @@ class Chord(Tone):
             self.phrasing = [] + phrasing
             # TODO: validate
 
-    def __format__(self):
+    def __format__(self, _):
         """Return note as it should appear in lilypond file."""
         note = "< %s>%s" % (
             " ".join(format(pitch) for pitch in self.pitches),
@@ -194,7 +194,7 @@ class Chord(Tone):
             note += ":%d" % self.division
         if self.tie:
             note += "~"
-        note += + "".join([
+        note += "".join([
             "".join(self.attached),
             "".join(self.commands),
             "".join(self.phrasing)])

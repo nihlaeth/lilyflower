@@ -6,6 +6,12 @@ class Container(object):
 
     """Contain leafs and other containers."""
 
+    command = ""
+    delimiter_pre = "{"
+    delimiter_post = "}"
+    min_arguments = 0
+    max_arguments = 0
+
     def __init__(self, contents, arguments=None):
         """
         Create container.
@@ -14,11 +20,17 @@ class Container(object):
         arguments -> (list) depending on subclass, this container
             might require arguments, or have optional arguments.
         """
-        self.command = ""
+        self.container = contents
+        # deal with arguments
         if arguments is None:
             self.arguments = []
         else:
             self.arguments = arguments
+        if len(self.arguments) < self.min_arguments or \
+                len(self.arguments) > self.max_arguments:
+            raise InvalidArgument("Expects between %d and %d arguments." % (
+                self.min_arguments,
+                self.max_arguments))
         # check if there is more than one with block (only one allowed)
         num_with = 0
         for argument in self.arguments:
@@ -26,9 +38,6 @@ class Container(object):
                 num_with += 1
         if num_with > 1:
             raise InvalidArgument("Only one \\with block allowed.")
-        self.delimiter_pre = "{"
-        self.delimiter_post = "}"
-        self.container = contents
 
     def append(self, value):
         """Add to the end of the container."""

@@ -12,15 +12,16 @@ class Container(object):
     min_arguments = 0
     max_arguments = 0
 
-    def __init__(self, contents, arguments=None):
+    def __init__(self, content, arguments=None):
         """
         Create container.
 
-        contents -> (list) objects that make up the contents of container
+        content -> (list) objects that make up the content of container
         arguments -> (list) depending on subclass, this container
             might require arguments, or have optional arguments.
         """
-        self.container = contents
+        self.container = content
+        self.validate_content()
         # deal with arguments
         if arguments is None:
             self.arguments = []
@@ -39,6 +40,15 @@ class Container(object):
         if num_with > 1:
             raise InvalidArgument("Only one \\with block allowed.")
         self.validate_arguments()
+
+    def validate_content(self):
+        """
+        Do some in-depth content validation.
+
+        This method is a placeholder to be overwritten by child
+        classes.
+        """
+        pass
 
     def validate_arguments(self):
         """

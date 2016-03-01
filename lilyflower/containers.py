@@ -129,7 +129,7 @@ class LyricsTo(Container):
 
     """LyricsTo block."""
 
-    command = "\\lyricto"
+    command = "\\lyricsto"
 
 
 class Absolute(Container):

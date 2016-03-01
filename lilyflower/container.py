@@ -92,7 +92,10 @@ class Container(object):
         arguments. Otherwise it assumes the order given is fine.
         """
         # TODO: support for indents, so \with blocks are indented properly
-        return " ".join(format(self.arguments))
+        result = ""
+        for argument in self.arguments:
+            result += format(argument) + " "
+        return result
 
     def __format__(self, format_spec):
         """Return lilypond code."""
@@ -101,7 +104,7 @@ class Container(object):
             indent_level = int(format_spec)
         result = "\n%s" % ("  " * indent_level)
         if self.command != "":
-            result += "%s %s %s\n" % (
+            result += "%s %s%s\n" % (
                 self.command,
                 self._format_arguments(),
                 self.delimiter_pre)

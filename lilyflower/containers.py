@@ -48,3 +48,15 @@ class BookPart(Container):
         Container.__init__(self, contents, arguments)
         # TODO: only a single \with block is a valid argument - check this
         self.command = "\\bookpart"
+
+
+class With(Container):
+
+    """With block."""
+
+    def __init__(self, contents, arguments=None):
+        """Set correct command."""
+        Container.__init__(self, contents, arguments)
+        if len(self.arguments) > 0:
+            raise InvalidArgument("No arguments allowed!")
+        self.command = "\\with"

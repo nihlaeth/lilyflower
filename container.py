@@ -39,6 +39,7 @@ class Container(object):
 
     def reverse(self):
         """Reverse order."""
+        # TODO: preserve meaning and correct syntax when reversing
         self.container.reverse()
 
     def sort(self, cmp=None, key=None, reverse=False):
@@ -51,11 +52,7 @@ class Container(object):
 
     def __iter__(self):
         """Return iterator object."""
-        pass
-
-    def __next__(self):
-        """Return next item from the container."""
-        pass
+        return iter(self.container)
 
     def __reversed__(self):
         """Iterate over object in reverse order."""
@@ -77,7 +74,7 @@ class Container(object):
         """Return length of container."""
         return len(self.container)
 
-    def __format__(self):
+    def __format__(self, format_spec):
         """Return lilypond code."""
         result = ""
         if self.command != "":
@@ -92,7 +89,7 @@ class Container(object):
 
     def __iadd__(self, other):
         """Add something to the container in place."""
-        if issubclass(other, Container):
+        if isinstance(other, Container):
             self.extend(other.container)
         elif isinstance(other, list):
             self.extend(other)

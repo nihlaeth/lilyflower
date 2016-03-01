@@ -165,3 +165,14 @@ class Markup(Container):
     """Markup block."""
 
     command = "\\markup"
+
+
+class Repeat(Container):
+
+    """Repeat block."""
+
+    command = "\\repeat"
+    min_arguments = 2
+    max_arguments = 2
+
+    # TODO: we need argument validation here!

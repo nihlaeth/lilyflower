@@ -49,8 +49,8 @@ class Note(object):
         else:
             self.phrasing = [] + phrasing
 
-    def __repr__(self):
-        """Print note as it should appear in lilypond file."""
+    def __format__(self):
+        """Return note as it should appear in lilypond file."""
         note = "%s%s%s" % (
             self.pitch,
             self.octave,

@@ -12,7 +12,7 @@ class Spanner(object):
     case, they are the same object. The first time __format__()
     is called, it displays the opening spanner, the second time,
     it displays the closing part. This ensures they are always
-    closed properly.
+    closed properly, even if a sequense is reversed or sorted.
     """
 
     num_displays = 0

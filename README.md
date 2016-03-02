@@ -22,6 +22,7 @@ in question, and have notes know if they are being transposed somehow.
 For now I'll settle for awesome iterables and easy extensibility.
 
 ## TODO
+- [ ] add support for multi-measure rests
 - [ ] improve newline situation (too many newlines!)
 - [ ] add commands and text note attachments
 - [ ] have containers check if content is even remotely valid (class checking)
@@ -33,4 +34,5 @@ For now I'll settle for awesome iterables and easy extensibility.
 - [ ] improve reverse function (nested reverse)
 
 ## Planned features
+- [ ] add parser/generators for quick object generation
 - [ ] transpose and reverse by having lilypond interpret and parsing result

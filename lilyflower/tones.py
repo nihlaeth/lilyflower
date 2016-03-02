@@ -9,7 +9,7 @@ def _validate_pitch(pitch):
     # followed by (es|s|is)(es|is)* for accidentals
     # the 's' is for the es, and as (dutch pronounciation doesn't allow
     # for ees or aes).
-    regex = "^[a-g](s)?(es|is)*$"
+    regex = "^[a-g]([!?]|(s)?(es|is|eh|ih)*)$"
     if re.match(regex, pitch) is None:
         raise InvalidPitch("%s is not a valid pitch" % pitch)
 

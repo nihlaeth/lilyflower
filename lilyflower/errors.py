@@ -27,3 +27,10 @@ class InvalidDuration(ValueError):
     """Invalid duration."""
 
     pass
+
+
+class IllegalReuse(ValueError):
+
+    """Illegal re-use."""
+
+    pass

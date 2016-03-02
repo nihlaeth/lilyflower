@@ -16,7 +16,7 @@ def _validate_pitch(pitch):
 
 def _validate_octave(octave):
     """Validate octave."""
-    regex = "^[',]*$"
+    regex = "^(=)?[',]*$"
     if re.match(regex, octave) is None:
         raise InvalidOctave("%s is not a valid octave" % octave)
 

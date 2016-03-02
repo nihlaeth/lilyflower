@@ -130,7 +130,7 @@ class Note(Tone):
         note += "".join([
             "".join(self.attached),
             "".join(self.commands),
-            "".join(self.phrasing)])
+            "".join(format(item) for item in self.phrasing)])
         return note
 
 
@@ -197,7 +197,7 @@ class Chord(Tone):
         note += "".join([
             "".join(self.attached),
             "".join(self.commands),
-            "".join(self.phrasing)])
+            "".join(format(item) for item in self.phrasing)])
         return note
 
 

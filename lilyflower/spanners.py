@@ -22,14 +22,12 @@ class Spanner(object):
 
     def __format__(self, _):
         """Return lilypond code."""
-        if self.num_displays == 0:
+        if self.num_displays % 2 == 0:
             self.num_displays += 1
             return self.delimiter_open
-        elif self.num_displays == 1:
+        elif self.num_displays % 2 == 1:
             self.num_displays += 1
             return self.delimiter_close
-        else:
-            raise IllegalReuse("Spanner objects can only be displayed twice.")
 
 
 class Slur(Spanner):

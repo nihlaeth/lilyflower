@@ -10,6 +10,7 @@ class Command(object):
     min_args = 0
     max_args = 0
     inline = False
+    validated_arguments = None
 
     def __init__(self, *args):
         """Store arguments."""
@@ -32,10 +33,13 @@ class Command(object):
         indent_level = 0
         if format_spec != "":
             indent_level = int(format_spec)
-        separator = " " if len(self.args) > 0 else ""
-        result = "%s%s%s" % (
+        result = "%s%s" % (
             "  " * indent_level,
-            self.command,
-            separator + " ".join(
-                format(item, str(indent_level + 1)) for item in self.args))
+            self.command)
+        if self.validated_arguments is not None:
+            new_indent = indent_level + 1
+            result += " " + " ".join(
+                format(
+                    item,
+                    str(new_indent)) for item in self.validated_arguments)
         return result

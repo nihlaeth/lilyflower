@@ -1,23 +1,22 @@
 """Everything to do with markup blocks."""
 # pylint: disable = relative-import,too-few-public-methods
-import re
 from notecommands import NoteCommand
 from container import Container
 from errors import InvalidArgument, InvalidContent
+from schemedata import (
+    UnsignedFloat, SignedFloat, Pair, List, AssociationList, String, Direction)
 
 
-def _validate_ufloat(number):
-    """Validate unsigned float."""
-    regex = "^[0-9]+(\\.[0-9]*)?$"
-    if re.match(regex, number) is None:
-        raise InvalidArgument("Expected an unsigned float, not %r" % number)
-
-
-def _validate_sfloat(number):
-    """Validate signed float."""
-    regex = "^-?[0-9]+(\\.[0-9]*)?$"
-    if re.match(regex, number) is None:
-        raise InvalidArgument("Expected a signed float, not %r" % number)
+def _validate_markup(data):
+    """Check if object counts as markup."""
+    if isinstance(data, MarkupContainer):
+        pass
+    elif isinstance(data, MarkupCommand):
+        pass
+    elif isinstance(data, MarkupText):
+        pass
+    else:
+        raise InvalidArgument("Expected Markup item, not %r" % data)
 
 
 class MarkupText(object):
@@ -52,18 +51,7 @@ class MarkupContainer(Container, NoteCommand):
     def validate_content(self):
         """Make sure content belongs in a markup container."""
         for item in self.container:
-            # the list of allowed content here is not complete yet
-            # you can override settings in markup blocks for example
-            # and use variables (I think)
-            if isinstance(item, MarkupContainer):
-                pass
-            elif isinstance(item, MarkupCommand):
-                pass
-            elif isinstance(item, MarkupText):
-                pass
-            else:
-                raise InvalidContent(
-                    "%s does not belong in a markup container" % repr(item))
+            _validate_markup(item)
 
 
 class Markup(MarkupContainer):
@@ -101,9 +89,12 @@ class AbsFontSize(MarkupContainer):
     max_arguments = 1
 
     def validate_arguments(self):
-        """Make sure we get a scheme number (#N)."""
-        _validate_ufloat(str(self.arguments[0]))
-        self.validated_arguments.append("#" + str(self.arguments[0]))
+        """Make sure we get a scheme number (UnsignedFloat)."""
+        if not isinstance(self.arguments[0], UnsignedFloat):
+            raise InvalidArgument(
+                "Expected UnsignedFloat(SchemeData),"
+                " not %r" % self.arguments[0])
+        self.validated_arguments.append(self.arguments[0])
 
 
 class Box(MarkupContainer):
@@ -150,9 +141,11 @@ class FontSize(MarkupContainer):
     max_arguments = 1
 
     def validate_arguments(self):
-        """Make sure we get a scheme number(#-N)."""
-        _validate_sfloat(str(self.arguments[0]))
-        self.validated_arguments.append("#" + str(self.arguments[0]))
+        """Make sure we get a scheme number(SignedFloat)."""
+        if not isinstance(self.arguments[0], SignedFloat):
+            raise InvalidArgument(
+                "Expected SignedFloat(SchemeData), not %r" % self.arguments[0])
+        self.validated_arguments.append(self.arguments[0])
 
 
 class Huge(MarkupContainer):
@@ -185,9 +178,11 @@ class Magnify(MarkupContainer):
     max_arguments = 1
 
     def validate_arguments(self):
-        """Make sure we get a scheme number(#N)."""
-        _validate_ufloat(str(self.arguments[0]))
-        self.validated_arguments.append("#" + str(self.arguments[0]))
+        """Make sure we get a SchemeData String."""
+        if not isinstance(self.arguments[0], String):
+            raise InvalidArgument(
+                "Expected String(SchemeData), not %r" % self.arguments[0])
+        self.validated_arguments.append(self.arguments[0])
 
 
 class Medium(MarkupContainer):
@@ -233,8 +228,13 @@ class Replace(MarkupContainer):
     min_arguments = 1
     max_arguments = 1
 
-    # TODO: validate replacement list, maybe allow for a python list
-    # and convert?
+    def validate_arguments(self):
+        """Make sure we got passed an AssociationList(SchemeData)."""
+        if not isinstance(self.arguments[0], AssociationList):
+            raise InvalidArgument(
+                "Expected an AssociationList(SchemeData),"
+                " not %r" % self.arguments[0])
+        self.validated_arguments.append(self.arguments[0])
 
 
 class RomanFont(MarkupContainer):
@@ -260,8 +260,11 @@ class Simple(MarkupCommand):
     max_arguments = 1
 
     def validate_arguments(self):
-        """Make sure we received text."""
-        self.validated_arguments[0] = "#\"%s\"" % str(self.args[0])
+        """Make sure we received a SchemeData String."""
+        if not isinstance(self.args[0], String):
+            raise InvalidArgument(
+                "Expected a String(SchemeData), not %r" % self.args[0])
+        self.validated_arguments[0] = self.args[0]
 
 
 class Small(MarkupContainer):
@@ -374,7 +377,13 @@ class Combine(MarkupCommand):
     command = "\\combine"
     min_arguments = 2
     max_arguments = 2
-    # TODO: validation
+
+    def validate_arguments(self):
+        """Make sure arguments count as markup."""
+        _validate_markup(self.args[0])
+        _validate_markup(self.args[1])
+        self.validated_arguments.append(self.args[0])
+        self.validated_arguments.append(self.args[1])
 
 
 class Concat(MarkupContainer):
@@ -400,4 +409,41 @@ class FillLine(MarkupContainer):
 
 class FillWithPattern(MarkupCommand):
 
-    """WIP."""
+    """
+    Fill horizontal line with two markup elements and a pattern.
+
+    Usage:
+    FillWithPattern(space, direction, pattern, markup_left, markup_right)
+    Arguments:
+    space -> UnsignedFloat(SchemeData) - space in between patterns
+    direction -> Direction(SchemeData) - aligned to the direction markup
+    pattern -> Markup element - pattern to fill line with
+    markup_left -> Markup element - to be displayed at the left of pattern
+    markup_right -> Markup element - to be displayed at the right of pattern
+    """
+
+    command = "\\fill-with-pattern"
+    min_arguments = 5
+    max_arguments = 5
+
+    def validate_arguments(self):
+        """Make sure it at least appears valid."""
+        # space (should be Int)
+        if not isinstance(self.args[0], UnsignedFloat):
+            raise InvalidArgument(
+                "Expected Int(SchemeData), not %r", self.args[0])
+        # direction (should be Direction)
+        if not isinstance(self.args[1], Direction):
+            raise InvalidArgument(
+                "Expected Direction(SchemeData), not %r", self.args[1])
+
+        # pattern (should be markup element)
+        _validate_markup(self.args[2])
+
+        # markup_left (should be markup element)
+        _validate_markup(self.args[3])
+
+        # markup_right (should be markup element)
+        _validate_markup(self.args[4])
+
+        self.validated_arguments.extend(self.args)

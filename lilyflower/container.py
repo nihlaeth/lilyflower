@@ -11,6 +11,7 @@ class Container(object):
     delimiter_post = "}"
     min_arguments = 0
     max_arguments = 0
+    inline = False
 
     def __init__(self, content, arguments=None):
         """
@@ -35,7 +36,7 @@ class Container(object):
         # check if there is more than one with block (only one allowed)
         num_with = 0
         for argument in self.arguments:
-            if argument.__class__== "With":
+            if argument.__class__ == "With":
                 num_with += 1
         if num_with > 1:
             raise InvalidArgument("Only one \\with block allowed.")
@@ -53,7 +54,7 @@ class Container(object):
     def validate_arguments(self):
         """
         Do some in-depth argument validation.
-        
+
         This method is meant to be overwritten, so child
         classes can validate beyond number of arguments with
         little duplicate code.
@@ -143,24 +144,31 @@ class Container(object):
         indent_level = 0
         if format_spec is not "":
             indent_level = int(format_spec)
-        result = "\n%s" % ("  " * indent_level)
+        result = "  " * indent_level
         if self.command != "":
-            result += "%s %s%s\n" % (
+            result += "%s %s%s" % (
                 self.command,
                 self._format_arguments(),
                 self.delimiter_pre)
         else:
-            result += "%s\n" % self.delimiter_pre
+            result += self.delimiter_pre
 
-        result += "  " * (indent_level + 1)
+        inline_previous = False
         for item in self.container:
-            if isinstance(item, Container):
-                result += format(
-                    item,
-                    str(indent_level + 1))
-            else:
-                result += "%s " % format(item)
-        result += "\n%s%s\n" % ("  " * indent_level, self.delimiter_post)
+            separator = "\n"
+            inline_current = item.inline
+            # the only time we need a space as separator is
+            # when both the current and previous item are inline
+            if inline_previous and inline_current:
+                separator = " "
+            elif not inline_previous and inline_current:
+                # inline items don't indent themselves
+                separator = "\n" + "  " * (indent_level + 1)
+            result += "%s%s" % (separator, format(
+                item,
+                str(indent_level + 1)))
+            inline_previous = inline_current
+        result += "\n%s%s" % ("  " * indent_level, self.delimiter_post)
 
         return result
 

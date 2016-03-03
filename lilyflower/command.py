@@ -9,7 +9,7 @@ class Command(object):
     command = ""
     min_args = 0
     max_args = 0
-    newline = True
+    inline = False
 
     def __init__(self, *args):
         """Store arguments."""
@@ -32,10 +32,9 @@ class Command(object):
         indent_level = 0
         if format_spec != "":
             indent_level = int(format_spec)
-        result = "%s%s%s%s" % (
+        result = "%s%s%s" % (
             "  " * indent_level,
             self.command,
             " " + " ".join(
-                format(item, str(indent_level + 1)) for item in self.args),
-            ("\n" if self.newline else ""))
+                format(item, str(indent_level + 1)) for item in self.args))
         return result

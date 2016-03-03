@@ -4,74 +4,103 @@ from lilyflower import Container
 from nose.tools import assert_equals, assert_list_equal
 
 
+class Note(object):
+
+    """Mock note."""
+
+    inline = True
+
+    def __init__(self, note):
+        """Set self.note."""
+        self.note = note
+
+    def __format__(self, _):
+        """Display something."""
+        return self.note
+
+    def __eq__(self, other):
+        """Compare."""
+        if isinstance(other, str):
+            if self.note == other:
+                return True
+        elif isinstance(other, Note):
+            if self.note == other.note:
+                return True
+        return False
+
+
 def test_init():
     """Test Container.__init__()."""
-    numbers = [0, 1, 2]
-    container = Container(numbers)
-    assert_list_equal(container.container, [0, 1, 2])
+    notes = [Note('a'), Note('b'), Note('c')]
+    container = Container(notes)
+    assert_list_equal(
+        container.container,
+        [Note('a'), Note('b'), Note('c')])
 
 
 def test_iter():
     """Test Container iteration."""
-    numbers = [0, 1, 2]
-    container = Container(numbers)
+    notes = [Note('a'), Note('b'), Note('c')]
+    container = Container(notes)
 
     for i in enumerate(container):
-        assert_equals(i[1], numbers[i[0]])
+        assert_equals(i[1], notes[i[0]])
 
 
 def test_math():
     """Test Container addition and multiplication."""
-    numbers = [0, 1, 2]
-    container = Container(numbers)
+    notes = [Note('a'), Note('b'), Note('c')]
+    container = Container(notes)
     container *= 2
-    assert_list_equal(container.container, [0, 1, 2, 0, 1, 2])
+    assert_list_equal(container.container, ['a', 'b', 'c', 'a', 'b', 'c'])
 
-    container += 5
-    assert_list_equal(container.container, [0, 1, 2, 0, 1, 2, 5])
+    container += 'd'
+    assert_list_equal(container.container, ['a', 'b', 'c', 'a', 'b', 'c', 'd'])
 
-    container += [1, 2]
-    assert_list_equal(container.container, [0, 1, 2, 0, 1, 2, 5, 1, 2])
+    container += ['b', 'c']
+    assert_list_equal(
+        container.container,
+        ['a', 'b', 'c', 'a', 'b', 'c', 'd', 'b', 'c'])
 
 
 def test_list():
     """Test Container list functionality."""
-    numbers = [0, 1, 2]
-    container = Container(numbers)
-    assert_equals(container[0], 0)
-    container[2] = 5
-    assert_equals(container[2], 5)
-    container.append(4)
-    assert_list_equal(container.container, [0, 1, 5, 4])
-    container.extend([1])
-    assert_equals(container.pop(), 1)
-    container.insert(0, 7)
-    assert_list_equal(container.container, [7, 0, 1, 5, 4])
-    assert_equals(container.count(0), 1)
-    assert_equals(container.count(9), 0)
-    container.remove(7)
+    notes = [Note('a'), Note('b'), Note('c')]
+    container = Container(notes)
+    assert_equals(container[0], 'a')
+    container[2] = 'd'
+    assert_equals(container[2], 'd')
+    container.append('e')
+    assert_list_equal(container.container, ['a', 'b', 'd', 'e'])
+    container.extend(['c'])
+    assert_equals(container.pop(), 'c')
+    container.insert(0, 'f')
+    assert_list_equal(container.container, ['f', 'a', 'b', 'd', 'e'])
+    assert_equals(container.count('a'), 1)
+    assert_equals(container.count('g'), 0)
+    container.remove('e')
     container.reverse()
-    assert_list_equal(container.container, [4, 5, 1, 0])
+    assert_list_equal(container.container, ['d', 'b', 'a', 'f'])
     container.sort()
-    assert_list_equal(container.container, [0, 1, 4, 5])
+    assert_list_equal(container.container, ['a', 'b', 'd', 'f'])
     del container[1]
-    assert_list_equal(container.container, [0, 4, 5])
+    assert_list_equal(container.container, ['a', 'd', 'f'])
 
 
 def test_format():
     """Test Container formatting."""
-    container = Container([0, 1, 2])
+    container = Container([Note('a'), Note('b'), Note('c')])
     result = format(container)
-    expected = "\n{\n  0 1 2 \n}\n"
+    expected = "{\n  a b c\n}"
     assert_equals(result, expected)
 
     # increase indent
     result = format(container, "1")
-    expected = "\n  {\n    0 1 2 \n  }\n"
+    expected = "  {\n    a b c\n  }"
     assert_equals(result, expected)
 
     # test nesting
-    container = Container([0, 1, Container(["test"])])
+    container = Container([Note('a'), Note('b'), Container([Note('c')])])
     result = format(container)
-    expected = "\n{\n  0 1 \n  {\n    test \n  }\n\n}\n"
+    expected = "{\n  a b\n  {\n    c\n  }\n}"
     assert_equals(result, expected)

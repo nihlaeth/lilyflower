@@ -1,4 +1,5 @@
 """Note and rest objects - represent a tonal unit."""
+# pylint: disable = too-few-public-methods,relative-import
 import re
 from errors import InvalidPitch, InvalidOctave, InvalidDuration, InvalidArgument
 
@@ -32,6 +33,8 @@ def _validate_duration(duration):
 class Tone(object):
 
     """Grouping class so tones can be recognized."""
+
+    inline = True
 
 
 class Pitch(Tone):

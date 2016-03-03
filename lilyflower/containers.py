@@ -13,12 +13,18 @@ class LilyFile(Container):
 
     def __format__(self, _):
         """Return lilypond code."""
-        result = "%% Created with lilyflower at %s\n\n" % datetime.datetime.now()
+        # root container does not indent its children
+        result = "%% Created with lilyflower at %s\n" % datetime.datetime.now()
+        inline_previous = False
         for item in self.container:
-            if isinstance(item, Container):
-                result += format(item)
-            else:
-                result += "%s " % format(item)
+            separator = "\n"
+            inline_current = item.inline
+            # the only time we need a space as separator is when
+            # both the current and previous item are inline
+            if inline_previous and inline_current:
+                separator = " "
+            result += "%s%s" % (separator, format(item))
+            inline_previous = inline_current
         return result
 
 
@@ -200,11 +206,11 @@ class Measure(Container):
         indent_level = 0
         if format_spec is not "":
             indent_level = int(format_spec)
-        result = "\n%s" % ("  " * indent_level)
+        result = "  " * indent_level
         result += " ".join([
             format(item, str(indent_level + 1)) for item in self.container])
         if len(self.arguments) < 1:
-            result += " |\n"
+            result += " |"
         else:
-            result += " %s\n" % format(self.arguments[0])
+            result += " %s" % format(self.arguments[0])
         return result

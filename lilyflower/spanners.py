@@ -18,6 +18,7 @@ class Spanner(object):
     num_displays = 0
     delimiter_open = "("
     delimiter_close = ")"
+    inline = True
 
     def __format__(self, _):
         """Return lilypond code."""

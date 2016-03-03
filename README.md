@@ -23,7 +23,7 @@ For now I'll settle for awesome iterables and easy extensibility.
 
 ## TODO
 - [ ] add support for multi-measure rests
-- [ ] improve newline situation (too many newlines!)
+- [x] improve newline situation (too many newlines!)
 - [ ] add commands and text note attachments
 - [ ] have containers check if content is even remotely valid (class checking)
 - [ ] implement lyrics mode

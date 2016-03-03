@@ -2,6 +2,8 @@
 # pylint: disable = too-few-public-methods,relative-import
 import re
 from errors import InvalidPitch, InvalidOctave, InvalidDuration, InvalidArgument
+from spanners import Spanner
+from notecommands import NoteCommand
 
 
 def _validate_pitch(pitch):
@@ -37,6 +39,54 @@ class Tone(object):
     inline = True
 
 
+class NoteCommandMixin(object):
+
+    """Provide methods for dealing with note commands."""
+
+    note_commands = None
+
+    def process_note_commands(self, note_commands):
+        """Validate and store note commands."""
+        if note_commands is None:
+            self.note_commands = []
+        else:
+            self.note_commands = [] + note_commands
+        for command in self.note_commands:
+            if not isinstance(command, NoteCommand):
+                raise InvalidArgument("expected NoteCommand object")
+
+    def format_note_commands(self):
+        """Return lilypond code."""
+        if self.note_commands is not None:
+            return "".join(format(item) for item in self.note_commands)
+        else:
+            return ""
+
+
+class SpannerMixin(object):
+
+    """Provide methods for dealing with spanner objects."""
+
+    spanners = None
+
+    def process_spanners(self, spanners):
+        """Validate and store spanner objects."""
+        if spanners is None:
+            self.spanners = []
+        else:
+            self.spanners = [] + spanners
+        for spanner in self.spanners:
+            if not isinstance(spanner, Spanner):
+                raise InvalidArgument("expected Spanner object")
+
+    def format_spanners(self):
+        """Return lilypond code."""
+        if self.note_commands is not None:
+            return "".join(format(item) for item in self.spanners)
+        else:
+            return ""
+
+
 class Pitch(Tone):
 
     """Pitch - octave and pitch without duration."""
@@ -53,21 +103,22 @@ class Pitch(Tone):
         return "%s%s" % (self.pitch, self.octave)
 
 
-class Rest(Tone):
+class Rest(Tone, NoteCommandMixin):
 
     """Rest - duration - no octave and pitch."""
 
-    def __init__(self, duration=""):
+    def __init__(self, duration="", note_commands=None):
         """Set basic data."""
         self.duration = duration
         _validate_duration(duration)
+        self.process_note_commands(note_commands)
 
     def __format__(self, _):
-        """Rests in lilypond format."""
-        return "r%s" % self.duration
+        """Return lilypond code."""
+        return "r%s%s" % (self.duration, self.format_note_commands())
 
 
-class Note(Tone):
+class Note(Tone, NoteCommandMixin, SpannerMixin):
 
     """Represent a single pitch."""
 
@@ -78,9 +129,8 @@ class Note(Tone):
             duration="",
             division=None,
             tie=False,
-            attached=None,
-            commands=None,
-            phrasing=None):
+            note_commands=None,
+            spanners=None):
         """
         Initialize note data.
 
@@ -90,10 +140,9 @@ class Note(Tone):
         duration -> (string) pitch duration (e.g. "4..")
         division -> (int) used for tremolo
         tie -> (bool) should this note be tied to the next?
-        attached -> (list) text attached to note (fingering instructions,
-            tempo indications, etc.)
-        commands -> (list) commands attached to note (dynamics)
-        phrasing -> (list) slurs and phrasing
+        note_commands -> (list) text and comnands attached to
+            note (fingering instructions, dynamics, tempo indications, etc.)
+        spanners -> (list) slurs and phrasing
         """
         self.pitch = pitch
         _validate_pitch(pitch)
@@ -104,21 +153,8 @@ class Note(Tone):
         self.division = division
         # TODO: validate division
         self.tie = tie
-        if attached is None:
-            self.attached = []
-        else:
-            self.attached = [] + attached
-            # TODO: validate contents of attached
-        if commands is None:
-            self.commands = []
-        else:
-            self.commands = [] + commands
-            # TODO: validate contents of commands
-        if phrasing is None:
-            self.phrasing = []
-        else:
-            self.phrasing = [] + phrasing
-            # TODO: validate contents of phrasing
+        self.process_note_commands(note_commands)
+        self.process_spanners(spanners)
 
     def __format__(self, _):
         """Return note as it should appear in lilypond file."""
@@ -131,13 +167,12 @@ class Note(Tone):
         if self.tie:
             note += "~"
         note += "".join([
-            "".join(self.attached),
-            "".join(format(item) for item in self.commands),
-            "".join(format(item) for item in self.phrasing)])
+            self.format_note_commands(),
+            self.format_spanners()])
         return note
 
 
-class Chord(Tone):
+class Chord(Tone, NoteCommandMixin, SpannerMixin):
 
     """All the goodness of notes, but with more of them together."""
 
@@ -147,19 +182,17 @@ class Chord(Tone):
             duration="",
             division=None,
             tie=False,
-            attached=None,
-            commands=None,
-            phrasing=None):
+            note_commands=None,
+            spanners=None):
         """
         Set basic data.
-        
+
         pitches -> (list of Pitch objects) pitches that make up the chord
         duration -> (str) duration of entire chord
         division -> (int) used for tremolo
         tie -> (bool) if the entire chord should be tied to the next note
-        attached -> (list) attached text
-        commands -> (list) related commands
-        phrasing -> (list) slur- and phrasing marks
+        note_commands -> (list) related note_commands and text
+        spanners -> (list) slur- and phrasing marks
         """
         # TODO: pitches inside a chord can be tied - allow this
         # TODO: implement chord mode
@@ -172,21 +205,8 @@ class Chord(Tone):
         self.division = division
         # TODO: validate division
         self.tie = tie
-        if attached is None:
-            self.attached = []
-        else:
-            self.attached = [] + attached
-            # TODO: validate
-        if commands is None:
-            self.commands = []
-        else:
-            self.commands = [] + commands
-            # TODO: validate
-        if phrasing is None:
-            self.phrasing = []
-        else:
-            self.phrasing = [] + phrasing
-            # TODO: validate
+        self.process_note_commands(note_commands)
+        self.process_spanners(spanners)
 
     def __format__(self, _):
         """Return note as it should appear in lilypond file."""
@@ -198,9 +218,6 @@ class Chord(Tone):
         if self.tie:
             note += "~"
         note += "".join([
-            "".join(self.attached),
-            "".join(format(item) for item in self.commands),
-            "".join(format(item) for item in self.phrasing)])
+            self.format_note_commands(),
+            self.format_spanners()])
         return note
-
-

@@ -7,9 +7,9 @@ slur = Slur()
 crescendo = Crescendo(Piano())
 measure = Measure(
     [
-        Note('gis', commands=[Piano2(), crescendo], phrasing=[slur]),
+        Note('gis', note_commands=[Piano2(), crescendo], spanners=[slur]),
         Note('as'),
-        Note('bes', '', '4.', commands=[crescendo], phrasing=[slur])],
+        Note('bes', '', '4.', note_commands=[crescendo], spanners=[slur])],
     [Bar("|.")])
 
 staff = Staff([Note('a', '', '2'), Note('ases'), Note('ais', "'", '4.')])

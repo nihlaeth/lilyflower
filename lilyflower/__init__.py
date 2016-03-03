@@ -7,3 +7,4 @@ from markup import *
 from tones import Tone, Note, Pitch, Rest, Chord
 from spanners import Spanner, Slur, PhrasingSlur, Beam
 from dynamics import *
+from schemedata import *

@@ -54,4 +54,5 @@ class Bar(Command):
         # TODO: add support for custom bar definitions
         if self.args[0] not in valid_bars:
             raise InvalidArgument("%s not a valid bar type." % self.args[0])
-        # TODO: get apostrophes around argument
+        else:
+            self.validated_arguments = ["\"%s\"" % self.args[0]]

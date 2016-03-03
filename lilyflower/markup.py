@@ -73,6 +73,11 @@ class Markup(MarkupContainer):
     command = "\\markup"
 
 
+#
+# Font related stuff
+#
+
+
 class Bold(MarkupContainer):
 
     """Bold text."""
@@ -334,3 +339,65 @@ class Upright(MarkupContainer):
     """Upright in contrast to italic."""
 
     command = "\\upright"
+
+
+#
+# Alignment related stuff
+#
+
+
+class CenterAlign(MarkupContainer):
+
+    """Align to its X center (whatever that means)."""
+
+    command = "\\center-align"
+
+
+class CenterColumn(MarkupContainer):
+
+    """Align in a centered column."""
+
+    command = "\\center-column"
+
+
+class Column(MarkupContainer):
+
+    """Stack contents vertically."""
+
+    command = "\\column"
+
+
+class Combine(MarkupCommand):
+
+    """Print two markups on top of each other."""
+
+    command = "\\combine"
+    min_arguments = 2
+    max_arguments = 2
+    # TODO: validation
+
+
+class Concat(MarkupContainer):
+
+    """Combine contents in a horizontal line without space in between."""
+
+    command = "\\concat"
+
+
+class DirColumn(MarkupContainer):
+
+    """Put contents in column, according to the direction layout property."""
+
+    command = "\\dir-column"
+
+
+class FillLine(MarkupContainer):
+
+    """Space contents over entire width of line-width layout property."""
+
+    command = "\\fill-line"
+
+
+class FillWithPattern(MarkupCommand):
+
+    """WIP."""

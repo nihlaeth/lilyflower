@@ -11,6 +11,7 @@ class Container(object):
     delimiter_post = "}"
     min_arguments = 0
     max_arguments = 0
+    validated_arguments = None
     inline = False
 
     def __init__(self, content, arguments=None):
@@ -23,6 +24,7 @@ class Container(object):
         """
         self.container = content
         self.validate_content()
+        self.validated_arguments = []
         # deal with arguments
         if arguments is None:
             self.arguments = []
@@ -33,13 +35,6 @@ class Container(object):
             raise InvalidArgument("Expects between %d and %d arguments." % (
                 self.min_arguments,
                 self.max_arguments))
-        # check if there is more than one with block (only one allowed)
-        num_with = 0
-        for argument in self.arguments:
-            if argument.__class__ == "With":
-                num_with += 1
-        if num_with > 1:
-            raise InvalidArgument("Only one \\with block allowed.")
         self.validate_arguments()
 
     def validate_content(self):
@@ -61,6 +56,8 @@ class Container(object):
 
         Note: this method should not return anything. If something's
         up, raise an exception.
+
+        Side effect: it puts validated arguments in self.validated_arguments
         """
         pass
 
@@ -135,7 +132,7 @@ class Container(object):
         """
         # TODO: support for indents, so \with blocks are indented properly
         result = ""
-        for argument in self.arguments:
+        for argument in self.validated_arguments:
             result += format(argument) + " "
         return result
 

@@ -32,9 +32,10 @@ class Command(object):
         indent_level = 0
         if format_spec != "":
             indent_level = int(format_spec)
+        separator = " " if len(self.args) > 0 else ""
         result = "%s%s%s" % (
             "  " * indent_level,
             self.command,
-            " " + " ".join(
+            separator + " ".join(
                 format(item, str(indent_level + 1)) for item in self.args))
         return result

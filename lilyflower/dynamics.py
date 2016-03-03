@@ -1,10 +1,10 @@
 """Dynamic commands."""
 # pylint: disable=relative-import,too-few-public-methods
-from command import Command
+from notecommands import NoteCommand
 from errors import InvalidArgument
 
 
-class Dynamic(Command):
+class Dynamic(NoteCommand):
 
     """Dynamic mark."""
 

@@ -2,15 +2,14 @@
 # pylint: disable=unused-wildcard-import,wildcard-import,invalid-name
 from lilyflower import *
 
-# c = Container([1, 2, 3, Container(["test", Container(["test2"])])])
-# print format(c, "1")
 
 slur = Slur()
+crescendo = Crescendo(Piano())
 measure = Measure(
     [
-        Note('gis', phrasing=[slur]),
+        Note('gis', commands=[Piano2(), crescendo], phrasing=[slur]),
         Note('as'),
-        Note('bes', '', '4.', phrasing=[slur])],
+        Note('bes', '', '4.', commands=[crescendo], phrasing=[slur])],
     [Bar("|.")])
 
 staff = Staff([Note('a', '', '2'), Note('ases'), Note('ais', "'", '4.')])

@@ -34,3 +34,10 @@ class IllegalReuse(ValueError):
     """Illegal re-use."""
 
     pass
+
+
+class InvalidContent(ValueError):
+
+    """Invalid content."""
+
+    pass

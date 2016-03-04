@@ -33,7 +33,7 @@ For now I'll settle for awesome iterables and easy extensibility.
 - [ ] add more containers
 - [ ] have containers validate arguments
 - [ ] implement lilypond variables & tags (more readable source code)
-- [ ] improve reverse function (nested reverse)
+- [x] improve reverse function (nested reverse)
 - [ ] better documentation
 
 ## Planned features

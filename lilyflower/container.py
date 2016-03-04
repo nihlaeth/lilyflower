@@ -88,8 +88,11 @@ class Container(object):
 
     def reverse(self):
         """Reverse order."""
-        # TODO: preserve meaning and correct syntax when reversing
         self.container.reverse()
+        # now reverse all containers inside this one as well
+        for item in self.container:
+            if isinstance(item, Container):
+                item.reverse()
 
     def sort(self, cmp=None, key=None, reverse=False):
         """Sort container."""

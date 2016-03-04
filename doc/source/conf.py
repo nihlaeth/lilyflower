@@ -39,6 +39,8 @@ extensions = [
     'sphinx.ext.pngmath',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
+    'numpydoc',
+    'sphinx.ext.autosummary'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -441,3 +443,9 @@ autodoc_default_flags = [
     'undoc-members',
     'inherited-members',
     'show-inheritance']
+
+# numpydoc settings
+numpydoc_show_class_members = True
+
+# this expects all class members to have their own page
+numpydoc_class_members_toctree = False

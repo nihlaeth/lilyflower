@@ -1,11 +1,6 @@
 lilyflower package
 ==================
 
-.. automodule:: lilyflower
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 Submodules
 ----------
 
@@ -23,3 +18,10 @@ Submodules
    lilyflower.spanners
    lilyflower.tones
 
+Module contents
+---------------
+
+.. automodule:: lilyflower
+    :members:
+    :undoc-members:
+    :show-inheritance:

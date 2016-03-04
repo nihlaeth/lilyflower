@@ -1,6 +1,10 @@
 """Some basic typo catching."""
 # pylint: disable=unused-wildcard-import,wildcard-import,invalid-name
-from lilyflower import *
+from lilyflower.spanners import Slur
+from lilyflower.dynamics import Crescendo, Piano, Piano2
+from lilyflower.tones import Note, Rest, Chord, Pitch
+from lilyflower.commands import Bar
+from lilyflower.containers import Staff, Measure, BookPart, LilyFile, Parallel
 
 
 slur = Slur()

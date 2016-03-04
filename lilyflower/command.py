@@ -6,19 +6,19 @@ class Command(object):
 
     """Non-container command."""
 
-    command = ""
-    min_arguments = 0
-    max_arguments = 0
-    inline = False
-    validated_arguments = None
+    _command = ""
+    _min_arguments = 0
+    _max_arguments = 0
+    _inline = False
+    _validated_arguments = None
 
     def __init__(self, *arguments):
         """Store arguments."""
-        if len(arguments) < self.min_arguments or \
-                len(arguments) > self.max_arguments:
+        if len(arguments) < self._min_arguments or \
+                len(arguments) > self._max_arguments:
             raise InvalidArgument("Expects between %d and %d arguments." % (
-                self.min_arguments, self.max_arguments))
-        self.arguments = arguments
+                self._min_arguments, self._max_arguments))
+        self._arguments = arguments
         self._validate_arguments()
 
     def _validate_arguments(self):
@@ -34,11 +34,11 @@ class Command(object):
         indent_level = 0
         if format_spec != "":
             indent_level = int(format_spec)
-        result = self.command
-        if self.validated_arguments is not None:
+        result = self._command
+        if self._validated_arguments is not None:
             new_indent = indent_level + 1
             result += " " + " ".join(
                 format(
                     item,
-                    str(new_indent)) for item in self.validated_arguments)
+                    str(new_indent)) for item in self._validated_arguments)
         return result

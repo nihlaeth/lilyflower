@@ -8,17 +8,17 @@ class LilyFile(Container):
 
     """Container for a single lilypond file."""
 
-    delimiter_pre = ""
-    delimiter_post = ""
+    _delimiter_pre = ""
+    _delimiter_post = ""
 
     def __format__(self, _):
         """Return lilypond code."""
         # root container does not indent its children
         result = "%% Created with lilyflower at %s\n" % datetime.datetime.now()
         inline_previous = False
-        for item in self.container:
+        for item in self._container:
             separator = "\n"
-            inline_current = item.inline
+            inline_current = item._inline
             # the only time we need a space as separator is when
             # both the current and previous item are inline
             if inline_previous and inline_current:
@@ -32,56 +32,56 @@ class Book(Container):
 
     """Book container."""
 
-    command = "\\book"
+    _command = "\\book"
 
 
 class BookPart(Container):
 
     """Book subdivision."""
 
-    command = "\\bookpart"
+    _command = "\\bookpart"
 
 
 class With(Container):
 
     """With block."""
 
-    command = "\\with"
+    _command = "\\with"
 
 
 class Score(Container):
 
     """Score block."""
 
-    command = "\\score"
+    _command = "\\score"
 
 
 class Staff(Container):
 
     """Staff block."""
 
-    command = "\\staff"
+    _command = "\\staff"
 
 
 class Header(Container):
 
     """Header block."""
 
-    command = "\\header"
+    _command = "\\header"
 
 
 class Layout(Container):
 
     """Layout block."""
 
-    command = "\\layout"
+    _command = "\\layout"
 
 
 class Midi(Container):
 
     """Midi block."""
 
-    command = "\\midi"
+    _command = "\\midi"
 
 
 class Parallel(Container):
@@ -96,23 +96,23 @@ class Voice(Container):
 
     """Voice block."""
 
-    command = "\\voice"
+    _command = "\\voice"
 
 
 class Paper(Container):
 
     """Paper block."""
 
-    command = "\\paper"
+    _command = "\\paper"
 
 
 class New(Container):
 
     """New block."""
 
-    command = "\\new"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\new"
+    _min_arguments = 1
+    _max_arguments = 1
 
     # TODO: we need argument validation here!
 
@@ -121,36 +121,36 @@ class Lyrics(Container):
 
     """Lyrics block."""
 
-    command = "\\lyrics"
+    _command = "\\lyrics"
 
 
 class AddLyrics(Container):
 
     """AddLyrics block."""
 
-    command = "\\addlyrics"
+    _command = "\\addlyrics"
 
 
 class LyricsTo(Container):
 
     """LyricsTo block."""
 
-    command = "\\lyricsto"
+    _command = "\\lyricsto"
 
 
 class Absolute(Container):
 
     """Absolute block."""
 
-    command = "\\absolute"
+    _command = "\\absolute"
 
 
 class Relative(Container):
 
     """Relative block."""
 
-    command = "\\relative"
-    max_arguments = 1
+    _command = "\\relative"
+    _max_arguments = 1
 
     # TODO: we need argument validation here!
 
@@ -159,9 +159,9 @@ class Transpose(Container):
 
     """Transpose block."""
 
-    command = "\\transpose"
-    min_arguments = 2
-    max_arguments = 2
+    _command = "\\transpose"
+    _min_arguments = 2
+    _max_arguments = 2
 
     # TODO: we need argument validation here!
 
@@ -170,16 +170,16 @@ class Markup(Container):
 
     """Markup block."""
 
-    command = "\\markup"
+    _command = "\\markup"
 
 
 class Repeat(Container):
 
     """Repeat block."""
 
-    command = "\\repeat"
-    min_arguments = 2
-    max_arguments = 2
+    _command = "\\repeat"
+    _min_arguments = 2
+    _max_arguments = 2
 
     # TODO: we need argument validation here!
 
@@ -195,9 +195,9 @@ class Measure(Container):
     but not much else.
     """
 
-    max_arguments = 1
-    delimiter_pre = ""
-    delimiter_post = ""
+    _max_arguments = 1
+    _delimiter_pre = ""
+    _delimiter_post = ""
 
     # TODO: argument validation! make sure we got 0 or 1 bar objects.
 
@@ -206,11 +206,10 @@ class Measure(Container):
         indent_level = 0
         if format_spec is not "":
             indent_level = int(format_spec)
-        result = ""
-        result += " ".join([
-            format(item, str(indent_level + 1)) for item in self.container])
-        if len(self.arguments) < 1:
+        result = " ".join([
+            format(item, str(indent_level + 1)) for item in self._container])
+        if len(self._arguments) < 1:
             result += " |"
         else:
-            result += " %s" % format(self.arguments[0])
+            result += " %s" % format(self._arguments[0])
         return result

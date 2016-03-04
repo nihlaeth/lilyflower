@@ -1,7 +1,11 @@
 """Note and rest objects - represent a tonal unit."""
 # pylint: disable = too-few-public-methods,relative-import
 import re
-from errors import InvalidPitch, InvalidOctave, InvalidDuration, InvalidArgument
+from errors import (
+    InvalidPitch,
+    InvalidOctave,
+    InvalidDuration,
+    InvalidArgument)
 from spanners import Spanner
 from notecommands import NoteCommand
 
@@ -36,29 +40,29 @@ class Tone(object):
 
     """Grouping class so tones can be recognized."""
 
-    inline = True
+    _inline = True
 
 
 class NoteCommandMixin(object):
 
     """Provide methods for dealing with note commands."""
 
-    note_commands = None
+    _note_commands = None
 
-    def process_note_commands(self, note_commands):
+    def _process_note_commands(self, note_commands):
         """Validate and store note commands."""
         if note_commands is None:
-            self.note_commands = []
+            self._note_commands = []
         else:
-            self.note_commands = [] + note_commands
-        for command in self.note_commands:
+            self._note_commands = [] + note_commands
+        for command in self._note_commands:
             if not isinstance(command, NoteCommand):
                 raise InvalidArgument("expected NoteCommand object")
 
-    def format_note_commands(self):
+    def _format_note_commands(self):
         """Return lilypond code."""
-        if self.note_commands is not None:
-            return "".join(format(item) for item in self.note_commands)
+        if self._note_commands is not None:
+            return "".join(format(item) for item in self._note_commands)
         else:
             return ""
 
@@ -67,22 +71,22 @@ class SpannerMixin(object):
 
     """Provide methods for dealing with spanner objects."""
 
-    spanners = None
+    _spanners = None
 
-    def process_spanners(self, spanners):
+    def _process_spanners(self, spanners):
         """Validate and store spanner objects."""
         if spanners is None:
-            self.spanners = []
+            self._spanners = []
         else:
-            self.spanners = [] + spanners
-        for spanner in self.spanners:
+            self._spanners = [] + spanners
+        for spanner in self._spanners:
             if not isinstance(spanner, Spanner):
                 raise InvalidArgument("expected Spanner object")
 
-    def format_spanners(self):
+    def _format_spanners(self):
         """Return lilypond code."""
-        if self.note_commands is not None:
-            return "".join(format(item) for item in self.spanners)
+        if self._note_commands is not None:
+            return "".join(format(item) for item in self._spanners)
         else:
             return ""
 
@@ -93,14 +97,14 @@ class Pitch(Tone):
 
     def __init__(self, pitch, octave=""):
         """Set basic data."""
-        self.pitch = pitch
+        self._pitch = pitch
         _validate_pitch(pitch)
         self.octave = octave
         _validate_octave(octave)
 
     def __format__(self, _):
         """Pitch in lilypond format."""
-        return "%s%s" % (self.pitch, self.octave)
+        return "%s%s" % (self._pitch, self.octave)
 
 
 class Rest(Tone, NoteCommandMixin):
@@ -109,13 +113,13 @@ class Rest(Tone, NoteCommandMixin):
 
     def __init__(self, duration="", note_commands=None):
         """Set basic data."""
-        self.duration = duration
+        self._duration = duration
         _validate_duration(duration)
-        self.process_note_commands(note_commands)
+        self._process_note_commands(note_commands)
 
     def __format__(self, _):
         """Return lilypond code."""
-        return "r%s%s" % (self.duration, self.format_note_commands())
+        return "r%s%s" % (self._duration, self._format_note_commands())
 
 
 class Note(Tone, NoteCommandMixin, SpannerMixin):
@@ -144,31 +148,31 @@ class Note(Tone, NoteCommandMixin, SpannerMixin):
             note (fingering instructions, dynamics, tempo indications, etc.)
         spanners -> (list) slurs and phrasing
         """
-        self.pitch = pitch
+        self._pitch = pitch
         _validate_pitch(pitch)
         self.octave = octave
         _validate_octave(octave)
-        self.duration = duration
+        self._duration = duration
         _validate_duration(duration)
-        self.division = division
+        self._division = division
         # TODO: validate division
-        self.tie = tie
-        self.process_note_commands(note_commands)
-        self.process_spanners(spanners)
+        self._tie = tie
+        self._process_note_commands(note_commands)
+        self._process_spanners(spanners)
 
     def __format__(self, _):
         """Return note as it should appear in lilypond file."""
         note = "%s%s%s" % (
-            self.pitch,
+            self._pitch,
             self.octave,
-            self.duration)
-        if self.division is not None:
-            note += ":%d" % self.division
-        if self.tie:
+            self._duration)
+        if self._division is not None:
+            note += ":%d" % self._division
+        if self._tie:
             note += "~"
         note += "".join([
-            self.format_note_commands(),
-            self.format_spanners()])
+            self._format_note_commands(),
+            self._format_spanners()])
         return note
 
 
@@ -196,28 +200,28 @@ class Chord(Tone, NoteCommandMixin, SpannerMixin):
         """
         # TODO: pitches inside a chord can be tied - allow this
         # TODO: implement chord mode
-        self.pitches = pitches
+        self._pitches = pitches
         for pitch in pitches:
             if not isinstance(pitch, Pitch):
                 raise InvalidArgument("expected a pitch object: %s" % pitch)
-        self.duration = duration
+        self._duration = duration
         _validate_duration(duration)
-        self.division = division
+        self._division = division
         # TODO: validate division
-        self.tie = tie
-        self.process_note_commands(note_commands)
-        self.process_spanners(spanners)
+        self._tie = tie
+        self._process_note_commands(note_commands)
+        self._process_spanners(spanners)
 
     def __format__(self, _):
         """Return note as it should appear in lilypond file."""
         note = "< %s>%s" % (
-            " ".join(format(pitch) for pitch in self.pitches),
-            self.duration)
-        if self.division is not None:
-            note += ":%d" % self.division
-        if self.tie:
+            " ".join(format(pitch) for pitch in self._pitches),
+            self._duration)
+        if self._division is not None:
+            note += ":%d" % self._division
+        if self._tie:
             note += "~"
         note += "".join([
-            self.format_note_commands(),
-            self.format_spanners()])
+            self._format_note_commands(),
+            self._format_spanners()])
         return note

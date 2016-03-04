@@ -7,10 +7,10 @@ class Bar(Command):
 
     """Bar checks and delimiters."""
 
-    command = "\\bar"
-    min_arguments = 1
-    max_arguments = 1
-    inline = True
+    _command = "\\bar"
+    _min_arguments = 1
+    _max_arguments = 1
+    _inline = True
 
     def _validate_arguments(self):
         """Make sure argument is a valid bar."""
@@ -52,8 +52,8 @@ class Bar(Command):
             ":|.S.|:-S",
             ":|.S.|:-S"]
         # TODO: add support for custom bar definitions
-        if self.arguments[0] not in valid_bars:
+        if self._arguments[0] not in valid_bars:
             raise InvalidArgument(
-                "%s not a valid bar type." % self.arguments[0])
+                "%s not a valid bar type." % self._arguments[0])
         else:
-            self.validated_arguments = ["\"%s\"" % self.arguments[0]]
+            self._validated_arguments = ["\"%s\"" % self._arguments[0]]

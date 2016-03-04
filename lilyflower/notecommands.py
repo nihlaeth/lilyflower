@@ -8,7 +8,7 @@ class NoteCommand(Command):
 
     """Commands that attach to a tone."""
 
-    inline = True
+    _inline = True
 
     def __init__(self, *arguments, **kwargs):
         """Set arguments and position(^|-|_|).
@@ -17,13 +17,13 @@ class NoteCommand(Command):
         """
         Command.__init__(self, *arguments)
         if 'position' not in kwargs:
-            self.position = ""
+            self._position = ""
         else:
-            self.position = kwargs['position']
-        if re.match("^[\\^\\-_]?$", self.position) is None:
+            self._position = kwargs['position']
+        if re.match("^[\\^\\-_]?$", self._position) is None:
             raise InvalidArgument(
-                "Expected (^|-|_|) as position, not %r" % self.position)
+                "Expected (^|-|_|) as position, not %r" % self._position)
 
     def __format__(self, format_spec):
         """Return lilypond code."""
-        return "%s%s" % (self.position, Command.__format__(self, format_spec))
+        return "%s%s" % (self._position, Command.__format__(self, format_spec))

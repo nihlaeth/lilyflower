@@ -8,7 +8,7 @@ class Dynamic(NoteCommand):
 
     """Dynamic mark."""
 
-    inline = True
+    _inline = True
 
 
 class Crescendo(Dynamic):
@@ -22,27 +22,27 @@ class Crescendo(Dynamic):
     Optional argument: closing part (Dynamic) - default = \\!
     """
 
-    command = "\\<"
-    close = "\\!"
-    max_arguments = 1
-    num_displays = 0
+    _command = "\\<"
+    _close = "\\!"
+    _max_arguments = 1
+    _num_displays = 0
 
     def _validate_arguments(self):
         """Set the closing part."""
-        if len(self.arguments) == 1:
-            if not isinstance(self.arguments[0], Dynamic):
+        if len(self._arguments) == 1:
+            if not isinstance(self._arguments[0], Dynamic):
                 raise InvalidArgument("Expects a Dynamic as closing part.")
             else:
-                self.close = self.arguments[0]
+                self._close = self._arguments[0]
 
     def __format__(self, _):
         """Return lilypond code."""
-        if self.num_displays % 2 == 0:
-            self.num_displays += 1
-            return self.command
-        elif self.num_displays % 2 == 1:
-            self.num_displays += 1
-            return format(self.close)
+        if self._num_displays % 2 == 0:
+            self._num_displays += 1
+            return self._command
+        elif self._num_displays % 2 == 1:
+            self._num_displays += 1
+            return format(self._close)
 
 
 class Decrescendo(Crescendo):
@@ -51,142 +51,142 @@ class Decrescendo(Crescendo):
     A decrescendo.
 
     First format(), it displays \\>, the second time it displays the
-    defined close command (see below).
+    defined close _command (see below).
 
     Optional argument: closing part (Dynamic) - default = \\!
     """
 
-    command = "\\>"
+    _command = "\\>"
 
 
 class Piano5(Dynamic):
 
     r"""Pianississississimo (\\ppppp)."""
 
-    command = "\\ppppp"
+    _command = "\\ppppp"
 
 
 class Piano4(Dynamic):
 
     r"""Pianissississimo (\\pppp)."""
 
-    command = "\\pppp"
+    _command = "\\pppp"
 
 
 class Piano3(Dynamic):
 
     r"""Pianississimo (\\ppp)."""
 
-    command = "\\ppp"
+    _command = "\\ppp"
 
 
 class Piano2(Dynamic):
 
     r"""Pianissimo (\\pp)."""
 
-    command = "\\pp"
+    _command = "\\pp"
 
 
 class Piano(Dynamic):
 
     r"""Piano (\\p)."""
 
-    command = "\\p"
+    _command = "\\p"
 
 
 class MezzoPiano(Dynamic):
 
     r"""MezzoPiano (\\mp)."""
 
-    command = "\\mp"
+    _command = "\\mp"
 
 
 class MezzoForte(Dynamic):
 
     r"""MezzoForte (\\mf)."""
 
-    command = "\\mf"
+    _command = "\\mf"
 
 
 class Forte(Dynamic):
 
     r"""Forte (\\f)."""
 
-    command = "\\f"
+    _command = "\\f"
 
 
 class Forte2(Dynamic):
 
     r"""Fortissimo (\\ff)."""
 
-    command = "\\ff"
+    _command = "\\ff"
 
 
 class Forte3(Dynamic):
 
     r"""Fortississimo (\\fff)."""
 
-    command = "\\fff"
+    _command = "\\fff"
 
 
 class Forte4(Dynamic):
 
     r"""Fortissississimo (\\ffff)."""
 
-    command = "\\ffff"
+    _command = "\\ffff"
 
 
 class Forte5(Dynamic):
 
     r"""Fortississississimo (\\fffff)."""
 
-    command = "\\fffff"
+    _command = "\\fffff"
 
 
 class FortePiano(Dynamic):
 
     r"""FortePiano (\\fp)."""
 
-    command = "\\fp"
+    _command = "\\fp"
 
 
 class Sforzato(Dynamic):
 
     r"""Sforzato (\\sf)."""
 
-    command = "\\sf"
+    _command = "\\sf"
 
 
 class Sfortissimo(Dynamic):
 
     r"""No idea what this is called properly (\\sff)."""
 
-    command = "\\sff"
+    _command = "\\sff"
 
 
 class Sforzando(Dynamic):
 
     r"""Sforzando (\\sfz)."""
 
-    command = "\\sfz"
+    _command = "\\sfz"
 
 
 class Spiano(Dynamic):
 
     r"""No idea what this is called properly (\\sp)."""
 
-    command = "\\sp"
+    _command = "\\sp"
 
 
 class Spianissimo(Dynamic):
 
     r"""No idea what this is called properly (\\spp)."""
 
-    command = "\\spp"
+    _command = "\\spp"
 
 
 class Rinforzando(Dynamic):
 
     r"""Rinforzando (\\rfz)."""
 
-    command = "\\rfz"
+    _command = "\\rfz"

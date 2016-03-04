@@ -28,11 +28,11 @@ class MarkupText(object):
 
     """Simple text for use inside markup blocks."""
 
-    inline = True
+    _inline = True
 
     def __init__(self, text):
         """Store text."""
-        self.text = text
+        self._text = text
         # TODO: validation (what do we allow here?)
 
 
@@ -51,7 +51,7 @@ class MarkupContainer(Container, NoteCommand):
     or stored in a variable that is then attached to a note.
     """
 
-    inline = True
+    _inline = True
 
     def __init__(self, content=None, arguments=None, position=""):
         """Store contents, arguments and optional position(^|-|_||)."""
@@ -60,13 +60,13 @@ class MarkupContainer(Container, NoteCommand):
 
     def _validate_content(self):
         """Make sure content belongs in a markup container."""
-        for item in self.container:
+        for item in self._container:
             _validate_markup(item)
 
     def __format__(self, format_spec):
         """Return lilypond code."""
         return "%s%s" % (
-            self.position,
+            self._position,
             Container.__format__(self, format_spec))
 
 
@@ -74,7 +74,7 @@ class Markup(MarkupContainer):
 
     """Markup block."""
 
-    command = "\\markup"
+    _command = "\\markup"
 
 
 #
@@ -86,278 +86,279 @@ class Bold(MarkupContainer):
 
     """Bold text."""
 
-    command = "\\bold"
+    _command = "\\bold"
 
 
 class Italic(MarkupContainer):
 
     """Italic text."""
 
-    command = "\\italic"
+    _command = "\\italic"
 
 
 class AbsFontSize(MarkupContainer):
 
     """Set absolute font size."""
 
-    command = "\\abs-fontsize"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\abs-fontsize"
+    _min_arguments = 1
+    _max_arguments = 1
 
     def _validate_arguments(self):
         """Make sure we get a scheme number (UnsignedFloat)."""
-        if not isinstance(self.arguments[0], UnsignedFloat):
+        if not isinstance(self._arguments[0], UnsignedFloat):
             raise InvalidArgument(
                 "Expected UnsignedFloat(SchemeData),"
-                " not %r" % self.arguments[0])
-        self.validated_arguments.append(self.arguments[0])
+                " not %r" % self._arguments[0])
+        self._validated_arguments.append(self._arguments[0])
 
 
 class Box(MarkupContainer):
 
     """Draw a box around some text."""
 
-    command = "\\box"
+    _command = "\\box"
 
 
 class Caps(MarkupContainer):
 
     """ALLCAPS."""
 
-    command = "\\caps"
+    _command = "\\caps"
 
 
 class DynamicFont(MarkupContainer):
 
     """Use the dynamic font (only contains f s z m p and r)."""
 
-    command = "\\dynamic"
+    _command = "\\dynamic"
 
 
 class FingerFont(MarkupContainer):
 
     """Use the finger font."""
 
-    command = "\\finger"
+    _command = "\\finger"
 
 
 class FontCaps(MarkupContainer):
 
     """Set font-shape to caps (font has to support this)."""
 
-    command = "\\fontCaps"
+    _command = "\\fontCaps"
 
 
 class FontSize(MarkupContainer):
 
     """Set font-size."""
 
-    command = "\\fontsize"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\fontsize"
+    _min_arguments = 1
+    _max_arguments = 1
 
     def _validate_arguments(self):
         """Make sure we get a scheme number(SignedFloat)."""
-        if not isinstance(self.arguments[0], SignedFloat):
+        if not isinstance(self._arguments[0], SignedFloat):
             raise InvalidArgument(
-                "Expected SignedFloat(SchemeData), not %r" % self.arguments[0])
-        self.validated_arguments.append(self.arguments[0])
+                "Expected SignedFloat(SchemeData), "
+                "not %r" % self._arguments[0])
+        self._validated_arguments.append(self._arguments[0])
 
 
 class Huge(MarkupContainer):
 
     """Set font-size to +2."""
 
-    command = "\\huge"
+    _command = "\\huge"
 
 
 class Large(MarkupContainer):
 
     """Set font-size to +1."""
 
-    command = "\\large"
+    _command = "\\large"
 
 
 class Larger(MarkupContainer):
 
     """Increase font size relative to current setting."""
 
-    command = "\\larger"
+    _command = "\\larger"
 
 
 class Magnify(MarkupContainer):
 
     """Enlarge font (only works if font name is set)."""
 
-    command = "\\magnify"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\magnify"
+    _min_arguments = 1
+    _max_arguments = 1
 
     def _validate_arguments(self):
         """Make sure we get a SchemeData String."""
-        if not isinstance(self.arguments[0], String):
+        if not isinstance(self._arguments[0], String):
             raise InvalidArgument(
-                "Expected String(SchemeData), not %r" % self.arguments[0])
-        self.validated_arguments.append(self.arguments[0])
+                "Expected String(SchemeData), not %r" % self._arguments[0])
+        self._validated_arguments.append(self._arguments[0])
 
 
 class Medium(MarkupContainer):
 
     """Contrast to bold."""
 
-    command = "\\medium"
+    _command = "\\medium"
 
 
 class NormalSizeSub(MarkupContainer):
 
     """Set font size to normal subscript."""
 
-    command = "\\normal-size-sub"
+    _command = "\\normal-size-sub"
 
 
 class NormalSizeSuper(MarkupContainer):
 
     """Set font size to normal superscript."""
 
-    command = "\\normal-size-super"
+    _command = "\\normal-size-super"
 
 
 class NormalText(MarkupContainer):
 
     """Set everything except size to default."""
 
-    command = "\\normal-text"
+    _command = "\\normal-text"
 
 
 class NumberFont(MarkupContainer):
 
     """Set number font family (only numbers and some punctuation)."""
 
-    command = "\\number"
+    _command = "\\number"
 
 
 class Replace(MarkupContainer):
 
     """Replace a string by another."""
 
-    command = "\\replace"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\replace"
+    _min_arguments = 1
+    _max_arguments = 1
 
     def _validate_arguments(self):
         """Make sure we got passed an AssociationList(SchemeData)."""
-        if not isinstance(self.arguments[0], AssociationList):
+        if not isinstance(self._arguments[0], AssociationList):
             raise InvalidArgument(
                 "Expected an AssociationList(SchemeData),"
-                " not %r" % self.arguments[0])
-        self.validated_arguments.append(self.arguments[0])
+                " not %r" % self._arguments[0])
+        self._validated_arguments.append(self._arguments[0])
 
 
 class RomanFont(MarkupContainer):
 
     """Set roman font family."""
 
-    command = "\\roman"
+    _command = "\\roman"
 
 
 class SansFont(MarkupContainer):
 
     """Set sans font family."""
 
-    command = "\\sans"
+    _command = "\\sans"
 
 
 class Simple(MarkupCommand):
 
     """Simple text."""
 
-    command = "\\simple"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\simple"
+    _min_arguments = 1
+    _max_arguments = 1
 
     def _validate_arguments(self):
         """Make sure we received a SchemeData String."""
-        if not isinstance(self.arguments[0], String):
+        if not isinstance(self._arguments[0], String):
             raise InvalidArgument(
-                "Expected a String(SchemeData), not %r" % self.arguments[0])
-        self.validated_arguments[0] = self.arguments[0]
+                "Expected a String(SchemeData), not %r" % self._arguments[0])
+        self._validated_arguments[0] = self._arguments[0]
 
 
 class Small(MarkupContainer):
 
     """Set font-size to -1."""
 
-    command = "\\small"
+    _command = "\\small"
 
 
 class SmallCaps(MarkupContainer):
 
     """Small font-size, all-caps."""
 
-    command = "\\smallCaps"
+    _command = "\\smallCaps"
 
 
 class Smaller(MarkupContainer):
 
     """Decrease font-size relative to current setting."""
 
-    command = "\\smaller"
+    _command = "\\smaller"
 
 
 class Sub(MarkupContainer):
 
     """Subscript."""
 
-    command = "\\sub"
+    _command = "\\sub"
 
 
 class Super(MarkupContainer):
 
     """Superscript."""
 
-    command = "\\super"
+    _command = "\\super"
 
 
 class Teeny(MarkupContainer):
 
     """Set font size to -3."""
 
-    command = "\\teeny"
+    _command = "\\teeny"
 
 
 class TextFont(MarkupContainer):
 
     """Set font to text family."""
 
-    command = "\\text"
+    _command = "\\text"
 
 
 class Tiny(MarkupContainer):
 
     """Set font size to -2."""
 
-    command = "\\tiny"
+    _command = "\\tiny"
 
 
 class TypeWriterFont(MarkupContainer):
 
     """Set font family to typewriter."""
 
-    command = "\\typewriter"
+    _command = "\\typewriter"
 
 
 class Underline(MarkupContainer):
 
     """Underline text."""
 
-    command = "\\underline"
+    _command = "\\underline"
 
 
 class Upright(MarkupContainer):
 
     """Upright in contrast to italic."""
 
-    command = "\\upright"
+    _command = "\\upright"
 
 
 #
@@ -369,58 +370,58 @@ class CenterAlign(MarkupContainer):
 
     """Align to its X center (whatever that means)."""
 
-    command = "\\center-align"
+    _command = "\\center-align"
 
 
 class CenterColumn(MarkupContainer):
 
     """Align in a centered column."""
 
-    command = "\\center-column"
+    _command = "\\center-column"
 
 
 class Column(MarkupContainer):
 
     """Stack contents vertically."""
 
-    command = "\\column"
+    _command = "\\column"
 
 
 class Combine(MarkupCommand):
 
     """Print two markups on top of each other."""
 
-    command = "\\combine"
-    min_arguments = 2
-    max_arguments = 2
+    _command = "\\combine"
+    _min_arguments = 2
+    _max_arguments = 2
 
     def _validate_arguments(self):
         """Make sure arguments count as markup."""
-        _validate_markup(self.arguments[0])
-        _validate_markup(self.arguments[1])
-        self.validated_arguments.append(self.arguments[0])
-        self.validated_arguments.append(self.arguments[1])
+        _validate_markup(self._arguments[0])
+        _validate_markup(self._arguments[1])
+        self._validated_arguments.append(self._arguments[0])
+        self._validated_arguments.append(self._arguments[1])
 
 
 class Concat(MarkupContainer):
 
     """Combine contents in a horizontal line without space in between."""
 
-    command = "\\concat"
+    _command = "\\concat"
 
 
 class DirColumn(MarkupContainer):
 
     """Put contents in column, according to the direction layout property."""
 
-    command = "\\dir-column"
+    _command = "\\dir-column"
 
 
 class FillLine(MarkupContainer):
 
     """Space contents over entire width of line-width layout property."""
 
-    command = "\\fill-line"
+    _command = "\\fill-line"
 
 
 class FillWithPattern(MarkupCommand):
@@ -438,116 +439,118 @@ class FillWithPattern(MarkupCommand):
     markup_right -> Markup element - to be displayed at the right of pattern
     """
 
-    command = "\\fill-with-pattern"
-    min_arguments = 5
-    max_arguments = 5
+    _command = "\\fill-with-pattern"
+    _min_arguments = 5
+    _max_arguments = 5
 
     def _validate_arguments(self):
         """Make sure it at least appears valid."""
         # space (should be Int)
-        if not isinstance(self.arguments[0], UnsignedFloat):
+        if not isinstance(self._arguments[0], UnsignedFloat):
             raise InvalidArgument(
                 "Expected UnsignedFloat(SchemeData), "
-                "not %r", self.arguments[0])
+                "not %r", self._arguments[0])
         # direction (should be Direction)
-        if not isinstance(self.arguments[1], SignedFloat):
+        if not isinstance(self._arguments[1], SignedFloat):
             raise InvalidArgument(
                 "Expected Direction(SchemeData), "
-                " or a SignedFloat(SchemeData), not %r", self.arguments[1])
+                " or a SignedFloat(SchemeData), not %r", self._arguments[1])
 
         # pattern (should be markup element)
-        _validate_markup(self.arguments[2])
+        _validate_markup(self._arguments[2])
 
         # markup_left (should be markup element)
-        _validate_markup(self.arguments[3])
+        _validate_markup(self._arguments[3])
 
         # markup_right (should be markup element)
-        _validate_markup(self.arguments[4])
+        _validate_markup(self._arguments[4])
 
-        self.validated_arguments.extend(self.arguments)
+        self._validated_arguments.extend(self._arguments)
 
 
 class GeneralAlign(MarkupContainer):
 
     """Align content in <axis> direction to the <dir> side."""
 
-    command = "\\general-align"
-    min_arguments = 2
-    max_arguments = 2
+    _command = "\\general-align"
+    _min_arguments = 2
+    _max_arguments = 2
 
     def _validate_arguments(self):
         """Make sure arguments make some kind of sense."""
         # axis (should be int or axis)
-        if not isinstance(self.arguments[0], SignedInt):
+        if not isinstance(self._arguments[0], SignedInt):
             raise InvalidArgument(
                 "Expected SignedInt(SchemeData) or "
-                "Axis(SchemeData), not %r" % self.arguments[0])
+                "Axis(SchemeData), not %r" % self._arguments[0])
         # direction
-        if not isinstance(self.arguments[1], SignedFloat):
+        if not isinstance(self._arguments[1], SignedFloat):
             raise InvalidArgument(
                 "Expected Direction(SchemeData), "
-                " or a SignedFloat(SchemeData), not %r", self.arguments[1])
-        self.validated_arguments.append(self.arguments[0])
-        self.validated_arguments.append(self.arguments[1])
+                " or a SignedFloat(SchemeData), not %r", self._arguments[1])
+        self._validated_arguments.append(self._arguments[0])
+        self._validated_arguments.append(self._arguments[1])
 
 
 class HAlign(MarkupContainer):
 
     """Horizontal align."""
 
-    command = "\\halign"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\halign"
+    _min_arguments = 1
+    _max_arguments = 1
 
     def _validate_arguments(self):
         """Validate arguments."""
         # direction
-        if not isinstance(self.arguments[0], SignedFloat):
+        if not isinstance(self._arguments[0], SignedFloat):
             raise InvalidArgument(
                 "Expected Direction(SchemeData), "
-                " or a SignedFloat(SchemeData), not %r", self.arguments[0])
-        self.validated_arguments.append(self.arguments[0])
+                " or a SignedFloat(SchemeData), not %r", self._arguments[0])
+        self._validated_arguments.append(self._arguments[0])
 
 
 class HCenterIn(MarkupContainer):
 
     """Center horiz. within a box of extending len/2 to both sides."""
 
-    command = "\\halign-in"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\halign-in"
+    _min_arguments = 1
+    _max_arguments = 1
 
     def _validate_arguments(self):
         """Validate arguments."""
-        if not isinstance(self.arguments[0], SignedFloat):
+        if not isinstance(self._arguments[0], SignedFloat):
             raise InvalidArgument(
-                "Expected SignedFloat(SchemeData), not %r" % self.arguments[0])
-        self.validated_arguments.append(self.arguments[0])
+                "Expected SignedFloat(SchemeData), "
+                "not %r" % self._arguments[0])
+        self._validated_arguments.append(self._arguments[0])
 
 
 class HSpace(MarkupCommand):
 
     """Create invisible object taking up horizontal space."""
 
-    command = "\\hspace"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\hspace"
+    _min_arguments = 1
+    _max_arguments = 1
 
     def _validate_arguments(self):
         """Validate arguments."""
-        if not isinstance(self.arguments[0], SignedFloat):
+        if not isinstance(self._arguments[0], SignedFloat):
             raise InvalidArgument(
-                "Expected SignedFloat(SchemeData), not %r" % self.arguments[0])
-        self.validated_arguments.append(self.arguments[0])
+                "Expected SignedFloat(SchemeData), "
+                "not %r" % self._arguments[0])
+        self._validated_arguments.append(self._arguments[0])
 
 
 class JustifyField(MarkupCommand):
 
     """Justify markup in field."""
 
-    command = "\\justify-field"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\justify-field"
+    _min_arguments = 1
+    _max_arguments = 1
 
     # TODO: validate argument (scheme field)
 
@@ -556,113 +559,116 @@ class Justify(MarkupContainer):
 
     """Justify contents."""
 
-    command = "\\justify"
+    _command = "\\justify"
 
 
 class JustifyString(MarkupCommand):
 
     """Justify a string."""
 
-    command = "\\jusify-string"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\jusify-string"
+    _min_arguments = 1
+    _max_arguments = 1
 
     def _validate_arguments(self):
         """Validate arguments."""
-        if not isinstance(self.arguments[0], String):
+        if not isinstance(self._arguments[0], String):
             raise InvalidArgument(
-                "Expected String(SchemeData), not %r" % self.arguments[0])
-        self.validated_arguments.append(self.arguments[0])
+                "Expected String(SchemeData), not %r" % self._arguments[0])
+        self._validated_arguments.append(self._arguments[0])
 
 
 class LeftAlign(MarkupContainer):
 
     """Align contents to the left."""
 
-    command = "\\left-align"
+    _command = "\\left-align"
 
 
 class LeftColumn(MarkupContainer):
 
     """Align contents to the left in a column."""
 
-    command = "\\left-column"
+    _command = "\\left-column"
 
 
 class Line(MarkupContainer):
 
     """Put contents in horizontal line."""
 
-    command = "\\line"
+    _command = "\\line"
 
 
 class Lower(MarkupContainer):
 
     """Lower contents vertically."""
 
-    command = "\\lower"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\lower"
+    _min_arguments = 1
+    _max_arguments = 1
 
     def _validate_arguments(self):
         """Validate arguments."""
-        if not isinstance(self.arguments[0], SignedFloat):
+        if not isinstance(self._arguments[0], SignedFloat):
             raise InvalidArgument(
-                "Expected SignedFloat(SchemeData), not %r" % self.arguments[0])
-        self.validated_arguments.append(self.arguments[0])
+                "Expected SignedFloat(SchemeData), "
+                "not %r" % self._arguments[0])
+        self._validated_arguments.append(self._arguments[0])
 
 
 class PadAround(MarkupContainer):
 
     """Pad around contents."""
 
-    command = "\\pad-around"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\pad-around"
+    _min_arguments = 1
+    _max_arguments = 1
 
     def _validate_arguments(self):
         """Validate arguments."""
-        if not isinstance(self.arguments[0], SignedFloat):
+        if not isinstance(self._arguments[0], SignedFloat):
             raise InvalidArgument(
-                "Expected SignedFloat(SchemeData), not %r" % self.arguments[0])
-        self.validated_arguments.append(self.arguments[0])
+                "Expected SignedFloat(SchemeData), "
+                "not %r" % self._arguments[0])
+        self._validated_arguments.append(self._arguments[0])
 
 
 class PadMarkup(PadAround):
 
     """Same as PadAround."""
 
-    command = "\\pad-markup"
+    _command = "\\pad-markup"
 
 
 class PadToBox(MarkupContainer):
 
     """Make content take at least (-x . x) by (-y . y) space."""
 
-    command = "\\pad-to-box"
-    min_arguments = 2
-    max_arguments = 2
+    _command = "\\pad-to-box"
+    _min_arguments = 2
+    _max_arguments = 2
 
     def _validate_arguments(self):
         """Validate arguments."""
-        for arg in self.arguments:
+        for arg in self._arguments:
             if not isinstance(arg, Pair):
                 raise InvalidArgument(
                     "Expected Pair(SchemeData), not %r" % arg)
-            self.validated_arguments.append(arg)
+            self._validated_arguments.append(arg)
 
 
 class PadX(MarkupContainer):
 
     """Pad in the x direction."""
 
-    command = "\\pad-x"
-    min_arguments = 1
-    max_arguments = 1
+    _command = "\\pad-x"
+    _min_arguments = 1
+    _max_arguments = 1
 
     def _validate_arguments(self):
         """Validate arguments."""
-        if not isinstance(self.arguments[0], SignedFloat):
+        if not isinstance(self._arguments[0], SignedFloat):
             raise InvalidArgument(
-                "Expected SignedFloat(SchemeData), not %r" % self.arguments[0])
-        self.validated_arguments.append(self.arguments[0])
+                "Expected SignedFloat(SchemeData), "
+                "not %r" % self._arguments[0])
+        self._validated_arguments.append(self._arguments[0])

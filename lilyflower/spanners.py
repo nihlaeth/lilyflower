@@ -15,19 +15,19 @@ class Spanner(object):
     closed properly, even if a sequense is reversed or sorted.
     """
 
-    num_displays = 0
-    delimiter_open = "("
-    delimiter_close = ")"
-    inline = True
+    _num_displays = 0
+    _delimiter_open = "("
+    _delimiter_close = ")"
+    _inline = True
 
     def __format__(self, _):
         """Return lilypond code."""
-        if self.num_displays % 2 == 0:
-            self.num_displays += 1
-            return self.delimiter_open
-        elif self.num_displays % 2 == 1:
-            self.num_displays += 1
-            return self.delimiter_close
+        if self._num_displays % 2 == 0:
+            self._num_displays += 1
+            return self._delimiter_open
+        elif self._num_displays % 2 == 1:
+            self._num_displays += 1
+            return self._delimiter_close
 
 
 class Slur(Spanner):
@@ -41,13 +41,13 @@ class PhrasingSlur(Spanner):
 
     """Phrasing slur spanner."""
 
-    delimiter_open = "\\("
-    delimiter_cloe = "\\)"
+    _delimiter_open = "\\("
+    _delimiter_close = "\\)"
 
 
 class Beam(Spanner):
 
     """Manual beam spanner."""
 
-    delimiter_open = "["
-    delimiter_close = "]"
+    _delimiter_open = "["
+    _delimiter_close = "]"

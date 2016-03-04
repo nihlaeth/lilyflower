@@ -25,7 +25,7 @@ For now I'll settle for awesome iterables and easy extensibility.
 - [ ] add support for multi-measure rests
 - [x] improve newline situation (too many newlines!)
 - [ ] add commands and text note attachments
-- [ ] allow (^|\_|-) before a notecommand
+- [x] allow (^|\_|-) before a notecommand
 - [x] have containers with a content of len 1 forego delimiters (how to fix this with indents?)
 - [ ] have containers check if content is even remotely valid (class checking)
 - [ ] implement lyrics mode

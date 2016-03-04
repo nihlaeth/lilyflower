@@ -48,10 +48,21 @@ class MarkupContainer(Container, NoteCommand):
 
     inline = True
 
+    def __init__(self, content=None, arguments=None, position=""):
+        """Store contents, arguments and optional position(^|-|_||)."""
+        NoteCommand.__init__(self, position=position)
+        Container.__init__(self, content, arguments)
+
     def validate_content(self):
         """Make sure content belongs in a markup container."""
         for item in self.container:
             _validate_markup(item)
+
+    def __format__(self, format_spec):
+        """Return lilypond code."""
+        return "%s%s" % (
+            self.position,
+            Container.__format__(self, format_spec))
 
 
 class Markup(MarkupContainer):

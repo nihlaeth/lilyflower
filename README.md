@@ -23,20 +23,20 @@ For now I'll settle for awesome iterables and easy extensibility.
 
 ## TODO
 - [ ] add support for multi-measure rests
-- [x] improve newline situation (too many newlines!)
-- [ ] add commands and text note attachments
-- [x] allow (^|\_|-) before a notecommand
-- [x] have containers with a content of len 1 forego delimiters (how to fix this with indents?)
+- [ ] add all notecommands (accents and such)
 - [ ] have containers check if content is even remotely valid (class checking)
+- [ ] add all markup commands and containers
 - [ ] implement lyrics mode
+- [ ] implement chord mode
 - [ ] add comments
-- [ ] add more containers
+- [ ] add all music commands and containers
 - [ ] have containers validate arguments
 - [ ] implement lilypond variables & tags (more readable source code)
-- [x] improve reverse function (nested reverse)
+- [ ] implement property setting
 - [ ] better documentation
+- [ ] test everything
 
 ## Planned features
-- [ ] add parser/generators for quick object generation
-- [ ] transpose and reverse by having lilypond interpret and parsing result
+- [ ] add parser/generators for quick object tree generation
+- [ ] expensive & permanent transpose and reverse by having lilypond interpret and parsing result
 - [ ] template functions to save time (only write music)

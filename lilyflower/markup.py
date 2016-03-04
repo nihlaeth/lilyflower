@@ -2,9 +2,13 @@
 # pylint: disable = relative-import,too-few-public-methods
 from notecommands import NoteCommand
 from container import Container
-from errors import InvalidArgument, InvalidContent
+from errors import InvalidArgument
 from schemedata import (
-    UnsignedFloat, SignedFloat, Pair, List, AssociationList, String, Direction)
+    UnsignedFloat,
+    SignedFloat,
+    AssociationList,
+    String,
+    SignedInt)
 
 
 def _validate_markup(data):
@@ -449,7 +453,7 @@ class FillWithPattern(MarkupCommand):
         # space (should be Int)
         if not isinstance(self.args[0], UnsignedFloat):
             raise InvalidArgument(
-                "Expected Int(SchemeData), not %r", self.args[0])
+                "Expected UnsignedFloat(SchemeData), not %r", self.args[0])
         # direction (should be Direction)
         if not isinstance(self.args[1], SignedFloat):
             raise InvalidArgument(
@@ -466,3 +470,27 @@ class FillWithPattern(MarkupCommand):
         _validate_markup(self.args[4])
 
         self.validated_arguments.extend(self.args)
+
+
+class GeneralAlign(MarkupContainer):
+
+    """Align content in <axis> direction to the <dir> side."""
+
+    command = "\\general-align"
+    min_arguments = 2
+    max_arguments = 2
+
+    def validate_arguments(self):
+        """Make sure arguments make some kind of sense."""
+        # axis (should be int or axis)
+        if not isinstance(self.arguments[0], SignedInt):
+            raise InvalidArgument(
+                "Expected SignedInt(SchemeData) or "
+                "Axis(SchemeData), not %r" % self.arguments[0])
+        # direction
+        if not isinstance(self.arguments[1], SignedFloat):
+            raise InvalidArgument(
+                "Expected Direction(SchemeData), "
+                " or a SignedFloat(SchemeData), not %r", self.arguments[1])
+        self.validated_arguments.append(self.arguments[0])
+        self.validated_arguments.append(self.arguments[1])

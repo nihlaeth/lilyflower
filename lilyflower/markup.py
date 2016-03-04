@@ -1,5 +1,4 @@
 """Everything to do with markup blocks."""
-# pylint: disable = too-few-public-methods
 from lilyflower.notecommands import NoteCommand
 from lilyflower.container import Container
 from lilyflower.errors import InvalidArgument

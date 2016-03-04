@@ -1,5 +1,4 @@
 """Dynamic commands."""
-# pylint: disable=too-few-public-methods
 from lilyflower.notecommands import NoteCommand
 from lilyflower.errors import InvalidArgument
 

@@ -1,5 +1,4 @@
 """Spanner objects."""
-# pylint: disable=too-few-public-methods
 
 
 class Spanner(object):

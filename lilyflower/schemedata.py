@@ -1,5 +1,5 @@
 """Scheme datatypes."""
-# pylint: disable=too-few-public-methods,super-init-not-called
+# pylint: disable=super-init-not-called
 import collections
 from lilyflower.errors import InvalidArgument
 

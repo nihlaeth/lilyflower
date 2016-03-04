@@ -1,5 +1,4 @@
 """Note and rest objects - represent a tonal unit."""
-# pylint: disable = too-few-public-methods
 import re
 from lilyflower.errors import (
     InvalidPitch,

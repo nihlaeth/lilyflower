@@ -4,9 +4,56 @@ from lilyflower.errors import InvalidArgument
 
 class Command(object):
 
-    """Non-container command."""
+    r"""
+    Command stub.
 
-    _command = ""
+    Every content-less command inherits from this. Not meant to be called
+    directly.
+
+    Use format() to get lilypond code.
+
+    Usage::
+
+        Command(*arguments)
+
+    Parameters
+    ==========
+    *arguments:
+        zero or more arguments. ``Command`` does not accept any, but
+        subclasses can set their own requirements.
+
+    Returns
+    =======
+    None
+
+    Raises
+    ======
+    InvalidArgument:
+        if there are too few, too many or the wrong type arguments.
+
+    Notes
+    =====
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.command import Command
+        from lilyflower.errors import InvalidArgument
+
+    .. doctest::
+
+        >>> command = Command()
+        >>> print format(command)
+        \test
+        >>> try:
+        ...     Command("this is not a valid argument")
+        ... except InvalidArgument as e:
+        ...     print e
+        Expects between 0 and 0 arguments.
+    """
+
+    _command = "\\test"
     _min_arguments = 0
     _max_arguments = 0
     _inline = False

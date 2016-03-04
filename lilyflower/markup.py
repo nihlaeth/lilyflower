@@ -8,7 +8,8 @@ from schemedata import (
     SignedFloat,
     AssociationList,
     String,
-    SignedInt)
+    SignedInt,
+    Pair)
 
 
 def _validate_markup(data):
@@ -487,3 +488,180 @@ class GeneralAlign(MarkupContainer):
                 " or a SignedFloat(SchemeData), not %r", self.arguments[1])
         self.validated_arguments.append(self.arguments[0])
         self.validated_arguments.append(self.arguments[1])
+
+
+class HAlign(MarkupContainer):
+
+    """Horizontal align."""
+
+    command = "\\halign"
+    min_arguments = 1
+    max_arguments = 1
+
+    def validate_arguments(self):
+        """Validate arguments."""
+        # direction
+        if not isinstance(self.arguments[0], SignedFloat):
+            raise InvalidArgument(
+                "Expected Direction(SchemeData), "
+                " or a SignedFloat(SchemeData), not %r", self.arguments[0])
+        self.validated_arguments.append(self.arguments[0])
+
+
+class HCenterIn(MarkupContainer):
+
+    """Center horiz. within a box of extending len/2 to both sides."""
+
+    command = "\\halign-in"
+    min_arguments = 1
+    max_arguments = 1
+
+    def validate_arguments(self):
+        """Validate arguments."""
+        if not isinstance(self.arguments[0], SignedFloat):
+            raise InvalidArgument(
+                "Expected SignedFloat(SchemeData), not %r" % self.arguments[0])
+        self.validated_arguments.append(self.arguments[0])
+
+
+class HSpace(MarkupCommand):
+
+    """Create invisible object taking up horizontal space."""
+
+    command = "\\hspace"
+    min_arguments = 1
+    max_arguments = 1
+
+    def validate_arguments(self):
+        """Validate arguments."""
+        if not isinstance(self.args[0], SignedFloat):
+            raise InvalidArgument(
+                "Expected SignedFloat(SchemeData), not %r" % self.args[0])
+        self.validated_arguments.append(self.args[0])
+
+
+class JustifyField(MarkupCommand):
+
+    """Justify markup in field."""
+
+    command = "\\justify-field"
+    min_arguments = 1
+    max_arguments = 1
+
+    # TODO: validate argument (scheme field)
+
+
+class Justify(MarkupContainer):
+
+    """Justify contents."""
+
+    command = "\\justify"
+
+
+class JustifyString(MarkupCommand):
+
+    """Justify a string."""
+
+    command = "\\jusify-string"
+    min_arguments = 1
+    max_arguments = 1
+
+    def validate_arguments(self):
+        """Validate arguments."""
+        if not isinstance(self.args[0], String):
+            raise InvalidArgument(
+                "Expected String(SchemeData), not %r" % self.args[0])
+        self.validated_arguments.append(self.args[0])
+
+
+class LeftAlign(MarkupContainer):
+
+    """Align contents to the left."""
+
+    command = "\\left-align"
+
+
+class LeftColumn(MarkupContainer):
+
+    """Align contents to the left in a column."""
+
+    command = "\\left-column"
+
+
+class Line(MarkupContainer):
+
+    """Put contents in horizontal line."""
+
+    command = "\\line"
+
+
+class Lower(MarkupContainer):
+
+    """Lower contents vertically."""
+
+    command = "\\lower"
+    min_args = 1
+    max_args = 1
+
+    def validate_arguments(self):
+        """Validate arguments."""
+        if not isinstance(self.arguments[0], SignedFloat):
+            raise InvalidArgument(
+                "Expected SignedFloat(SchemeData), not %r" % self.arguments[0])
+        self.validated_arguments.append(self.arguments[0])
+
+
+class PadAround(MarkupContainer):
+
+    """Pad around contents."""
+
+    command = "\\pad-around"
+    min_args = 1
+    max_args = 1
+
+    def validate_arguments(self):
+        """Validate arguments."""
+        if not isinstance(self.arguments[0], SignedFloat):
+            raise InvalidArgument(
+                "Expected SignedFloat(SchemeData), not %r" % self.arguments[0])
+        self.validated_arguments.append(self.arguments[0])
+
+
+class PadMarkup(PadAround):
+
+    """Same as PadAround."""
+
+    command = "\\pad-markup"
+
+
+class PadToBox(MarkupContainer):
+
+    """Make content take at least (-x . x) by (-y . y) space."""
+
+    command = "\\pad-to-box"
+    min_args = 2
+    max_args = 2
+
+    def validate_arguments(self):
+        """Validate arguments."""
+        for arg in self.arguments:
+            if not isinstance(arg, Pair):
+                raise InvalidArgument(
+                    "Expected Pair(SchemeData), not %r" % arg)
+            self.validated_arguments.append(arg)
+
+
+class PadX(MarkupContainer):
+
+    """Pad in the x direction."""
+
+    command = "\\pad-x"
+    min_args = 1
+    max_args = 1
+
+    def validate_arguments(self):
+        """Validate arguments."""
+        if not isinstance(self.arguments[0], SignedFloat):
+            raise InvalidArgument(
+                "Expected SignedFloat(SchemeData), not %r" % self.arguments[0])
+        self.validated_arguments.append(self.arguments[0])

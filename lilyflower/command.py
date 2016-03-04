@@ -19,9 +19,9 @@ class Command(object):
             raise InvalidArgument("Expects between %d and %d arguments." % (
                 self.min_arguments, self.max_arguments))
         self.arguments = arguments
-        self.validate_arguments()
+        self._validate_arguments()
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """
         In-depth argument validation.
 

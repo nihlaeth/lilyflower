@@ -23,7 +23,7 @@ class Container(object):
             might require arguments, or have optional arguments.
         """
         self.container = content
-        self.validate_content()
+        self._validate_content()
         self.validated_arguments = []
         # deal with arguments
         if arguments is None:
@@ -35,9 +35,9 @@ class Container(object):
             raise InvalidArgument("Expects between %d and %d arguments." % (
                 self.min_arguments,
                 self.max_arguments))
-        self.validate_arguments()
+        self._validate_arguments()
 
-    def validate_content(self):
+    def _validate_content(self):
         """
         Do some in-depth content validation.
 
@@ -46,7 +46,7 @@ class Container(object):
         """
         pass
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """
         Do some in-depth argument validation.
 

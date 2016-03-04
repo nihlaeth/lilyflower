@@ -12,7 +12,7 @@ class Bar(Command):
     max_arguments = 1
     inline = True
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Make sure argument is a valid bar."""
         valid_bars = [
             ".",

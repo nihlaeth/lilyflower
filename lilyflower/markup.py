@@ -58,7 +58,7 @@ class MarkupContainer(Container, NoteCommand):
         NoteCommand.__init__(self, position=position)
         Container.__init__(self, content, arguments)
 
-    def validate_content(self):
+    def _validate_content(self):
         """Make sure content belongs in a markup container."""
         for item in self.container:
             _validate_markup(item)
@@ -104,7 +104,7 @@ class AbsFontSize(MarkupContainer):
     min_arguments = 1
     max_arguments = 1
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Make sure we get a scheme number (UnsignedFloat)."""
         if not isinstance(self.arguments[0], UnsignedFloat):
             raise InvalidArgument(
@@ -156,7 +156,7 @@ class FontSize(MarkupContainer):
     min_arguments = 1
     max_arguments = 1
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Make sure we get a scheme number(SignedFloat)."""
         if not isinstance(self.arguments[0], SignedFloat):
             raise InvalidArgument(
@@ -193,7 +193,7 @@ class Magnify(MarkupContainer):
     min_arguments = 1
     max_arguments = 1
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Make sure we get a SchemeData String."""
         if not isinstance(self.arguments[0], String):
             raise InvalidArgument(
@@ -244,7 +244,7 @@ class Replace(MarkupContainer):
     min_arguments = 1
     max_arguments = 1
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Make sure we got passed an AssociationList(SchemeData)."""
         if not isinstance(self.arguments[0], AssociationList):
             raise InvalidArgument(
@@ -275,7 +275,7 @@ class Simple(MarkupCommand):
     min_arguments = 1
     max_arguments = 1
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Make sure we received a SchemeData String."""
         if not isinstance(self.arguments[0], String):
             raise InvalidArgument(
@@ -394,7 +394,7 @@ class Combine(MarkupCommand):
     min_arguments = 2
     max_arguments = 2
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Make sure arguments count as markup."""
         _validate_markup(self.arguments[0])
         _validate_markup(self.arguments[1])
@@ -442,7 +442,7 @@ class FillWithPattern(MarkupCommand):
     min_arguments = 5
     max_arguments = 5
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Make sure it at least appears valid."""
         # space (should be Int)
         if not isinstance(self.arguments[0], UnsignedFloat):
@@ -475,7 +475,7 @@ class GeneralAlign(MarkupContainer):
     min_arguments = 2
     max_arguments = 2
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Make sure arguments make some kind of sense."""
         # axis (should be int or axis)
         if not isinstance(self.arguments[0], SignedInt):
@@ -499,7 +499,7 @@ class HAlign(MarkupContainer):
     min_arguments = 1
     max_arguments = 1
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Validate arguments."""
         # direction
         if not isinstance(self.arguments[0], SignedFloat):
@@ -517,7 +517,7 @@ class HCenterIn(MarkupContainer):
     min_arguments = 1
     max_arguments = 1
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Validate arguments."""
         if not isinstance(self.arguments[0], SignedFloat):
             raise InvalidArgument(
@@ -533,7 +533,7 @@ class HSpace(MarkupCommand):
     min_arguments = 1
     max_arguments = 1
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Validate arguments."""
         if not isinstance(self.arguments[0], SignedFloat):
             raise InvalidArgument(
@@ -567,7 +567,7 @@ class JustifyString(MarkupCommand):
     min_arguments = 1
     max_arguments = 1
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Validate arguments."""
         if not isinstance(self.arguments[0], String):
             raise InvalidArgument(
@@ -604,7 +604,7 @@ class Lower(MarkupContainer):
     min_arguments = 1
     max_arguments = 1
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Validate arguments."""
         if not isinstance(self.arguments[0], SignedFloat):
             raise InvalidArgument(
@@ -620,7 +620,7 @@ class PadAround(MarkupContainer):
     min_arguments = 1
     max_arguments = 1
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Validate arguments."""
         if not isinstance(self.arguments[0], SignedFloat):
             raise InvalidArgument(
@@ -643,7 +643,7 @@ class PadToBox(MarkupContainer):
     min_arguments = 2
     max_arguments = 2
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Validate arguments."""
         for arg in self.arguments:
             if not isinstance(arg, Pair):
@@ -660,7 +660,7 @@ class PadX(MarkupContainer):
     min_arguments = 1
     max_arguments = 1
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Validate arguments."""
         if not isinstance(self.arguments[0], SignedFloat):
             raise InvalidArgument(

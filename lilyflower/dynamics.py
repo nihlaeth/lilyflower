@@ -27,7 +27,7 @@ class Crescendo(Dynamic):
     max_arguments = 1
     num_displays = 0
 
-    def validate_arguments(self):
+    def _validate_arguments(self):
         """Set the closing part."""
         if len(self.arguments) == 1:
             if not isinstance(self.arguments[0], Dynamic):

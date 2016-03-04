@@ -141,7 +141,21 @@ class Container(object):
         indent_level = 0
         if format_spec is not "":
             indent_level = int(format_spec)
-        result = "  " * indent_level
+        if len(self.container) == 1:
+            # don't print delimiters at length 1
+            # also, don't increase indent, we didn't use it here
+            if self.command == "":
+                return format(self.container[0], str(indent_level))
+            elif len(self.validated_arguments) == 0:
+                return "%s %s" % (
+                    self.command,
+                    format(self.container[0], str(indent_level)))
+            else:
+                return "%s %s %s" % (
+                    self.command,
+                    self._format_arguments(),
+                    format(self.container[0], str(indent_level)))
+        result = ""
         if self.command != "":
             result += "%s %s%s" % (
                 self.command,
@@ -152,15 +166,12 @@ class Container(object):
 
         inline_previous = False
         for item in self.container:
-            separator = "\n"
+            separator = "\n%s" % ("  " * (indent_level + 1))
             inline_current = item.inline
             # the only time we need a space as separator is
             # when both the current and previous item are inline
             if inline_previous and inline_current:
                 separator = " "
-            elif not inline_previous and inline_current:
-                # inline items don't indent themselves
-                separator = "\n" + "  " * (indent_level + 1)
             result += "%s%s" % (separator, format(
                 item,
                 str(indent_level + 1)))

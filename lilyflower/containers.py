@@ -206,7 +206,7 @@ class Measure(Container):
         indent_level = 0
         if format_spec is not "":
             indent_level = int(format_spec)
-        result = "  " * indent_level
+        result = ""
         result += " ".join([
             format(item, str(indent_level + 1)) for item in self.container])
         if len(self.arguments) < 1:

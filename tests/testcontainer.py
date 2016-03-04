@@ -4,6 +4,7 @@ from lilyflower import Container
 from nose.tools import assert_equals, assert_list_equal
 
 
+# pylint: disable=too-few-public-methods
 class Note(object):
 
     """Mock note."""
@@ -96,11 +97,30 @@ def test_format():
 
     # increase indent
     result = format(container, "1")
-    expected = "  {\n    a b c\n  }"
+    expected = "{\n    a b c\n  }"
     assert_equals(result, expected)
 
-    # test nesting
+    # test nesting (single argument = no block)
     container = Container([Note('a'), Note('b'), Container([Note('c')])])
     result = format(container)
-    expected = "{\n  a b\n  {\n    c\n  }\n}"
+    expected = "{\n  a b\n  c\n}"
+    assert_equals(result, expected)
+
+    # now check indent when container with content len 1 contains a
+    # container
+    container = Container([
+        Note('a'),
+        Note('b'),
+        Container([Container([Note('c'), Note('d')])])])
+    expected = "{\n  a b\n  {\n    c d\n  }\n}"
+    result = format(container)
+    assert_equals(result, expected)
+
+    # now check with a container of length != 1
+    container = Container([
+        Note('a'),
+        Note('b'),
+        Container([Note('c'), Note('d')])])
+    result = format(container)
+    expected = "{\n  a b\n  {\n    c d\n  }\n}"
     assert_equals(result, expected)

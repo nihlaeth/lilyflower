@@ -33,9 +33,7 @@ class Command(object):
         indent_level = 0
         if format_spec != "":
             indent_level = int(format_spec)
-        result = "%s%s" % (
-            "  " * indent_level,
-            self.command)
+        result = self.command
         if self.validated_arguments is not None:
             new_indent = indent_level + 1
             result += " " + " ".join(

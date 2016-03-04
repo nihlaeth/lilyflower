@@ -364,18 +364,11 @@ class Upright(MarkupContainer):
 #
 
 
-class CenterAlign(MarkupCommand):
+class CenterAlign(MarkupContainer):
 
     """Align to its X center (whatever that means)."""
 
     command = "\\center-align"
-    min_arguments = 1
-    max_arguments = 1
-
-    def validate_arguments(self):
-        """Make sure argument is a markup expression."""
-        _validate_markup(self.args[0])
-        self.validated_arguments.append(self.args[0])
 
 
 class CenterColumn(MarkupContainer):

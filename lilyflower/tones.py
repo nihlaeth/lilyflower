@@ -1,13 +1,13 @@
 """Note and rest objects - represent a tonal unit."""
-# pylint: disable = too-few-public-methods,relative-import
+# pylint: disable = too-few-public-methods
 import re
-from errors import (
+from lilyflower.errors import (
     InvalidPitch,
     InvalidOctave,
     InvalidDuration,
     InvalidArgument)
-from spanners import Spanner
-from notecommands import NoteCommand
+from lilyflower.spanners import Spanner
+from lilyflower.notecommands import NoteCommand
 
 
 def _validate_pitch(pitch):

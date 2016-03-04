@@ -1,5 +1,5 @@
 """Container type - can contain leafs and other containers."""
-from errors import InvalidArgument
+from lilyflower.errors import InvalidArgument
 
 
 class Container(object):

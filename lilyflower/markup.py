@@ -1,9 +1,9 @@
 """Everything to do with markup blocks."""
-# pylint: disable = relative-import,too-few-public-methods
-from notecommands import NoteCommand
-from container import Container
-from errors import InvalidArgument
-from schemedata import (
+# pylint: disable = too-few-public-methods
+from lilyflower.notecommands import NoteCommand
+from lilyflower.container import Container
+from lilyflower.errors import InvalidArgument
+from lilyflower.schemedata import (
     UnsignedFloat,
     SignedFloat,
     AssociationList,

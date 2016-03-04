@@ -1,6 +1,6 @@
 """Commands that attach to a tone."""
-from command import Command
-from errors import InvalidArgument
+from lilyflower.command import Command
+from lilyflower.errors import InvalidArgument
 import re
 
 

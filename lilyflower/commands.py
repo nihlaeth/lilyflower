@@ -1,6 +1,6 @@
 """Non-container commands."""
-from command import Command
-from errors import InvalidArgument
+from lilyflower.command import Command
+from lilyflower.errors import InvalidArgument
 
 
 class Bar(Command):

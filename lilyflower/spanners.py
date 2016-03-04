@@ -1,6 +1,5 @@
 """Spanner objects."""
-# pylint: disable=relative-import,too-few-public-methods
-from errors import IllegalReuse
+# pylint: disable=too-few-public-methods
 
 
 class Spanner(object):

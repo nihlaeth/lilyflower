@@ -1,7 +1,7 @@
 """Container derived classes."""
 import datetime
 
-from container import Container
+from lilyflower.container import Container
 
 
 class LilyFile(Container):

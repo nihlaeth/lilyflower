@@ -1,5 +1,5 @@
 """Non-container command."""
-from errors import InvalidArgument
+from lilyflower.errors import InvalidArgument
 
 
 class Command(object):

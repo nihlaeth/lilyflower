@@ -4,7 +4,106 @@ from lilyflower.errors import InvalidArgument
 
 class Container(object):
 
-    """Contain leafs and other containers."""
+    r"""
+    Main structural component.
+
+    Every container type command inherits from this.
+
+    Iterable / sequence type.
+
+    Use format() to get lilypond code.
+
+    Usage::
+
+        Container(content, arguments=None)
+
+    Parameters
+    ==========
+    content: list, lilyflower object
+        contents of the container. Subclasses can set stricter requirements.
+    arguments: list, optional
+        arguments for this container. Container does not accept any
+        arguments, subclasses set their own requirements.
+
+    Returns
+    =======
+    None
+
+    Raises
+    =======
+    InvalidArgument:
+        when too many, too little, or the wrong type arguments are provided
+        (subclasses decide what's valid)
+    InvalidContent:
+        when the wrong content type is provided (subclasses determine
+        what's valid)
+
+    Notes
+    =====
+    A container with length zero will display delimiters (curly braces
+    in most cases), so will a container with length >= 2. A container
+    with a single item in it however (regardless if that's a container
+    or not), will forego delimiters.
+
+    Examples
+    ========
+
+    .. testsetup::
+
+        from lilyflower.container import Container
+        from lilyflower.tones import Note
+
+    .. doctest::
+
+        >>> container = Container([])
+        >>> print format(container)
+        {
+        }
+        >>> container.append(Note('a'))
+        >>> print format(container)
+        a
+        >>> container += Note('b')
+        >>> print format(container)
+        {
+          a b
+        }
+        >>> container[1] = Container([Note('b'), Note('c')])
+        >>> print format(container)
+        {
+          a
+          {
+            b c
+          }
+        }
+        >>> container.extend([Container([]), Container([Note('d'), Note('e')])])
+        >>> print format(container)
+        {
+          a
+          {
+            b c
+          }
+          {
+          }
+          {
+            d e
+          }
+        }
+        >>> container = Container([Note('a'), Note('b'), Note('c')])
+        >>> for item in container:
+        ...     print format(item)
+        a
+        b
+        c
+        >>> container[2] = Container([Note('c'), Note('d'), Note('e')])
+        >>> container.reverse()
+        >>> print format(container)
+        {
+          {
+            e d c
+          }
+          b a
+        }
+    """
 
     _command = ""
     _delimiter_pre = "{"
@@ -107,7 +206,7 @@ class Container(object):
         return iter(self._container)
 
     def __reversed__(self):
-        """Iterate over object in reverse order."""
+        """Iterate over object in reverse order (UNIMPLEMENTED)."""
         pass
 
     def __getitem__(self, index):

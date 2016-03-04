@@ -1,5 +1,5 @@
 """Tests for lilyflower.Container."""
-from lilyflower import Container
+from lilyflower.container import Container
 # pylint: disable=no-name-in-module
 from nose.tools import assert_equals, assert_list_equal
 

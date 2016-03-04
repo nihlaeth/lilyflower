@@ -451,9 +451,10 @@ class FillWithPattern(MarkupCommand):
             raise InvalidArgument(
                 "Expected Int(SchemeData), not %r", self.args[0])
         # direction (should be Direction)
-        if not isinstance(self.args[1], Direction):
+        if not isinstance(self.args[1], SignedFloat):
             raise InvalidArgument(
-                "Expected Direction(SchemeData), not %r", self.args[1])
+                "Expected Direction(SchemeData), "
+                " or a SignedFloat(SchemeData), not %r", self.args[1])
 
         # pattern (should be markup element)
         _validate_markup(self.args[2])

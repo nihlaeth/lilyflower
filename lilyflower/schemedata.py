@@ -85,7 +85,7 @@ class String(SchemeData):
         self.data = str(data)
 
 
-class Direction(SchemeData):
+class Direction(SignedFloat):
 
     """Not an official Scheme data type, but used a lot in lilypond."""
 

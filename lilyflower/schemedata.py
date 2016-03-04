@@ -109,6 +109,28 @@ class Direction(SignedFloat):
         return "%s%s" % (self.start_symbol, self.data)
 
 
+class Axis(SignedInt):
+
+    """Not an official Scheme data type, but used a lot in lilypond."""
+
+    def __init__(self, data):
+        """Check if it's a valid axis."""
+        if data in ["x", "X"]:
+            self.data = "X"
+        elif data in ["y", "Y"]:
+            self.data = "Y"
+        else:
+            raise InvalidArgument("Expected X or Y, not %r" % data)
+
+    def nested(self):
+        """Data for nested use (used by compound SchemeData objects)."""
+        return self.data
+
+    def __format__(self, _):
+        """Return lilypond code."""
+        return "%s%s" % (self.start_symbol, self.data)
+
+
 class Pair(SchemeData):
 
     """Pair."""

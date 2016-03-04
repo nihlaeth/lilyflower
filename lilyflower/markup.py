@@ -277,10 +277,10 @@ class Simple(MarkupCommand):
 
     def validate_arguments(self):
         """Make sure we received a SchemeData String."""
-        if not isinstance(self.args[0], String):
+        if not isinstance(self.arguments[0], String):
             raise InvalidArgument(
-                "Expected a String(SchemeData), not %r" % self.args[0])
-        self.validated_arguments[0] = self.args[0]
+                "Expected a String(SchemeData), not %r" % self.arguments[0])
+        self.validated_arguments[0] = self.arguments[0]
 
 
 class Small(MarkupContainer):
@@ -396,10 +396,10 @@ class Combine(MarkupCommand):
 
     def validate_arguments(self):
         """Make sure arguments count as markup."""
-        _validate_markup(self.args[0])
-        _validate_markup(self.args[1])
-        self.validated_arguments.append(self.args[0])
-        self.validated_arguments.append(self.args[1])
+        _validate_markup(self.arguments[0])
+        _validate_markup(self.arguments[1])
+        self.validated_arguments.append(self.arguments[0])
+        self.validated_arguments.append(self.arguments[1])
 
 
 class Concat(MarkupContainer):
@@ -445,25 +445,26 @@ class FillWithPattern(MarkupCommand):
     def validate_arguments(self):
         """Make sure it at least appears valid."""
         # space (should be Int)
-        if not isinstance(self.args[0], UnsignedFloat):
+        if not isinstance(self.arguments[0], UnsignedFloat):
             raise InvalidArgument(
-                "Expected UnsignedFloat(SchemeData), not %r", self.args[0])
+                "Expected UnsignedFloat(SchemeData), "
+                "not %r", self.arguments[0])
         # direction (should be Direction)
-        if not isinstance(self.args[1], SignedFloat):
+        if not isinstance(self.arguments[1], SignedFloat):
             raise InvalidArgument(
                 "Expected Direction(SchemeData), "
-                " or a SignedFloat(SchemeData), not %r", self.args[1])
+                " or a SignedFloat(SchemeData), not %r", self.arguments[1])
 
         # pattern (should be markup element)
-        _validate_markup(self.args[2])
+        _validate_markup(self.arguments[2])
 
         # markup_left (should be markup element)
-        _validate_markup(self.args[3])
+        _validate_markup(self.arguments[3])
 
         # markup_right (should be markup element)
-        _validate_markup(self.args[4])
+        _validate_markup(self.arguments[4])
 
-        self.validated_arguments.extend(self.args)
+        self.validated_arguments.extend(self.arguments)
 
 
 class GeneralAlign(MarkupContainer):
@@ -534,10 +535,10 @@ class HSpace(MarkupCommand):
 
     def validate_arguments(self):
         """Validate arguments."""
-        if not isinstance(self.args[0], SignedFloat):
+        if not isinstance(self.arguments[0], SignedFloat):
             raise InvalidArgument(
-                "Expected SignedFloat(SchemeData), not %r" % self.args[0])
-        self.validated_arguments.append(self.args[0])
+                "Expected SignedFloat(SchemeData), not %r" % self.arguments[0])
+        self.validated_arguments.append(self.arguments[0])
 
 
 class JustifyField(MarkupCommand):
@@ -568,10 +569,10 @@ class JustifyString(MarkupCommand):
 
     def validate_arguments(self):
         """Validate arguments."""
-        if not isinstance(self.args[0], String):
+        if not isinstance(self.arguments[0], String):
             raise InvalidArgument(
-                "Expected String(SchemeData), not %r" % self.args[0])
-        self.validated_arguments.append(self.args[0])
+                "Expected String(SchemeData), not %r" % self.arguments[0])
+        self.validated_arguments.append(self.arguments[0])
 
 
 class LeftAlign(MarkupContainer):
@@ -600,8 +601,8 @@ class Lower(MarkupContainer):
     """Lower contents vertically."""
 
     command = "\\lower"
-    min_args = 1
-    max_args = 1
+    min_arguments = 1
+    max_arguments = 1
 
     def validate_arguments(self):
         """Validate arguments."""
@@ -616,8 +617,8 @@ class PadAround(MarkupContainer):
     """Pad around contents."""
 
     command = "\\pad-around"
-    min_args = 1
-    max_args = 1
+    min_arguments = 1
+    max_arguments = 1
 
     def validate_arguments(self):
         """Validate arguments."""
@@ -639,8 +640,8 @@ class PadToBox(MarkupContainer):
     """Make content take at least (-x . x) by (-y . y) space."""
 
     command = "\\pad-to-box"
-    min_args = 2
-    max_args = 2
+    min_arguments = 2
+    max_arguments = 2
 
     def validate_arguments(self):
         """Validate arguments."""
@@ -656,8 +657,8 @@ class PadX(MarkupContainer):
     """Pad in the x direction."""
 
     command = "\\pad-x"
-    min_args = 1
-    max_args = 1
+    min_arguments = 1
+    max_arguments = 1
 
     def validate_arguments(self):
         """Validate arguments."""

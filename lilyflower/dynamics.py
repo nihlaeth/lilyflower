@@ -24,16 +24,16 @@ class Crescendo(Dynamic):
 
     command = "\\<"
     close = "\\!"
-    max_args = 1
+    max_arguments = 1
     num_displays = 0
 
-    def validate_args(self):
+    def validate_arguments(self):
         """Set the closing part."""
-        if len(self.args) == 1:
-            if not isinstance(self.args[0], Dynamic):
+        if len(self.arguments) == 1:
+            if not isinstance(self.arguments[0], Dynamic):
                 raise InvalidArgument("Expects a Dynamic as closing part.")
             else:
-                self.close = self.args[0]
+                self.close = self.arguments[0]
 
     def __format__(self, _):
         """Return lilypond code."""

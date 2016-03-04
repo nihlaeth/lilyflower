@@ -7,20 +7,21 @@ class Command(object):
     """Non-container command."""
 
     command = ""
-    min_args = 0
-    max_args = 0
+    min_arguments = 0
+    max_arguments = 0
     inline = False
     validated_arguments = None
 
-    def __init__(self, *args):
+    def __init__(self, *arguments):
         """Store arguments."""
-        if len(args) < self.min_args or len(args) > self.max_args:
+        if len(arguments) < self.min_arguments or \
+                len(arguments) > self.max_arguments:
             raise InvalidArgument("Expects between %d and %d arguments." % (
-                self.min_args, self.max_args))
-        self.args = args
-        self.validate_args()
+                self.min_arguments, self.max_arguments))
+        self.arguments = arguments
+        self.validate_arguments()
 
-    def validate_args(self):
+    def validate_arguments(self):
         """
         In-depth argument validation.
 

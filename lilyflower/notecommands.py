@@ -10,12 +10,12 @@ class NoteCommand(Command):
 
     inline = True
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *arguments, **kwargs):
         """Set arguments and position(^|-|_|).
 
         Syntax: __init__(*arguments, position=(^|-|_|))
         """
-        Command.__init__(self, *args)
+        Command.__init__(self, *arguments)
         if 'position' not in kwargs:
             self.position = ""
         else:

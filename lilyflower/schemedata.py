@@ -56,7 +56,7 @@ class UnsignedFloat(SchemeData):
 
     def __init__(self, data):
         """Make sure it's an unsigned float."""
-        if not isinstance(data, float):
+        if not isinstance(data, float) and not isinstance(data, int):
             raise InvalidArgument("%r is not a float." % data)
         elif data < 0:
             raise InvalidArgument("%d is smaller than zero." % data)
@@ -70,7 +70,7 @@ class SignedFloat(SchemeData):
 
     def __init__(self, data):
         """Make sure it's a signed float."""
-        if not isinstance(data, float):
+        if not isinstance(data, float) and not isinstance(data, int):
             raise InvalidArgument("%r is not a float." % data)
         else:
             self._data = data

@@ -34,6 +34,7 @@ class Bar(Command):
     See Also
     ========
     :class:`lilyflower.command.Command`
+    :class:`lilyflower.errors.InvalidArgument`
 
     References
     ==========

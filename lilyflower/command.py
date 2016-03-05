@@ -34,6 +34,10 @@ class Command(object):
     Notes
     =====
 
+    See Also
+    ========
+    :class:`lilyflower.errors.InvalidArgument`
+
     Examples
     ========
     .. testsetup::

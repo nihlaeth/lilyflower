@@ -316,3 +316,98 @@ class PadX(MarkupContainer):
                 "Expected SignedFloat(SchemeData), "
                 "not %r" % self._arguments[0])
         self._validated_arguments.append(self._arguments[0])
+
+
+class PutAdjacent(MarkupCommand):
+
+    r"""
+    Put `arg2` next to `arg1` without moving `arg1`.
+
+    Usage::
+        PutAdjacent(axis, direction, arg1, arg2)
+
+    Parameters
+    ==========
+    axis: Axis, SignedInt
+        along which axis to move
+    direction: Direction, SignedFloat
+        in which direction to move
+    arg1: markup
+        markup to which arg2 should be put adjacent
+    arg2: markup
+        markup to put adjacent to arg1
+
+    Returns
+    =======
+    None
+
+    Raises
+    ======
+    InvalidArgument:
+        if any of the arguments don't have the correct type, or
+        if the wrong number of arguments is supplied.
+
+    Notes
+    =====
+    Technically this should be a container with two separate contents
+    for `arg1` and `arg2`. This would complicate things programmatically
+    though, so we decided against it. If you need `arg1` or `arg2` to be
+    more than one element, wrap them in a
+    :class:`lilyflower.markup.base.MarkupContainer`.
+
+    See Also
+    ========
+    :class:`lilyflower.container.Container`
+    :class:`lilyflower.markup.base.MarkupContainer`
+    :class:`lilyflower.errors.InvalidArgument`
+    :class:`lilyflower.schemedata.SignedInt`
+    :class:`lilyflower.schemedata.SignedFloat`
+    :class:`lilyflower.schemedata.Axis`
+    :class:`lilyflower.schemedata.Direction`
+    :func:`lilyflower.markup.base.validate_markup`
+
+    References
+    ==========
+    `Lilypond \\put-adjacent documentation
+    <http://lilypond.org/doc/v2.18/Documentation/notation/align>`_
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.markup.font import Bold
+        from lilyflower.markup.align import PutAdjacent
+        from lilyflower.errors import InvalidArgument
+        from lilyflower.schemedata import Axis, Direction
+
+    .. doctest::
+
+        >>> c = PutAdjacent(Axis('x'), Direction('up'), Bold([]), Bold([]))
+        >>> print format(c)
+        \put-adjacent #X #UP \bold {
+          } \bold {
+          }
+        >>> try:
+        ...     PutAdjacent(Direction('up'), Axis('y'), Bold([]), Bold([]))
+        ... except InvalidArgument as e:
+        ...     print e
+        Expected an Axis(SchemeData) or SignedInt(SchemeData) as the first argument, not ...
+    """
+
+    _command = "\\put-adjacent"
+    _min_arguments = 4
+    _max_arguments = 4
+
+    def _validate_arguments(self):
+        if not isinstance(self._arguments[0], SignedInt):
+            raise InvalidArgument(
+                "Expected an Axis(SchemeData) or SignedInt(SchemeData) "
+                "as the first argument, not %r" % self._arguments[0])
+        if not isinstance(self._arguments[1], SignedFloat):
+            raise InvalidArgument(
+                "Expected a Direction(SchemeData) or SignedFloat(SchemeDat)"
+                " object as the second argument, not %r" % self._arguments[1])
+        validate_markup(self._arguments[2])
+        validate_markup(self._arguments[3])
+        self._validated_arguments = []
+        self._validated_arguments.extend(self._arguments)

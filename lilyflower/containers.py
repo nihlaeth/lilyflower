@@ -43,6 +43,11 @@ class LilyFile(Container):
     :class:`lilyflower.errors.InvalidArgument`
     :class:`lilyflower.errors.InvalidContent`
 
+    References
+    ==========
+    `Lilypond file structure
+    <http://lilypond.org/doc/v2.18/Documentation/notation/file-structure>_`
+
     Examples
     ========
     .. testsetup::
@@ -154,16 +159,127 @@ class Book(Container):
 
 class BookPart(Container):
 
-    """Book subdivision."""
+    r"""
+    BookPart container.
+
+    Usage::
+
+        BookPart(content)
+
+    Parameters
+    ==========
+    content: list, lilyflower objects
+        Content of the container
+
+    Returns
+    =======
+    None
+
+    Raises
+    ======
+    InvalidArgument:
+        if any arguments are supplied
+    InvalidContent: UNIMPLEMENTED
+        if the content conatains anything but lilyflower objects
+
+    Notes
+    =====
+
+    See Also
+    ========
+    :class:`lilyflower.container.Container`
+    :class:`lilyflower.errors.InvalidArgument`
+    :class:`lilyflower.errors.InvalidContent`
+
+    References
+    ==========
+    `Lilypond \\bookpart documentation
+    <http://lilypond.org/doc/v2.18/Documentation/notation/multiple-scores-in-a-book#index-_005cbookpart-1>`_
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.containers import BookPart
+        from lilyflower.errors import InvalidArgument
+
+    .. doctest::
+
+        >>> print format(BookPart([]))
+        \bookpart {
+        }
+        >>> try:
+        ...     BookPart([], ["invalid argument"])
+        ... except InvalidArgument as e:
+        ...     print e
+        Expects between 0 and 0 arguments.
+    """
 
     _command = "\\bookpart"
 
 
 class With(Container):
 
-    """With block."""
+    r"""
+    With container.
+
+    Usage::
+
+        With(content)
+
+    Parameters
+    ==========
+    content: list, setting overrides
+        Content of the container
+
+    Returns
+    =======
+    None
+
+    Raises
+    ======
+    InvalidArgument:
+        if any arguments are supplied
+    InvalidContent: UNIMPLEMENTED
+        if the content conatains anything but lilyflower objects
+
+    Notes
+    =====
+    With is an inline object - it won't be printed on a newline. Its
+    contents will, though.
+
+    See Also
+    ========
+    :class:`lilyflower.container.Container`
+    :class:`lilyflower.errors.InvalidArgument`
+    :class:`lilyflower.errors.InvalidContent`
+
+    References
+    ==========
+    `Lilypond \\with documentation
+    <http://lilypond.org/doc/v2.18/Documentation/notation/modifying-context-plug_002dins#index-_005cwith-1>`_
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.containers import With
+        from lilyflower.errors import InvalidArgument
+
+    .. doctest::
+
+        >>> print format(With([]))
+        \with {
+        }
+        >>> try:
+        ...     With([], ["invalid argument"])
+        ... except InvalidArgument as e:
+        ...     print e
+        Expects between 0 and 0 arguments.
+    """
 
     _command = "\\with"
+    _inline = True
 
 
 class Score(Container):

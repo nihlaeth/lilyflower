@@ -369,7 +369,7 @@ class PutAdjacent(MarkupCommand):
     References
     ==========
     `Lilypond \\put-adjacent documentation
-    <http://lilypond.org/doc/v2.18/Documentation/notation/align>`_
+    <http://lilypond.org/doc/v2.18/Documentation/notation/align#index-_005cput_002dadjacent-1>`_
 
     Examples
     ========

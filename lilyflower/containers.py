@@ -27,6 +27,8 @@ class LilyFile(Container):
 
     Raises
     ======
+    InvalidArgument:
+        if any arguments are supplied
     InvalidContent: UNIMPLEMENTED
         when an item in the content is not a valid lilyflower object
 
@@ -38,6 +40,8 @@ class LilyFile(Container):
     See Also
     ========
     :class:`lilyflower.container.Container`
+    :class:`lilyflower.errors.InvalidArgument`
+    :class:`lilyflower.errors.InvalidContent`
 
     Examples
     ========
@@ -46,6 +50,7 @@ class LilyFile(Container):
         from lilyflower.containers import LilyFile
         from lilyflower.container import Container
         from lilyflower.tones import Note
+        from lilyflower.errors import InvalidArgument
 
     .. doctest::
 
@@ -59,6 +64,11 @@ class LilyFile(Container):
         {
           a b
         }
+        >>> try:
+        ...     LilyFile([], "illegal argument")
+        ... except InvalidArgument as e:
+        ...     print e
+        Expects between 0 and 0 arguments.
     """
 
     _delimiter_pre = ""
@@ -83,7 +93,61 @@ class LilyFile(Container):
 
 class Book(Container):
 
-    """Book container."""
+    r"""
+    Book container.
+
+    Usage::
+
+        Book(content)
+
+    Parameters
+    ==========
+    content: list, lilyflower objects
+        Content of the container
+
+    Returns
+    =======
+    None
+
+    Raises
+    ======
+    InvalidArgument:
+        if any arguments are supplied
+    InvalidContent: UNIMPLEMENTED
+        if the content conatains anything but lilyflower objects
+
+    Notes
+    =====
+
+    See Also
+    ========
+    :class:`lilyflower.container.Container`
+    :class:`lilyflower.errors.InvalidArgument`
+    :class:`lilyflower.errors.InvalidContent`
+
+    References
+    ==========
+    `Lilypond \\book documentation
+    <http://lilypond.org/doc/v2.18/Documentation/notation/multiple-output-files-from-one-input-file>`_
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.containers import Book
+        from lilyflower.errors import InvalidArgument
+
+    .. doctest::
+
+        >>> print format(Book([]))
+        \book {
+        }
+        >>> try:
+        ...     Book([], ["invalid argument"])
+        ... except InvalidArgument as e:
+        ...     print e
+        Expects between 0 and 0 arguments.
+    """
 
     _command = "\\book"
 

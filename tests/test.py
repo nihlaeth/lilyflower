@@ -22,4 +22,5 @@ f = LilyFile([
     BookPart([Parallel([staff, staff2])]),
     BookPart([Bar("||")])])
 
-print format(f)
+if __name__ == "__main__":
+    print format(f)

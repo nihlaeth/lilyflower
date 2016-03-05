@@ -22,14 +22,20 @@ in question, and have notes know if they are being transposed somehow.
 For now I'll settle for awesome iterables and easy extensibility.
 
 ## Installation
-  python setup.py install
+```
+python setup.py install
+```
 
 ## Tests
-  python setup.py doctest # requires sphinx
-  python setup.py test # requires nose
+```
+python setup.py doctest # requires sphinx
+python setup.py test # requires nose
+```
 
 ## Documentation
-  # python setup.py html
+```
+python setup.py html
+```
 Html documentation will be built in doc/build/html
 
 ## TODO

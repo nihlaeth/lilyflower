@@ -2,6 +2,7 @@
 from lilyflower.notecommands import NoteCommand
 from lilyflower.container import Container
 from lilyflower.errors import InvalidArgument
+import re
 
 
 def validate_markup(data):
@@ -47,7 +48,10 @@ class MarkupContainer(Container, NoteCommand):
 
     def __init__(self, content=None, arguments=None, position=""):
         """Store contents, arguments and optional position(^|-|_||)."""
-        NoteCommand.__init__(self, position=position)
+        self._position = position
+        if re.match("^[\\^\\-_]?$", self._position) is None:
+            raise InvalidArgument(
+                "Expected (^|-|_|) as position, not %r" % self._position)
         Container.__init__(self, content, arguments)
 
     def _validate_content(self):

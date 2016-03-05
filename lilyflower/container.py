@@ -126,7 +126,10 @@ class Container(object):
         arguments -> (list) depending on subclass, this container
             might require arguments, or have optional arguments.
         """
-        self._container = content
+        if content is None:
+            self._container = []
+        else:
+            self._container = [] + content
         self._validate_content()
         self._validated_arguments = []
         # deal with arguments

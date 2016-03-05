@@ -324,7 +324,7 @@ class PutAdjacent(MarkupCommand):
     Put `arg2` next to `arg1` without moving `arg1`.
 
     Usage::
-        PutAdjacent(axis, direction, arg1, arg2)
+        PutAdjacent(axis, direction, arg1, arg2, position="")
 
     Parameters
     ==========
@@ -336,6 +336,8 @@ class PutAdjacent(MarkupCommand):
         markup to which arg2 should be put adjacent
     arg2: markup
         markup to put adjacent to arg1
+    position: str (^|-|_|), optional, named, default=""
+        position relative to note
 
     Returns
     =======
@@ -357,8 +359,8 @@ class PutAdjacent(MarkupCommand):
 
     See Also
     ========
-    :class:`lilyflower.container.Container`
-    :class:`lilyflower.markup.base.MarkupContainer`
+    :class:`lilyflower.command.Command`
+    :class:`lilyflower.markup.base.MarkupCommand`
     :class:`lilyflower.errors.InvalidArgument`
     :class:`lilyflower.schemedata.SignedInt`
     :class:`lilyflower.schemedata.SignedFloat`
@@ -411,3 +413,81 @@ class PutAdjacent(MarkupCommand):
         validate_markup(self._arguments[3])
         self._validated_arguments = []
         self._validated_arguments.extend(self._arguments)
+
+
+class Raise(MarkupContainer):
+
+    r"""
+    Raise `content` horizontally by `amount`.
+
+    Usage::
+        Raise(content, [amount], position="")
+
+    Parameters
+    ==========
+    content: list, markup, optional
+        contents of raise block
+    amount: SignedFloat
+        how much to raise content
+    position: string (^|-|_|), optional, default=""
+        position relative to the note this is attached to
+
+    Returns
+    =======
+    None
+
+    Raises
+    ======
+    InvalidContent: UNIMPLEMENTED
+        if any content items are not considered markup
+    InvalidArgument:
+        if any of the arguments don't have the correct type, or
+        if the wrong number of arguments is supplied.
+
+    Notes
+    =====
+
+    See Also
+    ========
+    :class:`lilyflower.container.Container`
+    :class:`lilyflower.markup.base.MarkupContainer`
+    :class:`lilyflower.errors.InvalidArgument`
+    :class:`lilyflower.schemedata.SignedFloat`
+
+    References
+    ==========
+    `Lilypond \\raise documentation
+    <http://lilypond.org/doc/v2.18/Documentation/notation/align#index-_005craise-3>`_
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.markup.align import Raise
+        from lilyflower.errors import InvalidArgument
+        from lilyflower.schemedata import SignedFloat
+
+    .. doctest::
+
+        >>> c = Raise([], [SignedFloat(5)])
+        >>> print format(c)
+        \raise #5 {
+        }
+        >>> try:
+        ...     Raise(arguments=[5])
+        ... except InvalidArgument as e:
+        ...     print e
+        Expected a SignedFloat(SchemeData) as first argument, not 5
+    """
+
+    _command = "\\raise"
+    _min_arguments = 1
+    _max_arguments = 1
+
+    def _validate_arguments(self):
+        if not isinstance(self._arguments[0], SignedFloat):
+            raise InvalidArgument(
+                "Expected a SignedFloat(SchemeData) as first argument,"
+                " not %r" % self._arguments[0])
+        else:
+            self._validated_arguments = [self._arguments[0]]

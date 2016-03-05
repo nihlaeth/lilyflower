@@ -438,10 +438,10 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 
 
 # my own autodoc settings
+autoclass_content = 'class'
+
 autodoc_default_flags = [
     'members',
-    'undoc-members',
-    'inherited-members',
     'show-inheritance']
 
 # numpydoc settings

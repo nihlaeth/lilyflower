@@ -20,6 +20,7 @@ class Doctest(Command):
     description = 'Run doctests with Sphinx'
     user_options = []
     target = 'doctest'
+    output_dir = '.doc/build'
 
     def initialize_options(self):
         pass
@@ -31,7 +32,7 @@ class Doctest(Command):
         from sphinx.application import Sphinx
         sph = Sphinx('./doc/source',  # source directory
                      './doc/source',  # directory containing conf.py
-                     './doc/build',  # output directory
+                     self.output_dir,  # output directory
                      './doc/build/doctrees',  # doctree directory
                      self.target)  # finally, specify the doctest builder'
         sph.build()
@@ -42,6 +43,7 @@ class BuildHtml(Doctest):
     """Build sphinx html documentation."""
 
     target = 'html'
+    output_dir = './doc/build/html'
 
 
 setup(

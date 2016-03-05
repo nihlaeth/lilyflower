@@ -46,7 +46,7 @@ class LilyFile(Container):
     References
     ==========
     `Lilypond file structure
-    <http://lilypond.org/doc/v2.18/Documentation/notation/file-structure>_`
+    <http://lilypond.org/doc/v2.18/Documentation/notation/file-structure>`_
 
     Examples
     ========

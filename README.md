@@ -36,7 +36,15 @@ python setup.py test # requires nose
 ```
 python setup.py html
 ```
-Html documentation will be built in doc/build/html
+Html documentation will be built in doc/build/html. If the documentation
+does not reflect changes in the source, issue a make clean and try again:
+
+```
+cd doc
+make clean
+cd ..
+python setup.py html
+```
 
 ## TODO
 - [ ] add support for multi-measure rests

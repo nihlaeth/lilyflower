@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :titlesonly:
 
    lilyflower.command
    lilyflower.commands

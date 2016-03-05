@@ -1,4 +1,4 @@
-lilyflower.errors module
+errors
 ========================
 
 .. automodule:: lilyflower.errors

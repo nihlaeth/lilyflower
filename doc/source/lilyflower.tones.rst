@@ -1,4 +1,4 @@
-lilyflower.tones module
+tones
 =======================
 
 .. automodule:: lilyflower.tones

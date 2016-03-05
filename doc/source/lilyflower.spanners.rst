@@ -1,4 +1,4 @@
-lilyflower.spanners module
+spanners
 ==========================
 
 .. automodule:: lilyflower.spanners

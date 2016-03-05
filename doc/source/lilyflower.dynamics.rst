@@ -1,4 +1,4 @@
-lilyflower.dynamics module
+dynamics
 ==========================
 
 .. automodule:: lilyflower.dynamics

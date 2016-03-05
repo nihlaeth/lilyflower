@@ -1,4 +1,4 @@
-lilyflower.schemedata module
+schemedata
 ============================
 
 .. automodule:: lilyflower.schemedata

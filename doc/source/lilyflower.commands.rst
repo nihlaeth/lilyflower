@@ -1,4 +1,4 @@
-lilyflower.commands module
+commands
 ==========================
 
 .. automodule:: lilyflower.commands

@@ -1,5 +1,5 @@
-notecommands
+align
 ==============================
 
-.. automodule:: lilyflower.notecommands
+.. automodule:: lilyflower.markup.align
     :show-inheritance:

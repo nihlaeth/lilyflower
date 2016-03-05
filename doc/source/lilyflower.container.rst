@@ -1,4 +1,4 @@
-lilyflower.container module
+container
 ===========================
 
 .. automodule:: lilyflower.container

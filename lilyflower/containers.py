@@ -6,7 +6,60 @@ from lilyflower.container import Container
 
 class LilyFile(Container):
 
-    """Container for a single lilypond file."""
+    r"""
+    Container for a single lilypond file.
+
+    Unlike other `Container` subclasses, `LilyFile` does not indent
+    its contents, nor does it display delimiter.
+
+    Usage::
+
+        LilyFile(contents)
+
+    Parameters
+    ==========
+    content: list
+        a list of lilyflower objects
+
+    Returns
+    =======
+    None
+
+    Raises
+    ======
+    InvalidContent: UNIMPLEMENTED
+        when an item in the content is not a valid lilyflower object
+
+    Notes
+    =====
+    Prints a comment at the top of the lilypond output with some
+    basic information (created with lilyflower, date and time).
+
+    See Also
+    ========
+    :class:`lilyflower.container.Container`
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.containers import LilyFile
+        from lilyflower.container import Container
+        from lilyflower.tones import Note
+
+    .. doctest::
+
+        >>> print format(LilyFile([]))
+        % Created with lilyflower at ...-...-... ...:...:...
+        <BLANKLINE>
+        >>> f = LilyFile([Container([Note('a'), Note('b')])])
+        >>> print format(f)
+        % Created with lilyflower at ...-...-... ...:...:...
+        <BLANKLINE>
+        {
+          a b
+        }
+    """
 
     _delimiter_pre = ""
     _delimiter_post = ""

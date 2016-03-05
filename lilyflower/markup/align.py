@@ -391,7 +391,7 @@ class PutAdjacent(MarkupCommand):
         ...     PutAdjacent(Direction('up'), Axis('y'), Bold([]), Bold([]))
         ... except InvalidArgument as e:
         ...     print e
-        Expected an Axis(SchemeData) or SignedInt(SchemeData) as the first argument, not ...
+        Expected an Axis(SchemeData) or SignedInt(SchemeData) as the first ...
     """
 
     _command = "\\put-adjacent"

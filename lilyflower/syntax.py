@@ -164,7 +164,7 @@ SPEC = Spec()
 markup_t = ('markup', 'attachment')
 markup_c = ('markup', 'comment', 'setting', 'variable')
 # TODO: define what's allowed in a score
-score_c = ()
+music_c = ('music', 'comment')
 
 # arguments
 markup = Argument('markup', markup_c, False)
@@ -371,7 +371,7 @@ SPEC.rest_by_number(
     (log, dot_count),
     None)
 SPEC.rest('\\rest', markup_t, (duration,), None)
-SPEC.score('\\score', markup_t, None, score_c)
+SPEC.score('\\score', markup_t, None, music_c)
 SPEC.semiflat('\\semiflat', markup_t, None, None)
 SPEC.semisharp('\\semisharp', markup_t, None, None)
 SPEC.sesquiflat('\\sesquiflat', markup_t, None, None)

@@ -9,6 +9,7 @@ from UserDict import DictMixin
 from lilyflower.schemedata import (
     SignedFloat,
     String,
+    List,
     AssociationList,
     Pair,
     SignedInt)
@@ -151,8 +152,12 @@ markup_c = ('markup', 'comment', 'setting', 'variable')
 
 # arguments
 markup = Argument('markup', markup_c, False)
-string = Argument('string', String, False)
 pattern = Argument('pattern', markup_c, False)
+string = Argument('string', String, False)
+file_name = Argument('file_name', String, False)
+url = Argument('url', String, False)
+# TODO: create scheme boolean
+filled = Argument('filled', None, False)
 axis = Argument('axis', SignedInt, False)
 space = Argument('space', SignedFloat, False)
 length = Argument('length', SignedFloat, False)
@@ -160,11 +165,20 @@ size = Argument('size', SignedFloat, False)
 amount = Argument('amount', SignedFloat, False)
 direction = Argument('direction', SignedFloat, False)
 angle = Argument('angle', SignedFloat, False)
+width = Argument('width', SignedFloat, False)
+slope = Argument('slope', SignedFloat, False)
+radius = Argument('radius', SignedFloat, False)
+thickness = Argument('thickness', SignedFloat, False)
+blot = Argument('blot', SignedFloat, False)
 # TODO: create scheme symbol (field)
 symbol = Argument('symbol', None, False)
-pair = Argument('pair', Pair, False)
+xext = Argument('xext', Pair, False)
+yext = Argument('yext', Pair, False)
+factor = Argument('factor', Pair, False)
 offset = Argument('offset', Pair, False)
+destination = Argument('destination', Pair, False)
 assoc_list = Argument('association_list', AssociationList, False)
+commands = Argument('commands', List, False)
 
 # markup container
 SPEC.add('markup', '\\markup', markup_t, None, markup_c)
@@ -236,7 +250,7 @@ SPEC.add('line', '\\line', markup_t, None, markup_c)
 SPEC.add('lower', '\\lower', markup_t, (amount), markup_c)
 SPEC.add('pad_around', '\\pad-around', markup_t, (amount), markup_c)
 SPEC.add('pad_markup', '\\pad-markup', markup_t, (amount), markup_c)
-SPEC.add('pad_to_box', '\\pad-to-box', markup_t, (pair, pair), markup_c)
+SPEC.add('pad_to_box', '\\pad-to-box', markup_t, (xext, yext), markup_c)
 SPEC.add('pad_x', '\\pad-x', markup_t, (amount), markup_c)
 SPEC.add(
     'put_adjacent',
@@ -262,3 +276,39 @@ SPEC.add('wordwrap', '\\wordwrap', markup_t, None, markup_c)
 SPEC.add('wordwrap_string', '\\wordwrap-string', markup_t, (string), None)
 
 # markup graphic
+SPEC.add('arrow_head', '\\arrow-head', markup_t, (direction, filled), None)
+SPEC.add('beam', '\\beam', markup_t, (width, slope, thickness), None)
+SPEC.add('bracket', '\\bracket', markup_t, None, markup_c)
+SPEC.add('circle', '\\circle', markup_t, None, markup_c)
+SPEC.add(
+    'draw_circle',
+    '\\draw-circle',
+    markup_t,
+    (radius, thickness, filled),
+    None)
+SPEC.add(
+    'draw_dashed_line',
+    '\\draw-dashed-line',
+    markup_t,
+    (destination),
+    None)
+SPEC.add(
+    'draw_dotted_line',
+    '\\draw-dotted-line',
+    markup_t,
+    (destination),
+    None)
+SPEC.add('draw_hline', '\\draw-hline', markup_t, None, None)
+SPEC.add('draw_line', '\\draw-line', markup_t, (destination), markup_c)
+SPEC.add('ellipse', '\\ellipse', markup_t, None, markup_c)
+SPEC.add('epsfile', '\\epsfile', markup_t, (axis, size, file_name), None)
+SPEC.add('filled_box', '\\filled-box', markup_t, (xext, yext, blot), None)
+SPEC.add('hbracket', '\\hbracket', markup_t, None, markup_c)
+SPEC.add('oval', '\\oval', markup_t, None, markup_c)
+SPEC.add('parenthesize', '\\parenthesize', markup_t, None, markup_c)
+SPEC.add('path', '\\path', markup_t, (thickness, commands), None)
+SPEC.add('postscript', '\\postscript', markup_t, (string), None)
+SPEC.add('rounded_box', '\\rounded-box', markup_t, None, markup_c)
+SPEC.add('scale', '\\scale', markup_t, (factor), markup_c)
+SPEC.add('triangle', '\\triangle', markup_t, (filled), None)
+SPEC.add('with_url', '\\with-url', markup_t, (url), markup_c)

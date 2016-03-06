@@ -6,7 +6,12 @@ Syntax definition both used in parsing and formatting.
 import re
 from collections import namedtuple
 from UserDict import DictMixin
-from lilyflower.schemedata import SignedFloat, String, AssociationList
+from lilyflower.schemedata import (
+    SignedFloat,
+    String,
+    AssociationList,
+    Pair,
+    SignedInt)
 from lilyflower.errors import InvalidArgument
 
 Argument = namedtuple('Argument', 'name type optional')
@@ -145,14 +150,28 @@ markup_t = ('markup', 'attachment')
 markup_c = ('markup', 'comment', 'setting', 'variable')
 
 # arguments
-size = Argument('size', SignedFloat, False)
+markup = Argument('markup', markup_c, False)
 string = Argument('string', String, False)
+pattern = Argument('pattern', markup_c, False)
+axis = Argument('axis', SignedInt, False)
+space = Argument('space', SignedFloat, False)
+length = Argument('length', SignedFloat, False)
+size = Argument('size', SignedFloat, False)
+amount = Argument('amount', SignedFloat, False)
+direction = Argument('direction', SignedFloat, False)
+angle = Argument('angle', SignedFloat, False)
+# TODO: create scheme symbol (field)
+symbol = Argument('symbol', None, False)
+pair = Argument('pair', Pair, False)
+offset = Argument('offset', Pair, False)
 assoc_list = Argument('association_list', AssociationList, False)
 
-# markup font functions
-SPEC.add('bold', '\\bold', markup_t, None, markup_c)
-SPEC.add('italic', '\\italic', markup_t, None, markup_c)
+# markup container
+SPEC.add('markup', '\\markup', markup_t, None, markup_c)
+
+# markup font
 SPEC.add('abs_fontsize', '\\abs-fontsize', markup_t, (size), markup_c)
+SPEC.add('bold', '\\bold', markup_t, None, markup_c)
 SPEC.add('box', '\\box', markup_t, None, markup_c)
 SPEC.add('caps', '\\caps', markup_t, None, markup_c)
 SPEC.add('dynamic_font', '\\dynamic-font', markup_t, None, markup_c)
@@ -160,6 +179,7 @@ SPEC.add('finger_font', '\\finger', markup_t, None, markup_c)
 SPEC.add('font_caps', '\\fontCaps', markup_t, None, markup_c)
 SPEC.add('font_size', '\\font-size', markup_t, (size), markup_c)
 SPEC.add('huge', '\\huge', markup_t, None, markup_c)
+SPEC.add('italic', '\\italic', markup_t, None, markup_c)
 SPEC.add('large', '\\large', markup_t, None, markup_c)
 SPEC.add('larger', '\\larger', markup_t, None, markup_c)
 SPEC.add('magnify', '\\magnify', markup_t, (string), markup_c)
@@ -183,3 +203,62 @@ SPEC.add('tiny', '\\tiny', markup_t, None, markup_c)
 SPEC.add('typewriter_font', '\\typewriter', markup_t, None, markup_c)
 SPEC.add('underline', '\\underline', markup_t, None, markup_c)
 SPEC.add('upright', '\\upright', markup_t, None, markup_c)
+
+# markup align
+SPEC.add('center_align', '\\center-align', markup_t, None, markup_c)
+SPEC.add('center_column', '\\center-column', markup_t, None, markup_c)
+SPEC.add('column', '\\column', markup_t, None, markup_c)
+SPEC.add('combine', '\\combine', markup_t, (markup, markup), None)
+SPEC.add('concat', '\\concat', markup_t, None, markup_c)
+SPEC.add('dir_column', '\\dir-column', markup_t, None, markup_c)
+SPEC.add('fill_line', '\\fill-line', markup_t, None, None)
+SPEC.add(
+    'fill_with_pattern',
+    '\\fill-with-pattern',
+    markup_t,
+    (space, direction, pattern, markup, markup),
+    None)
+SPEC.add(
+    'general_align',
+    '\\general-align',
+    markup_t,
+    (axis, direction),
+    markup_c)
+SPEC.add('halign', '\\halign', markup_t, (direction), markup_c)
+SPEC.add('hcenter_in', '\\hcenter-in', markup_t, (length), markup_c)
+SPEC.add('hspace', '\\hspace', markup_t, (space), None)
+SPEC.add('justify_field', '\\justify-field', markup_t, (symbol), None)
+SPEC.add('justify', '\\justify', markup_t, None, markup_c)
+SPEC.add('justify_string', '\\justify-string', markup_t, (string), None)
+SPEC.add('left_align', '\\left-align', markup_t, None, markup_c)
+SPEC.add('left_column', '\\left-column', markup_t, None, markup_c)
+SPEC.add('line', '\\line', markup_t, None, markup_c)
+SPEC.add('lower', '\\lower', markup_t, (amount), markup_c)
+SPEC.add('pad_around', '\\pad-around', markup_t, (amount), markup_c)
+SPEC.add('pad_markup', '\\pad-markup', markup_t, (amount), markup_c)
+SPEC.add('pad_to_box', '\\pad-to-box', markup_t, (pair, pair), markup_c)
+SPEC.add('pad_x', '\\pad-x', markup_t, (amount), markup_c)
+SPEC.add(
+    'put_adjacent',
+    '\\put-adjacent',
+    markup_t,
+    (axis, direction, markup, markup),
+    None)
+SPEC.add('raise', '\\raise', markup_t, (amount), markup_c)
+SPEC.add('right_align', '\\right-align', markup_t, None, markup_c)
+SPEC.add('right_column', '\\right-column', markup_t, None, markup_c)
+SPEC.add('rotate', '\\rotate', markup_t, (angle), markup_c)
+SPEC.add('translate', '\\translate', markup_t, (offset), markup_c)
+SPEC.add(
+    'translate_scaled',
+    '\\translate-scaled',
+    markup_t,
+    (offset),
+    markup_c)
+SPEC.add('vcenter', '\\vcenter', markup_t, None, markup_c)
+SPEC.add('vspace', '\\vspace', markup_t, (amount), None)
+SPEC.add('wordwrap_field', '\\wordwrap-field', markup_t, (symbol), None)
+SPEC.add('wordwrap', '\\wordwrap', markup_t, None, markup_c)
+SPEC.add('wordwrap_string', '\\wordwrap-string', markup_t, (string), None)
+
+# markup graphic

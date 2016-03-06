@@ -149,16 +149,28 @@ SPEC = Spec()
 # types
 markup_t = ('markup', 'attachment')
 markup_c = ('markup', 'comment', 'setting', 'variable')
+# TODO: define what's allowed in a score
+score_c = ()
 
 # arguments
 markup = Argument('markup', markup_c, False)
 pattern = Argument('pattern', markup_c, False)
+footnote = Argument('footnote', markup_c, False)
+gauge = Argument('gauge', markup_c, False)
+default = Argument('default', markup_c, False)
 string = Argument('string', String, False)
 file_name = Argument('file_name', String, False)
 url = Argument('url', String, False)
+glyph_name = Argument('glyph_name', String, False)
+duration = Argument('duration', String, False)
+definition_string = Argument('definition_string', String, False)
+name = Argument('name', String, False)
 # TODO: create scheme boolean
 filled = Argument('filled', None, False)
 axis = Argument('axis', SignedInt, False)
+num_strings = Argument('num_strings', SignedInt, False)
+num = Argument('num', SignedInt, False)
+count = Argument('count', SignedInt, False)
 space = Argument('space', SignedFloat, False)
 length = Argument('length', SignedFloat, False)
 size = Argument('size', SignedFloat, False)
@@ -170,15 +182,30 @@ slope = Argument('slope', SignedFloat, False)
 radius = Argument('radius', SignedFloat, False)
 thickness = Argument('thickness', SignedFloat, False)
 blot = Argument('blot', SignedFloat, False)
+staff_space = Argument('staff_space', SignedFloat, False)
+log = Argument('log', SignedFloat, False)
+dot_count = Argument('log', SignedFloat, False)
+page_number = Argument('page_number', SignedFloat, False)
 # TODO: create scheme symbol (field)
 symbol = Argument('symbol', None, False)
+instrument = Argument('instrument', None, False)
+label = Argument('label', None, False)
 xext = Argument('xext', Pair, False)
 yext = Argument('yext', Pair, False)
 factor = Argument('factor', Pair, False)
 offset = Argument('offset', Pair, False)
+new_property = Argument('new_property', Pair, False)
 destination = Argument('destination', Pair, False)
 assoc_list = Argument('association_list', AssociationList, False)
 commands = Argument('commands', List, False)
+markings_list = Argument('markings_list', List, False)
+user_draw_commands = Argument('user_draw_commands', List, False)
+# TODO: create scheme procedure
+procedure = Argument('procedure', None, False)
+# TODO: create scheme stencil
+stencil = Argument('stencil', None, False)
+# TODO: create scheme color
+color = Argument('cooor', None, False)
 
 # markup container
 SPEC.add('markup', '\\markup', markup_t, None, markup_c)
@@ -312,3 +339,123 @@ SPEC.add('rounded_box', '\\rounded-box', markup_t, None, markup_c)
 SPEC.add('scale', '\\scale', markup_t, (factor), markup_c)
 SPEC.add('triangle', '\\triangle', markup_t, (filled), None)
 SPEC.add('with_url', '\\with-url', markup_t, (url), markup_c)
+
+# markup music
+SPEC.add(
+    'custom_tab_clef',
+    '\\customTabClef',
+    markup_t,
+    (num_strings, staff_space),
+    None)
+SPEC.add('doubleflat', '\\doubleflat', markup_t, None, None)
+SPEC.add('doublesharp', '\\doublesharp', markup_t, None, None)
+SPEC.add('fermata', '\\fermata', markup_t, None, None)
+SPEC.add('flat', '\\flat', markup_t, None, None)
+SPEC.add('musicglyph', '\\musicglyph', markup_t, (glyph_name), None)
+SPEC.add('natural', '\\natural', markup_t, None, None)
+SPEC.add(
+    'note_by_number',
+    '\\note-by-number',
+    markup_t,
+    (log, dot_count, direction),
+    None)
+SPEC.add('note', '\\note', markup_t, (duration, direction), None)
+SPEC.add(
+    'rest_by_number',
+    '\\rest-by-number',
+    markup_t,
+    (log, dot_count),
+    None)
+SPEC.add('rest', '\\rest', markup_t, (duration), None)
+SPEC.add('score', '\\score', markup_t, None, score_c)
+SPEC.add('semiflat', '\\semiflat', markup_t, None, None)
+SPEC.add('semisharp', '\\semisharp', markup_t, None, None)
+SPEC.add('sesquiflat', '\\sesquiflat', markup_t, None, None)
+SPEC.add('sesquisharp', '\\sesquisharp', markup_t, None, None)
+SPEC.add('sharp', '\\sharp', markup_t, None, None)
+SPEC.add('tied_lyric', '\\tied-lyric', markup_t, (string), None)
+
+# instrument specific markup
+SPEC.add('fret_diagram', '\\fret-diagram', markup_t, (definition_string), None)
+SPEC.add(
+    'fret_diagram_terse',
+    '\\fret_diagram_terse',
+    markup_t,
+    (definition_string),
+    None)
+SPEC.add(
+    'fret_diagram_verbose',
+    '\\fret-diagram-verbose',
+    markup_t,
+    (markings_list),
+    None)
+SPEC.add('harp_pedal', '\\harp-pedal', markup_t, (definition_string), None)
+SPEC.add(
+    'woodwind_diagram',
+    '\\woodwind-diagram',
+    markup_t,
+    (instrument, user_draw_commands),
+    None)
+
+# according registers markup
+SPEC.add('discant', '\\discant', markup_t, (name), None)
+SPEC.add('free_bass', '\\freeBass', markup_t, (name), None)
+SPEC.add('std_bass', '\\stdBass', markup_t, (name), None)
+SPEC.add('std_bass_iv', '\\stdBassIV', markup_t, (name), None)
+SPEC.add('std_bass_v', '\\stdBassV', markup_t, (name), None)
+SPEC.add('std_bass_vi', '\\stdBassVI', markup_t, (name), None)
+
+# other markup
+SPEC.add(
+    'auto_footnote',
+    '\\auto-footnote',
+    markup_t,
+    (markup, footnote),
+    None)
+SPEC.add('backslashed_digit', '\\backslashed-digit', markup_t, (num), None)
+SPEC.add('char', '\\char', markup_t, (num), None)
+SPEC.add('eyeglasses', '\\eyeglasses', markup_t, None, None)
+SPEC.add('footnote', '\\footnote', markup_t, (markup, footnote), None)
+SPEC.add('fraction', '\\fraction', markup_t, (markup, markup), None)
+SPEC.add('fromproperty', '\\fromproperty', markup_t, (symbol), None)
+SPEC.add('leftbrace', '\\leftbrace', markup_t, (size), None)
+SPEC.add('lookup', '\\lookup', markup_t, (glyph_name), None)
+SPEC.add('markalphabet', '\\markalphabet', markup_t, (num), None)
+SPEC.add('markletter', '\\markletter', markup_t, (num), None)
+SPEC.add('null', '\\null', markup_t, None, None)
+SPEC.add('on_the_fly', '\\on-the-fly', markup_t, (procedure), markup_c)
+SPEC.add('override', '\\override', markup_t, (new_property), markup_c)
+SPEC.add('page_link', '\\page-link', markup_t, (page_number), markup_c)
+SPEC.add(
+    'page_ref',
+    '\\page-ref',
+    markup_t,
+    (label, gauge, default),
+    None)
+SPEC.add(
+    'pattern',
+    '\\pattern',
+    markup_t,
+    (count, axis, space, pattern),
+    None)
+SPEC.add(
+    'property_recursive',
+    '\\property-recursive',
+    markup_t,
+    (symbol),
+    None)
+SPEC.add('right_brace', '\\right-brace', markup_t, (size), None)
+SPEC.add('slashed_digit', '\\slashed-digit', markup_t, (num), None)
+SPEC.add('stencil', '\\stencil', markup_t, (stencil), None)
+SPEC.add('strut', '\\strut', markup_t, None, None)
+SPEC.add('transparent', '\\transparent', markup_t, None, markup_c)
+SPEC.add('verbatim_file', '\\verbatim-file', markup_t, (name), None)
+SPEC.add('whiteout', '\\whiteout', markup_t, None, markup_c)
+SPEC.add('with_color', '\\with-color', markup_t, (color), markup_c)
+SPEC.add(
+    'with_dimensions',
+    '\\with-dimensions',
+    markup_t,
+    (xext, yext),
+    markup_c)
+SPEC.add('with_link', '\\with-link', markup_t, (label), markup_c)

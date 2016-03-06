@@ -21,6 +21,16 @@ in question, and have notes know if they are being transposed somehow.
 
 For now I'll settle for awesome iterables and easy extensibility.
 
+## Current state
+This project is not even alpha yet - do not use it at this point. I'm still
+figuring out what shape this is going to take, so anything is subject to change.
+
+I got diverted into rewriting the lilypond spec and documentation, which is pointless and not what I wanted, so I decided to go a different way.
+
+Command and container classes won't be defined individually, but generated from some syntax rules.
+
+Also, I'm going to try and make use of the work the awesome folks at python-ly did. It currently isn't possible to generate .ly code with their tools, but what they do, they do superbly. No need to invent the wheel twice.
+
 ## Installation
 ```
 python setup.py install

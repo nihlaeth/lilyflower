@@ -9,6 +9,7 @@ from UserDict import DictMixin
 from lilyflower.schemedata import (
     SignedFloat,
     String,
+    Color,
     List,
     AssociationList,
     Pair,
@@ -218,8 +219,7 @@ user_draw_commands = Argument('user_draw_commands', List, False)
 procedure = Argument('procedure', None, False)
 # TODO: create scheme stencil
 stencil = Argument('stencil', None, False)
-# TODO: create scheme color
-color = Argument('cooor', None, False)
+color = Argument('color', Color, False)
 
 # markup container
 SPEC.markup('\\markup', markup_t, None, markup_c)

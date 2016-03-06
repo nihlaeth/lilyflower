@@ -24,6 +24,24 @@ class SchemeData(object):
         return "%s%r" % (self._start_symbol, self._data)
 
 
+class Boolean(SchemeData):
+
+    """Boolean value."""
+
+    def __init__(self, data):
+        """Check if bool."""
+        if not isinstance(data, bool):
+            raise InvalidArgument("%r is not a bool." % data)
+        if data:
+            self._data = "#t"
+        else:
+            self._data = "#f"
+
+    def __format__(self, _):
+        """Return lilypond cgde."""
+        return "%s%s" % (self._start_symbol, self._data)
+
+
 class UnsignedInt(SchemeData):
 
     """Unsigned integer."""

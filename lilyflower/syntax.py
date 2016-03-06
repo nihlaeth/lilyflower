@@ -12,6 +12,7 @@ from lilyflower.schemedata import (
     List,
     AssociationList,
     Pair,
+    Boolean,
     SignedInt)
 from lilyflower.errors import InvalidArgument
 
@@ -179,8 +180,7 @@ glyph_name = Argument('glyph_name', String, False)
 duration = Argument('duration', String, False)
 definition_string = Argument('definition_string', String, False)
 name = Argument('name', String, False)
-# TODO: create scheme boolean
-filled = Argument('filled', None, False)
+filled = Argument('filled', Boolean, False)
 axis = Argument('axis', SignedInt, False)
 num_strings = Argument('num_strings', SignedInt, False)
 num = Argument('num', SignedInt, False)

@@ -42,6 +42,7 @@ class Spec(object, DictMixin):
                 return self._add_rule(attr_name, *args, **kwargs)
             return add_name
         else:
+            # TODO: return instance of node object created with spec
             return self._container[attr_name]
 
     # pylint: disable=too-many-arguments

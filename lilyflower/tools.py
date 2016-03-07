@@ -123,7 +123,6 @@ def generate_docstring(class_name, attributes):
                 # we can't import Bold for real because of circular
                 # dependencies
                 args.append(("Bold([])", r"\bold { }"))
-                break
             # TODO: handle other argument types (like 'music')
         elif issubclass(arg.type_, String):
             imports_scheme.append("String")

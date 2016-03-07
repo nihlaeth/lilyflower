@@ -112,6 +112,8 @@ def generate_docstring(class_name, attributes):
     imports_this = [class_name]
     args = []
     for arg in attributes.arguments:
+        # Note: the matching order matters, because of inheritance within
+        # lilyflower.schemedata
         if arg.type_ is None:
             # Unimplemented type
             # TODO: issue warning about unimplemented type
@@ -127,6 +129,12 @@ def generate_docstring(class_name, attributes):
         elif issubclass(arg.type_, String):
             imports_scheme.append("String")
             args.append(("String('test')", String("test")))
+        elif issubclass(arg.type_, Direction):
+            imports_scheme.append("Direction")
+            args.append(("Direction('up')", Direction('up')))
+        elif issubclass(arg.type_, Axis):
+            imports_scheme.append("Axis")
+            args.append(("Axis('x')", Axis('x')))
         elif issubclass(arg.type_, SignedFloat):
             imports_scheme.append("SignedFloat")
             args.append(("SignedFloat(0)", SignedFloat(0)))
@@ -145,12 +153,6 @@ def generate_docstring(class_name, attributes):
         elif issubclass(arg.type_, UnsignedFloat):
             imports_scheme.append("UnsignedFloat")
             args.append(("UnsignedFloat(0.5)", UnsignedFloat(0.5)))
-        elif issubclass(arg.type_, Direction):
-            imports_scheme.append("Direction")
-            args.append(("Direction('up')", Direction('up')))
-        elif issubclass(arg.type_, Axis):
-            imports_scheme.append("Axis")
-            args.append(("Axis('x')", Axis('x')))
         elif issubclass(arg.type_, Pair):
             imports_scheme.append("Pair")
             if "SignedInt" not in imports_scheme:
@@ -158,6 +160,15 @@ def generate_docstring(class_name, attributes):
             args.append((
                 "Pair([SignedInt(0), SignedInt(1)])",
                 Pair([SignedInt(0), SignedInt(1)])))
+        elif issubclass(arg.type_, AssociationList):
+            imports_scheme.append("AssociationList")
+            if "SignedInt" not in imports_scheme:
+                imports_scheme.append("SignedInt")
+            if "Pair" not in imports_scheme:
+                imports_scheme.append("Pair")
+            args.append((
+                "AssociationList([Pair([SignedInt(0), SignedInt(1)])])",
+                AssociationList([Pair([SignedInt(0), SignedInt(1)])])))
         elif issubclass(arg.type_, List):
             imports_scheme.append("List")
             if "SignedInt" not in imports_scheme:
@@ -165,15 +176,6 @@ def generate_docstring(class_name, attributes):
             args.append((
                 "List([SignedInt(0), SignedInt(1), SignedInt(2)])",
                 List([SignedInt(0), SignedInt(1), SignedInt(2)])))
-        elif issubclass(arg.type_, AssociationList):
-            imports_scheme.append("List")
-            if "SignedInt" not in imports_scheme:
-                imports_scheme.append("SignedInt")
-            if "Pair" not in imports_scheme:
-                imports_scheme.append("Pair")
-            args.append((
-                "AssociationList([Pair(SignedInt(0), SignedInt(1))])",
-                AssociationList([Pair([SignedInt(0), SignedInt(1)])])))
         else:
             raise InvalidArgument("do not recognize type %r" % arg.type_)
 

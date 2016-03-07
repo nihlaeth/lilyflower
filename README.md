@@ -59,7 +59,7 @@ python setup.py html
 ```
 
 ## TODO
-- [ ] build in formatting for content lengths > 1
+- [x] build in formatting for content lengths > 1
 - [ ] add sequence & iterator methods to Node
 - [ ] add weakref to Node for object tree traversal
 - [ ] add support for objects with an open and close part (spanners, crescendo, etc.)

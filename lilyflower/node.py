@@ -156,7 +156,8 @@ class Node(object):
             result += " " + " ".join(
                 format(self._stored_arguments[key])
                 for key in self._stored_arguments)
-        # now handle contents!
+
+        # now handle content!
         if self._allowed_content is not None:
             result += " %s" % self._delimiter_open
             if len(self._content) == 0:
@@ -169,6 +170,21 @@ class Node(object):
                     self._delimiter_close)
             else:
                 # more than one item, start newline and indent stuff
-                # TODO: handle formatting of more that one item
-                pass
+                inline_previous = False
+                for item in self._content:
+                    separator = "\n%s" % ("  " * (indent_level + 1))
+                    inline_current = item._inline
+                    # the only time when we need a space as a
+                    # separator is when both the current and
+                    # previous item are inline
+                    if inline_previous and inline_current:
+                        separator = " "
+                    result += "%s%s" % (separator, format(
+                        item,
+                        str(indent_level + 1)))
+                    inline_previous = inline_current
+                result += "\n%s%s" % (
+                    "  " * indent_level,
+                    self._delimiter_close)
+
         return result

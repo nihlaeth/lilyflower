@@ -2,7 +2,7 @@
 from lilyflower.dom import *
 from lilyflower.schemedata import SignedFloat
 
-markup = Markup([
+markup = LilyFile([Markup([
     Bold([
         Italic([
             AbsFontsize(
@@ -14,5 +14,5 @@ markup = Markup([
         ]),
         Bold()
     ])
-])
+])])
 print format(markup)

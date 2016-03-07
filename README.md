@@ -68,7 +68,7 @@ python setup.py html
 - [ ] add type checking methods to Node (for self.\_type)
 - [ ] implement inherited duration & octave (through tree traversal)
 - [ ] clean out all the old classes
-- [ ] add LilyFile object to dom
+- [x] add LilyFile object to dom
 - [ ] add support for multi-measure rests
 - [ ] add all notecommands (accents and such)
 - [ ] have containers check if content is even remotely valid (class checking)

@@ -168,7 +168,8 @@ markup_a = ('markup', 'variable')
 music_c = ('music', 'comment')
 
 # arguments
-markup = Argument('markup', markup_a, False)
+arg1 = Argument('arg1', markup_a, False)
+arg2 = Argument('arg2', markup_a, False)
 pattern = Argument('pattern', markup_a, False)
 footnote = Argument('footnote', markup_a, False)
 gauge = Argument('gauge', markup_a, False)
@@ -262,14 +263,14 @@ SPEC.upright(r'\upright', markup_t, None, markup_c)
 SPEC.center_align(r'\center-align', markup_t, None, markup_c)
 SPEC.center_column(r'\center-column', markup_t, None, markup_c)
 SPEC.column(r'\column', markup_t, None, markup_c)
-SPEC.combine(r'\combine', markup_t, (markup, markup), None)
+SPEC.combine(r'\combine', markup_t, (arg1, arg2), None)
 SPEC.concat(r'\concat', markup_t, None, markup_c)
 SPEC.dir_column(r'\dir-column', markup_t, None, markup_c)
 SPEC.fill_line(r'\fill-line', markup_t, None, None)
 SPEC.fill_with_pattern(
     r'\fill-with-pattern',
     markup_t,
-    (space, direction, pattern, markup, markup),
+    (space, direction, pattern, arg1, arg2),
     None)
 SPEC.general_align(
     r'\general-align',
@@ -293,7 +294,7 @@ SPEC.pad_x(r'\pad-x', markup_t, (amount,), markup_c)
 SPEC.put_adjacent(
     r'\put-adjacent',
     markup_t,
-    (axis, direction, markup, markup),
+    (axis, direction, arg1, arg2),
     None)
 SPEC.raise_markup(r'\raise', markup_t, (amount,), markup_c)
 SPEC.right_align(r'\right-align', markup_t, None, markup_c)
@@ -409,13 +410,13 @@ SPEC.std_bass_vi(r'\stdBassVI', markup_t, (name,), None)
 SPEC.auto_footnote(
     r'\auto-footnote',
     markup_t,
-    (markup, footnote),
+    (arg1, footnote),
     None)
 SPEC.backslashed_digit(r'\backslashed-digit', markup_t, (num,), None)
 SPEC.char(r'\char', markup_t, (num,), None)
 SPEC.eyeglasses(r'\eyeglasses', markup_t, None, None)
-SPEC.footnote(r'\footnote', markup_t, (markup, footnote), None)
-SPEC.fraction(r'\fraction', markup_t, (markup, markup), None)
+SPEC.footnote(r'\footnote', markup_t, (arg1, footnote), None)
+SPEC.fraction(r'\fraction', markup_t, (arg1, arg2), None)
 SPEC.fromproperty(r'\fromproperty', markup_t, (symbol,), None)
 SPEC.leftbrace(r'\leftbrace', markup_t, (size,), None)
 SPEC.lookup(r'\lookup', markup_t, (glyph_name,), None)

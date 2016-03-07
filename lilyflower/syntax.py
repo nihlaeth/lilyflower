@@ -13,6 +13,7 @@ from lilyflower.schemedata import (
     List,
     AssociationList,
     Pair,
+    Symbol,
     Boolean,
     SignedInt)
 from lilyflower.errors import InvalidArgument
@@ -201,10 +202,9 @@ staff_space = Argument('staff_space', SignedFloat, False)
 log = Argument('log', SignedFloat, False)
 dot_count = Argument('dot_count', SignedFloat, False)
 page_number = Argument('page_number', SignedFloat, False)
-# TODO: create scheme symbol (field)
-symbol = Argument('symbol', None, False)
-instrument = Argument('instrument', None, False)
-label = Argument('label', None, False)
+symbol = Argument('symbol', Symbol, False)
+instrument = Argument('instrument', Symbol, False)
+label = Argument('label', Symbol, False)
 xext = Argument('xext', Pair, False)
 yext = Argument('yext', Pair, False)
 factor = Argument('factor', Pair, False)

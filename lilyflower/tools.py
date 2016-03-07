@@ -8,6 +8,7 @@ from lilyflower.schemedata import (
     UnsignedFloat,
     Axis,
     Direction,
+    Symbol,
     Color,
     Pair,
     List,
@@ -153,6 +154,9 @@ def generate_docstring(class_name, attributes):
         elif issubclass(arg.type_, UnsignedFloat):
             imports_scheme.append("UnsignedFloat")
             args.append(("UnsignedFloat(0.5)", UnsignedFloat(0.5)))
+        elif issubclass(arg.type_, Symbol):
+            imports_scheme.append("Symbol")
+            args.append(("Symbol('header:title')", Symbol('header:title')))
         elif issubclass(arg.type_, Pair):
             imports_scheme.append("Pair")
             if "SignedInt" not in imports_scheme:

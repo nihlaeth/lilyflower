@@ -289,6 +289,40 @@ class Axis(SignedInt):
         return "%s%s" % (self._start_symbol, self._data)
 
 
+class Symbol(SchemeData):
+
+    r"""
+    Field - scheme identifier for a lilypond element.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import Symbol
+
+    .. doctest::
+
+        >>> print format(Symbol("header:title"))
+        #'header:title
+        >>> print Symbol("header:title").nested()
+        header:title
+    """
+
+    def __init__(self, data):
+        """Check if this is a valid field."""
+        if re.match(r"^[a-zA-Z][a-zA-Z:_\-0-9]*$", data) is None:
+            raise InvalidArgument("%r is not a valid symbol" % data)
+        self._data = data
+
+    def nested(self):
+        """Data for nested use (used by compound SchemeData objects)."""
+        return self._data
+
+    def __format__(self, _):
+        """Return lilypond code."""
+        return "%s'%s" % (self._start_symbol, self._data)
+
+
 class Pair(SchemeData):
 
     r"""

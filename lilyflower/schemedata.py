@@ -7,7 +7,22 @@ from lilyflower.errors import InvalidArgument
 
 class SchemeData(object):
 
-    """Scheme data."""
+    r"""
+    Scheme data.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import SchemeData
+
+    .. doctest::
+
+        >>> print format(SchemeData(5))
+        #5
+        >>> print SchemeData(5).nested()
+        5
+    """
 
     _start_symbol = "#"
     _inline = True
@@ -18,7 +33,7 @@ class SchemeData(object):
 
     def nested(self):
         """Data for nested use (used by compound SchemeData objects)."""
-        return self._data
+        return "%r" % self._data
 
     def __format__(self, _):
         """Return lilypond code."""
@@ -27,7 +42,22 @@ class SchemeData(object):
 
 class Boolean(SchemeData):
 
-    """Boolean value."""
+    r"""
+    Boolean value.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import Boolean
+
+    .. doctest::
+
+        >>> print format(Boolean(True))
+        ##t
+        >>> print Boolean(True).nested()
+        #t
+    """
 
     def __init__(self, data):
         """Check if bool."""
@@ -38,6 +68,10 @@ class Boolean(SchemeData):
         else:
             self._data = "#f"
 
+    def nested(self):
+        """Data for nested use (used by compound SchemeData objects)."""
+        return self._data
+
     def __format__(self, _):
         """Return lilypond cgde."""
         return "%s%s" % (self._start_symbol, self._data)
@@ -45,7 +79,22 @@ class Boolean(SchemeData):
 
 class UnsignedInt(SchemeData):
 
-    """Unsigned integer."""
+    r"""
+    Unsigned integer.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import UnsignedInt
+
+    .. doctest::
+
+        >>> print format(UnsignedInt(5))
+        #5
+        >>> print UnsignedInt(5).nested()
+        5
+    """
 
     def __init__(self, data):
         """Make sure it's an unsigned int."""
@@ -59,7 +108,22 @@ class UnsignedInt(SchemeData):
 
 class SignedInt(SchemeData):
 
-    """Signed integer."""
+    r"""
+    Signed integer.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import SignedInt
+
+    .. doctest::
+
+        >>> print format(SignedInt(-5))
+        #-5
+        >>> print SignedInt(-5).nested()
+        -5
+    """
 
     def __init__(self, data):
         """Make sure it's an integer."""
@@ -71,7 +135,22 @@ class SignedInt(SchemeData):
 
 class UnsignedFloat(SchemeData):
 
-    """Unsigned float."""
+    r"""
+    Unsigned float.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import UnsignedFloat
+
+    .. doctest::
+
+        >>> print format(UnsignedFloat(4.5))
+        #4.5
+        >>> print UnsignedFloat(4.5).nested()
+        4.5
+    """
 
     def __init__(self, data):
         """Make sure it's an unsigned float."""
@@ -85,7 +164,22 @@ class UnsignedFloat(SchemeData):
 
 class SignedFloat(SchemeData):
 
-    """Signed float."""
+    r"""
+    Signed float.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import SignedFloat
+
+    .. doctest::
+
+        >>> print format(SignedFloat(-5.5))
+        #-5.5
+        >>> print SignedFloat(-5.5).nested()
+        -5.5
+    """
 
     def __init__(self, data):
         """Make sure it's a signed float."""
@@ -97,7 +191,22 @@ class SignedFloat(SchemeData):
 
 class String(SchemeData):
 
-    """String."""
+    r"""
+    String.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import String
+
+    .. doctest::
+
+        >>> print format(String("test"))
+        #'test'
+        >>> print String("test").nested()
+        'test'
+    """
 
     def __init__(self, data):
         """Make sure it's a string."""
@@ -106,7 +215,22 @@ class String(SchemeData):
 
 class Direction(SignedFloat):
 
-    """Not an official Scheme data type, but used a lot in lilypond."""
+    r"""
+    Not an official Scheme data type, but used a lot in lilypond.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import Direction
+
+    .. doctest::
+
+        >>> print format(Direction("center"))
+        #CENTER
+        >>> print Direction("up").nested()
+        UP
+    """
 
     def __init__(self, data):
         """Check it it's a valid direction."""
@@ -130,7 +254,22 @@ class Direction(SignedFloat):
 
 class Axis(SignedInt):
 
-    """Not an official Scheme data type, but used a lot in lilypond."""
+    r"""
+    Not an official Scheme data type, but used a lot in lilypond.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import Axis
+
+    .. doctest::
+
+        >>> print format(Axis("x"))
+        #X
+        >>> print Axis("y").nested()
+        Y
+    """
 
     def __init__(self, data):
         """Check if it's a valid axis."""
@@ -152,7 +291,23 @@ class Axis(SignedInt):
 
 class Pair(SchemeData):
 
-    """Pair."""
+    r"""
+    Pair.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import Pair, SignedInt
+
+    .. doctest::
+
+        >>> pair = Pair([SignedInt(5), SignedInt(0)])
+        >>> print format(pair)
+        #'(5 . 0)
+        >>> print pair.nested()
+        (5 . 0)
+    """
 
     def __init__(self, data):
         """Make sure it's a sequence of length two."""
@@ -170,19 +325,35 @@ class Pair(SchemeData):
 
     def nested(self):
         """Data for nested use (used by compound SchemeData objects)."""
-        return "(%r . %r)" % (self._data[0].nested(), self._data[1].nested())
+        return "(%s . %s)" % (self._data[0].nested(), self._data[1].nested())
 
     def __format__(self, _):
         """Return lilypond code."""
-        return "%s'(%r . %r)" % (
+        return "%s'(%s . %s)" % (
             self._start_symbol,
-            str(self._data[0]),
-            str(self._data[1]))
+            self._data[0].nested(),
+            self._data[1].nested())
 
 
 class List(SchemeData):
 
-    """List."""
+    r"""
+    List.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import List, SignedInt
+
+    .. doctest::
+
+        >>> l = List([SignedInt(5), SignedInt(0), SignedInt(3)])
+        >>> print format(l)
+        #'(5 0 3)
+        >>> print l.nested()
+        (5 0 3)
+    """
 
     def __init__(self, data):
         """Make sure it's a sequence."""
@@ -196,18 +367,36 @@ class List(SchemeData):
 
     def nested(self):
         """Data for nested use (used by compound SchemeData objects)."""
-        return "(%s)" % " ".join("%r" % item.nested() for item in self._data)
+        return "(%s)" % " ".join("%s" % item.nested() for item in self._data)
 
     def __format__(self, _):
         """Return lilypond code."""
         return "%s'(%s)" % (
             self._start_symbol,
-            " ".join("%r" % item.nested() for item in self._data))
+            " ".join("%s" % item.nested() for item in self._data))
 
 
 class AssociationList(List):
 
-    """Association list."""
+    r"""
+    Association list.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import AssociationList, SignedInt, Pair
+
+    .. doctest::
+
+        >>> pair1 = Pair([SignedInt(0), SignedInt(1)])
+        >>> pair2 = Pair([SignedInt(2), SignedInt(3)])
+        >>> l = AssociationList([pair1, pair2])
+        >>> print format(l)
+        #'((0 . 1) (2 . 3))
+        >>> print l.nested()
+        ((0 . 1) (2 . 3))
+    """
 
     def __init__(self, data):
         """Make sure every item is a pair."""
@@ -219,7 +408,23 @@ class AssociationList(List):
 
 class Color(SchemeData):
 
-    """Color." representation in scheme."""
+    r"""
+    Color representation in scheme.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import Color
+
+    .. doctest::
+
+        >>> print format(Color('blue'))
+        #blue
+        >>> print Color('snow4').nested()
+        (x11-color "snow4")
+
+    """
 
     def __init__(self, data):
         """Determine if color is valid and wihat type it is."""
@@ -406,6 +611,10 @@ class Color(SchemeData):
             self._data = "(x11-color \"%s\")" % data
         else:
             raise InvalidArgument("%r is not a valid color.")
+
+    def nested(self):
+        """Data for nested use (used by compound SchemeData objects)."""
+        return "%s" % self._data
 
     def __format__(self, _):
         """Return lilypond code."""

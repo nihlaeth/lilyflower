@@ -11,10 +11,10 @@ for key in SPEC:
         (Node,),
         {
             '__doc__': generate_docstring(class_name, attributes),
-            'tag': attributes.lily_name,
-            'types': attributes.types,
-            'arguments': attributes.arguments,
-            'allowed_content': attributes.allowed_content,
-            'inline': attributes.inline,
-            'delimiter_open': attributes.delimiter_open,
-            'delimiter_close': attributes.delimiter_close})
+            '_tag': attributes.lily_name,
+            '_types': attributes.types,
+            '_arguments': attributes.arguments,
+            '_allowed_content': attributes.allowed_content,
+            '_inline': attributes.inline,
+            '_delimiter_open': attributes.delimiter_open,
+            '_delimiter_close': attributes.delimiter_close})

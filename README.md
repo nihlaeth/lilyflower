@@ -42,6 +42,10 @@ python setup.py doctest # requires sphinx
 python setup.py test # requires nose
 ```
 
+If you changed anything in the Node factory chain, make sure to issue
+a make clean first (see below), since sphinx does not detect changes in
+docstrings of files that haven't been edited.
+
 ## Documentation
 ```
 python setup.py html
@@ -50,22 +54,30 @@ Html documentation will be built in doc/build/html. If the documentation
 does not reflect changes in the source, issue a make clean and try again:
 
 ```
-cd doc
-make clean
-cd ..
+cd doc && make clean && cd ..
 python setup.py html
 ```
 
 ## TODO
+- [ ] build in formatting for content lengths > 1
+- [ ] add sequence & iterator methods to Node
+- [ ] add weakref to Node for object tree traversal
+- [ ] add support for objects with an open and close part (spanners, crescendo, etc.)
+- [ ] create lilypond data classes (duration, pitch, octave)
+- [ ] integrate tone classes into Node
+- [ ] add type checking methods to Node (for self.\_type)
+- [ ] implement inherited duration & octave (through tree traversal)
+- [ ] clean out all the old classes
+- [ ] add LilyFile object to dom
 - [ ] add support for multi-measure rests
 - [ ] add all notecommands (accents and such)
 - [ ] have containers check if content is even remotely valid (class checking)
-- [ ] add all markup commands and containers
+- [x] add all markup commands and containers
 - [ ] implement lyrics mode
 - [ ] implement chord mode
 - [ ] add comments
 - [ ] add all music commands and containers
-- [ ] have containers validate arguments
+- [x] have containers validate arguments
 - [ ] implement lilypond variables & tags (more readable source code)
 - [ ] implement property setting
 - [ ] better documentation

@@ -11,13 +11,16 @@ Submodules
    lilyflower.commands
    lilyflower.container
    lilyflower.containers
+   lilyflower.dom
    lilyflower.dynamics
    lilyflower.errors
-   lilyflower.markup
+   lilyflower.node
    lilyflower.notecommands
    lilyflower.schemedata
    lilyflower.spanners
+   lilyflower.syntax
    lilyflower.tones
+   lilyflower.tools
 
 Module contents
 ---------------

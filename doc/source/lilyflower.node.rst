@@ -2,4 +2,4 @@ node
 ======================
 
 .. automodule:: lilyflower.node
-    :show-inherintance:
+    :show-inheritance:

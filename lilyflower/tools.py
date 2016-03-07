@@ -198,10 +198,11 @@ def generate_docstring(class_name, attributes):
     """.format(
         name=class_name,
         parameters=", ".join(param[0] for param in args),
-        result="%s%s%s" % (
+        result="%s%s%s%s" % (
             attributes.lily_name,
             " " if len(args) > 0 else "",
-            " ".join(format(param[1]) for param in args)))
+            " ".join(format(param[1]) for param in args),
+            " { }" if attributes.allowed_content is not None else ""))
     # TODO: handle position & content arguments here!
 
     return docstring

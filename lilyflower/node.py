@@ -30,3 +30,10 @@ class Node(object):
     ========
 
     """
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def __format__(self, format_spec):
+        """Return lilypond code."""
+        return self.tag

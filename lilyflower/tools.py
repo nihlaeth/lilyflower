@@ -1,5 +1,19 @@
 """Some tools."""
 import re
+from lilyflower.schemedata import (
+    String,
+    SignedInt,
+    UnsignedInt,
+    SignedFloat,
+    UnsignedFloat,
+    Axis,
+    Direction,
+    Color,
+    Pair,
+    List,
+    AssociationList,
+    Boolean)
+from lilyflower.errors import InvalidArgument
 
 
 def property_to_class(name):
@@ -63,16 +77,16 @@ def generate_docstring(class_name, attributes):
 
     Returns
     =======
-    None
+    `None`
 
     Raises
     ======
-    :class:`lilyflower.errors.InvalidArgument`:
+    lilyflower.errors.InvalidArgument:
         if any of the arguments doesn't match the type requirement,
         or if there are too many or too few arguments.
     """
     if attributes.allowed_content is not None:
-        docstring += """:class:`lilyflower.errors.InvalidContent`:
+        docstring += """lilyflower.errors.InvalidContent:
         if any of the content does not match the type requirement.
     """
 
@@ -82,8 +96,112 @@ def generate_docstring(class_name, attributes):
     """
     # TODO: add some useful notes on parameter resolve order
 
-    # TODO: add see also section
+    docstring += """
 
-    # TODO: add reference section (maybe a search for command in lily docs?
+    See Also
+    ========
+    :class:`lilyflower.node.Node`
+    :class:`lilyflower.errors.InvalidArgument`
+    """
+
+    if attributes.allowed_content is not None:
+        docstring += """:class:`lilyflower.errors.InvalidContent`
+    """
+
+    imports_scheme = []
+    imports_this = [class_name]
+    args = []
+    for arg in attributes.arguments:
+        if arg.type_ is None:
+            # Unimplemented type
+            # TODO: issue warning about unimplemented type
+            pass
+        elif isinstance(arg.type_, tuple):
+            # list of node types allowed as argument
+            if 'markup' in arg.type_:
+                imports_this.append("Bold")
+                # we can't import Bold for real because of circular
+                # dependencies
+                args.append(("Bold([])", r"\bold { }"))
+                break
+            # TODO: handle other argument types (like 'music')
+        elif issubclass(arg.type_, String):
+            imports_scheme.append("String")
+            args.append(("String('test')", String("test")))
+        elif issubclass(arg.type_, SignedFloat):
+            imports_scheme.append("SignedFloat")
+            args.append(("SignedFloat(0)", SignedFloat(0)))
+        elif issubclass(arg.type_, Color):
+            imports_scheme.append("Color")
+            args.append(("Color('blue')", Color('blue')))
+        elif issubclass(arg.type_, Boolean):
+            imports_scheme.append("Boolean")
+            args.append(("Boolean(True)", Boolean(True)))
+        elif issubclass(arg.type_, UnsignedInt):
+            imports_scheme.append("UnsignedInt")
+            args.append(("UnsignedInt(0)", UnsignedInt(0)))
+        elif issubclass(arg.type_, SignedInt):
+            imports_scheme.append("SignedInt")
+            args.append(("SignedInt(-1)", SignedInt(-1)))
+        elif issubclass(arg.type_, UnsignedFloat):
+            imports_scheme.append("UnsignedFloat")
+            args.append(("UnsignedFloat(0.5)", UnsignedFloat(0.5)))
+        elif issubclass(arg.type_, Direction):
+            imports_scheme.append("Direction")
+            args.append(("Direction('up')", Direction('up')))
+        elif issubclass(arg.type_, Axis):
+            imports_scheme.append("Axis")
+            args.append(("Axis('x')", Axis('x')))
+        elif issubclass(arg.type_, Pair):
+            imports_scheme.append("Pair")
+            if "SignedInt" not in imports_scheme:
+                imports_scheme.append("SignedInt")
+            args.append((
+                "Pair([SignedInt(0), SignedInt(1)])",
+                Pair([SignedInt(0), SignedInt(1)])))
+        elif issubclass(arg.type_, List):
+            imports_scheme.append("List")
+            if "SignedInt" not in imports_scheme:
+                imports_scheme.append("SignedInt")
+            args.append((
+                "List([SignedInt(0), SignedInt(1), SignedInt(2)])",
+                List([SignedInt(0), SignedInt(1), SignedInt(2)])))
+        elif issubclass(arg.type_, AssociationList):
+            imports_scheme.append("List")
+            if "SignedInt" not in imports_scheme:
+                imports_scheme.append("SignedInt")
+            if "Pair" not in imports_scheme:
+                imports_scheme.append("Pair")
+            args.append((
+                "AssociationList([Pair(SignedInt(0), SignedInt(1))])",
+                AssociationList([Pair([SignedInt(0), SignedInt(1)])])))
+        else:
+            raise InvalidArgument("do not recognize type %r" % arg.type_)
+
+    docstring += """
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.dom import {imports}
+    """.format(imports=", ".join(imports_this))
+    if len(imports_scheme) > 0:
+        docstring += """    from lilyflower.schemedata import {imports}
+    """.format(imports=", ".join(imports_scheme))
+
+    docstring += """
+
+    .. doctest::
+
+        >>> print format({name}({parameters}))
+        {result}
+    """.format(
+        name=class_name,
+        parameters=", ".join(param[0] for param in args),
+        result="%s%s%s" % (
+            attributes.lily_name,
+            " " if len(args) > 0 else "",
+            " ".join(format(param[1]) for param in args)))
+    # TODO: handle position & content arguments here!
 
     return docstring

@@ -161,18 +161,18 @@ SPEC = Spec()
 # Some shortcuts
 # pylint: disable = invalid-name
 
-# types
+# types _t = type definition, _c = content validation, _= argument type
 markup_t = ('markup', 'attachment')
 markup_c = ('markup', 'comment', 'setting', 'variable')
-# TODO: define what's allowed in a score
+markup_a = ('markup', 'variable')
 music_c = ('music', 'comment')
 
 # arguments
-markup = Argument('markup', markup_c, False)
-pattern = Argument('pattern', markup_c, False)
-footnote = Argument('footnote', markup_c, False)
-gauge = Argument('gauge', markup_c, False)
-default = Argument('default', markup_c, False)
+markup = Argument('markup', markup_a, False)
+pattern = Argument('pattern', markup_a, False)
+footnote = Argument('footnote', markup_a, False)
+gauge = Argument('gauge', markup_a, False)
+default = Argument('default', markup_a, False)
 string = Argument('string', String, False)
 file_name = Argument('file_name', String, False)
 url = Argument('url', String, False)

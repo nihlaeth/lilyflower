@@ -18,6 +18,36 @@ from lilyflower.schemedata import (
 from lilyflower.errors import InvalidArgument
 
 
+def compare_iter(one, two):
+    r"""
+    Compare two iterables to see if they have any elements in common.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.tools import compare_iter
+
+    .. doctest::
+
+        >>> compare_iter((0, 1, 2), (3, 4, 5))
+        False
+        >>> compare_iter((0, 1, 3), (3,))
+        True
+        >>> compare_iter([1, 3, 5], ())
+        False
+        >>> compare_iter([], ())
+        True
+    """
+    if len(one) == 0 and len(two) == 0:
+        # special case - supported for testing Node
+        return True
+    for item in one:
+        if item in two:
+            return True
+    return False
+
+
 def property_to_class(name):
     r"""Convert property name to class name.
 

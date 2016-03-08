@@ -59,26 +59,19 @@ python setup.py html
 ```
 
 ## TODO
-- [x] build in formatting for content lengths > 1
-- [x] add sequence & iterator methods to Node
 - [ ] add math to Node
 - [ ] add weakref to Node for object tree traversal
 - [ ] add support for objects with an open and close part (spanners, crescendo, etc.)
 - [ ] create lilypond data classes (duration, pitch, octave)
 - [ ] integrate tone classes into Node
-- [x] add type checking methods to Node (for self.\_type)
 - [ ] implement inherited duration & octave (through tree traversal)
 - [ ] clean out all the old classes
-- [x] add LilyFile object to dom
 - [ ] add support for multi-measure rests
 - [ ] add all notecommands (accents and such)
-- [x] have containers check if content is even remotely valid (class checking)
-- [x] add all markup commands and containers
 - [ ] implement lyrics mode
 - [ ] implement chord mode
 - [ ] add comments
 - [ ] add all music commands and containers
-- [x] have containers validate arguments
 - [ ] implement lilypond variables & tags (more readable source code)
 - [ ] implement property setting
 - [ ] better documentation

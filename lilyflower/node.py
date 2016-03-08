@@ -51,7 +51,14 @@ class Node(object):
         >>> node.append(Node())
         >>> print len(node)
         4
-
+        >>> node[2].append(Node())
+        >>> for i in node.iter_depth():
+        ...     print format(i)
+        { }
+        { }
+        { { } }
+        { }
+        { }
     """
 
     _tag = ""

@@ -16,3 +16,8 @@ markup = LilyFile([Markup([
     ])
 ])])
 print format(markup)
+
+print "\nIterating in-depth"
+for item in markup.iter_depth():
+    print "\nNext iteration"
+    print format(item)

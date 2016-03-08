@@ -31,6 +31,55 @@ Command and container classes won't be defined individually, but generated from 
 
 Also, I'm going to try and make use of the work the awesome folks at python-ly did. It currently isn't possible to generate .ly code with their tools, but what they do, they do superbly. No need to invent the wheel twice.
 
+## Design decisions
+### Whitespace
+Situation: len(Node.\_content) == 1
+
+Old:
+```
+\tag \content {
+  \content-of-content
+  \more-content
+}
+```
+Ups and downs: special cases need to be defined - some tags always need braces. Takes up a lot of vertical space with non-container content.
+
+New:
+```
+\tag { \content {
+  \content-of-content
+  \more-content
+} }
+```
+Ups and downs: ugly, slightly confusing.
+
+Alternative:
+```
+\tag {
+  \content {
+    \content-of-content
+    \more-content
+  }
+}
+```
+Ups and downs: clear, beautiful, larger indents leaving less space for music on a signle rule. Takes up a lot more vertical space with non-container content.
+
+Right now, new is implemented. We might decide to switch to Alternative before all's said and done.
+
+### Tone inheritance
+In lilypond, tones inherit length and octave from their predecessors. Implementing this would be complex. It would be very useful to the end-user on the other side. This would also be useful for correct reversal with tempo and key changes.
+
+For now other tasks have higher priority.
+
+### Spanners
+Spanners are complex because they break the rigid nesting structure. I've chosen to implement the opening and closing part of a spanner as the same object, and to display them according to the number of times format has been called on them.
+
+Another Node that could make use of this is the Variable. First time around it displays its definition, every time after it just displays the tag.
+
+Upside is that spanners are always displayed correctly even after a reversal. It's also relatively simple to validate a node tree by checking if every spanner occurs twice.
+
+Downside is that this breaks if the end-user decides to format part of the node tree that contains one of the references, but not the other. Maybe implement a reset call for the final format?
+
 ## Installation
 ```
 python setup.py install

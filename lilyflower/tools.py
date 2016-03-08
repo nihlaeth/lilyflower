@@ -9,6 +9,7 @@ from lilyflower.schemedata import (
     Axis,
     Direction,
     Symbol,
+    Procedure,
     Color,
     Pair,
     List,
@@ -157,6 +158,11 @@ def generate_docstring(class_name, attributes):
         elif issubclass(arg.type_, Symbol):
             imports_scheme.append("Symbol")
             args.append(("Symbol('header:title')", Symbol('header:title')))
+        elif issubclass(arg.type_, Procedure):
+            imports_scheme.append("Procedure")
+            args.append((
+                "Procedure('(some-procedure)')",
+                Procedure('(some-procedure)')))
         elif issubclass(arg.type_, Pair):
             imports_scheme.append("Pair")
             if "SignedInt" not in imports_scheme:

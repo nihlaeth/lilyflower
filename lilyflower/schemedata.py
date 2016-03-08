@@ -323,6 +323,46 @@ class Symbol(SchemeData):
         return "%s'%s" % (self._start_symbol, self._data)
 
 
+class Procedure(SchemeData):
+
+    r"""
+    Scheme procedure.
+
+    Procedures are beyond the scope of this project, but you
+    can use them if you really want to.
+
+    Procedure expects a string that starts and ends with parens,
+    other than that, you're on your own.
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.schemedata import Procedure
+
+    .. doctest::
+
+        >>> print format(Procedure('(not-a-valid-scheme-procedure)'))
+        #(not-a-valid-scheme-procedure)
+        >>> print Procedure('(test)').nested()
+        (test)
+    """
+
+    def __init__(self, data):
+        """Check if it looks remotely like a scheme procedure."""
+        if re.match(r"^\(.*\)$", data) is None:
+            raise InvalidArgument("%r does not look like a procedure." % data)
+        self._data = data
+
+    def nested(self):
+        """Data for nested use (used by compound SchemeData objects)."""
+        return self._data
+
+    def __format__(self, _):
+        """Return lilypond code."""
+        return "%s%s" % (self._start_symbol, self._data)
+
+
 class Pair(SchemeData):
 
     r"""

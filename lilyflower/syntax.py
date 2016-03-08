@@ -14,6 +14,7 @@ from lilyflower.schemedata import (
     AssociationList,
     Pair,
     Symbol,
+    Procedure,
     Boolean,
     SignedInt)
 from lilyflower.errors import InvalidArgument
@@ -215,8 +216,7 @@ assoc_list = Argument('association_list', AssociationList, False)
 commands = Argument('commands', List, False)
 markings_list = Argument('markings_list', List, False)
 user_draw_commands = Argument('user_draw_commands', List, False)
-# TODO: create scheme procedure
-procedure = Argument('procedure', None, False)
+procedure = Argument('procedure', Procedure, False)
 # TODO: create scheme stencil
 stencil = Argument('stencil', None, False)
 color = Argument('color', Color, False)

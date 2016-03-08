@@ -31,6 +31,21 @@ class Node(object):
 
     Examples
     ========
+    .. testsetup::
+
+        from lilyflower.node import Node
+
+    .. doctest::
+
+        >>> node = Node([Node(), Node(), Node()])
+        >>> for item in node:
+        ...     print format(item)
+        { }
+        { }
+        { }
+        >>> node.append(Node())
+        >>> print len(node)
+        4
 
     """
 
@@ -146,6 +161,146 @@ class Node(object):
                     # for now we accept anything
                     self._content.append(item)
 
+    def append(self, value):
+        """Add item to the end of content."""
+        if self._allowed_content is not None:
+            # TODO: validation
+            self._content.append(value)
+        else:
+            raise ValueError("%s has no content" % self._tag)
+
+    def extend(self, extension):
+        """Add iterable to end of container (another Node for example)."""
+        if self._allowed_content is not None:
+            for item in extension:
+                self.append(item)
+        else:
+            raise ValueError("%s has no content" % self._tag)
+
+    def insert(self, index, value):
+        """Insert value into content at index."""
+        if self._allowed_content is not None:
+            # TODO: validation
+            self._content.insert(index, value)
+        else:
+            raise ValueError("%s has no content" % self._tag)
+
+    def count(self, value):
+        """Count occurances of value in content."""
+        if self._allowed_content is not None:
+            return self._content.count(value)
+        else:
+            raise ValueError("%s has no content" % self._tag)
+
+    def pop(self):
+        """Pop value from content."""
+        if self._allowed_content is not None:
+            return self._content.pop()
+        else:
+            raise ValueError("%s has no content" % self._tag)
+
+    def remove(self, value):
+        """Remove first occurance of value from content."""
+        if self._allowed_content is not None:
+            self._content.remove(value)
+        else:
+            raise ValueError("%s has no content" % self._tag)
+
+    def reverse(self, depth=-1):
+        """Reverse order of content and that of children to depth."""
+        if self._allowed_content is not None and depth != 0:
+            self._content.reverse()
+            for item in self._content:
+                item.reverse(depth - 1)
+
+    def sort(self, cmp=None, key=None, reverse=False, depth=-1):
+        """Sort content to depth."""
+        if self._allowed_content is not None and depth != 0:
+            self._content.sort(cmp, key, reverse)
+            for item in self._content:
+                item.sort(cmp, key, reverse, depth - 1)
+
+    def index(self, value):
+        """Find index of value in content."""
+        if self._allowed_content is not None:
+            return self._content.index(value)
+        else:
+            raise ValueError("%s has no content" % self._tag)
+
+    def __getitem__(self, name):
+        """
+        Get item from content or arguments.
+
+        if `name` is `str`: return from `self._stored_arguments`
+        if `name` is `int`: return from `self._content`
+        """
+        if isinstance(name, basestring):
+            return self._stored_arguments[name]
+        elif isinstance(name, int) or isinstance(name, slice):
+            return self._content[name]
+        else:
+            raise NameError("%r is not a valid key" % name)
+
+    def __setitem__(self, name, value):
+        """
+        Set item in content or arguments.
+
+        if `name` is `str`: set item in `self._stored_arguments`
+        if `name` is `int` or `slice`: set item in `self._content`
+        """
+        # TODO: validate before storage
+        if isinstance(name, basestring):
+            self._stored_arguments[name] = value
+        elif isinstance(name, int) or isinstance(name, slice):
+            self._content[name] = value
+        else:
+            raise NameError("%r is not a valid key" % name)
+
+    def __delitem__(self, name):
+        """
+        Delete item from content or arguments.
+
+        if `name` is `str`: del item in `self._stored_arguments`
+        if `name` is `int` or `slice`: del item in `self._content`
+        """
+        if isinstance(name, basestring):
+            del self._stored_arguments[name]
+        elif isinstance(name, int) or isinstance(name, slice):
+            del self._content[name]
+        else:
+            raise NameError("%r is not a valid key" % name)
+
+    def __len__(self):
+        """Return length of content."""
+        if self._allowed_content is not None:
+            return len(self._content)
+        else:
+            return 0
+
+    def __iter__(self):
+        """Return iterable for content."""
+        if self._allowed_content is not None:
+            return iter(self._content)
+        else:
+            raise StopIteration
+
+    def __reversed__(self):
+        """Return iterable for backwards iteration over content."""
+        if self._allowed_content is not None:
+            return iter(self._content[::-1])
+        else:
+            raise StopIteration
+
+    def iter_depth(self, depth=-1):
+        """Iterate over children and their contents, limited by depth."""
+        if depth != 0:
+            for child in self:
+                yield child
+                for child_content in child.iter_depth(depth - 1):
+                    yield child_content
+        else:
+            raise StopIteration
+
     def __format__(self, format_spec):
         """Return lilypond code."""
         indent_level = 0
@@ -153,13 +308,19 @@ class Node(object):
             indent_level = int(format_spec)
         result = "%s%s" % (self._position, self._tag)
         if len(self._stored_arguments) > 0:
-            result += " " + " ".join(
-                format(self._stored_arguments[key])
-                for key in self._stored_arguments)
+            result += " %s%s" % (
+                " ".join(
+                    format(self._stored_arguments[key])
+                    for key in self._stored_arguments),
+                " " if self._allowed_content is not None else "")
+        if len(self._stored_arguments) == 0 and \
+                self._allowed_content is not None and \
+                self._tag is not "":
+            result += " "
 
         # now handle content!
         if self._allowed_content is not None:
-            result += " %s" % self._delimiter_open
+            result += "%s" % self._delimiter_open
             if len(self._content) == 0:
                 # directly close, no newline!
                 result += " %s" % self._delimiter_close

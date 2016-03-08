@@ -1,8 +1,13 @@
 """Basic building block for the object tree."""
 from collections import OrderedDict
-from lilyflower.errors import InvalidArgument
+import re
+from lilyflower.errors import InvalidArgument, InvalidContent
+from lilyflower.tools import compare_iter
 
 
+# pylint: disable=protected-access
+# We only access protected content of our own children,
+# content needs to stay protected for end user.
 class Node(object):
 
     r"""
@@ -132,24 +137,14 @@ class Node(object):
             if arg_value[arg.name] is None and not arg.optional:
                 raise InvalidArgument(
                     "%s argument is not optional" % arg.name)
-            elif arg.type_ is None:
-                # Unimplemented type, issue warning, accept any value
-                pass
-            elif isinstance(arg.type_, tuple):
-                # TODO: do a typecheck on value
-                pass
-            else:
-                if not isinstance(arg_value[arg.name], arg.type_):
-                    raise InvalidArgument(
-                        "Expected %r, got %r" % (
-                            arg.type_,
-                            arg_value[arg.name]))
+            self._validate_argument(arg.name, arg_value[arg.name])
             # now we're sure this is a valid argument, store it
             self._stored_arguments[arg.name] = arg_value[arg.name]
 
         # handle position (optional)
         if 'attachment' in self._types:
             if arg_value['position'] is not None:
+                self._validate_argument('position', arg_value['position'])
                 self._position = arg_value['position']
 
         # handle content (optional)
@@ -157,14 +152,58 @@ class Node(object):
             self._content = []
             if arg_value['content'] is not None:
                 for item in arg_value['content']:
-                    # TODO: do a type check on content
-                    # for now we accept anything
+                    self._validate_content(item)
                     self._content.append(item)
+
+    def _validate_content(self, item):
+        """Validate content item."""
+        if not isinstance(item, Node):
+            raise InvalidContent("%r not a Node object." % item)
+        if not compare_iter(self._allowed_content, item._types):
+            raise InvalidContent("Type mismatch: %r, %r" % (
+                self._allowed_content,
+                item._types))
+        return True
+
+    def _validate_argument(self, name, value):
+        """Validate argument."""
+        # special arguments (position)
+        if name == 'position':
+            if re.match(r"^[\^\-_]?$", value) is None:
+                raise InvalidArgument("%r is not a valid position" % value)
+            else:
+                return True
+
+        # fetch argument
+        arg = None
+        for item in self._arguments:
+            if item.name == name:
+                arg = item
+        if arg is None:
+            InvalidArgument('%r: no such argument' % name)
+        elif arg.type_ is None:
+            # Unimplemented type, issue warning, accept any value
+            return True
+        elif isinstance(arg.type_, tuple):
+            if not isinstance(value, Node):
+                raise InvalidArgument("Expected Node for %s, not %r" % (
+                    name,
+                    value))
+            if not compare_iter(arg.type_, value._types):
+                raise InvalidArgument(
+                    "Type mismatch: %r, %r" % (arg.type_, value._types))
+        else:
+            if not isinstance(value, arg.type_):
+                raise InvalidArgument(
+                    "Expected %r, got %r" % (
+                        arg.type_,
+                        value))
+        return True
 
     def append(self, value):
         """Add item to the end of content."""
         if self._allowed_content is not None:
-            # TODO: validation
+            self._validate_content(value)
             self._content.append(value)
         else:
             raise ValueError("%s has no content" % self._tag)
@@ -180,7 +219,7 @@ class Node(object):
     def insert(self, index, value):
         """Insert value into content at index."""
         if self._allowed_content is not None:
-            # TODO: validation
+            self._validate_content(value)
             self._content.insert(index, value)
         else:
             raise ValueError("%s has no content" % self._tag)
@@ -248,10 +287,11 @@ class Node(object):
         if `name` is `str`: set item in `self._stored_arguments`
         if `name` is `int` or `slice`: set item in `self._content`
         """
-        # TODO: validate before storage
         if isinstance(name, basestring):
+            self._validate_argument(name, value)
             self._stored_arguments[name] = value
         elif isinstance(name, int) or isinstance(name, slice):
+            self._validate_content(value)
             self._content[name] = value
         else:
             raise NameError("%r is not a valid key" % name)

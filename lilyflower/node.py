@@ -164,6 +164,18 @@ class Node(object):
 
     def _validate_content(self, item):
         """Validate content item."""
+        if 'comment' in self._types and 'text' in self._allowed_content:
+            if not isinstance(item, str):
+                raise InvalidArgument('expected str, not %r' % item)
+            if len(self._content) > 0:
+                # current item is not appended yet, so len is actually >1
+                # multiline comment
+                self._delimiter_open = "%{"
+                self._delimiter_close = "%}"
+            else:
+                self._delimiter_open = "%"
+                self._delimiter_close = ""
+            return True
         if not isinstance(item, Node):
             raise InvalidContent("%r not a Node object." % item)
         if not compare_iter(self._allowed_content, item._types):
@@ -367,6 +379,11 @@ class Node(object):
 
         # now handle content!
         if self._allowed_content is not None:
+            new_indent = indent_level
+            if 'text' in self._allowed_content and \
+                    len(self._allowed_content) == 1:
+                # only strings, so no passing on formatting
+                new_indent = ""
             result += "%s" % self._delimiter_open
             if len(self._content) == 0:
                 # directly close, no newline!
@@ -374,13 +391,14 @@ class Node(object):
             elif len(self._content) == 1:
                 # keep it on the same rule
                 result += " %s %s" % (
-                    format(self._content[0], str(indent_level)),
+                    format(self._content[0], str(new_indent)),
                     self._delimiter_close)
             else:
                 # more than one item, start newline and indent stuff
                 inline_previous = False
+                new_indent += 1
                 for item in self._content:
-                    separator = "\n%s" % ("  " * (indent_level + 1))
+                    separator = "\n%s" % ("  " * new_indent)
                     inline_current = item._inline
                     # the only time when we need a space as a
                     # separator is when both the current and
@@ -389,7 +407,7 @@ class Node(object):
                         separator = " "
                     result += "%s%s" % (separator, format(
                         item,
-                        str(indent_level + 1)))
+                        str(new_indent)))
                     inline_previous = inline_current
                 result += "\n%s%s" % (
                     "  " * indent_level,

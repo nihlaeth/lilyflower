@@ -119,7 +119,7 @@ python setup.py html
 - [ ] add all notecommands (accents and such)
 - [ ] implement lyrics mode
 - [ ] implement chord mode
-- [ ] add comments
+- [x] add comments
 - [ ] add all music commands and containers
 - [ ] implement lilypond variables & tags (more readable source code)
 - [ ] implement property setting

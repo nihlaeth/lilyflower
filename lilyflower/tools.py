@@ -239,10 +239,10 @@ def generate_docstring(class_name, attributes):
             content_arg = "['test string']"
             content += "test string"
         content += " %s" % attributes.delimiter_close
-    if len(formatted_parameters) > 0:
-        formatted_parameters += ", %s" % content_arg
-    else:
-        formatted_parameters = content_arg
+        if len(formatted_parameters) > 0:
+            formatted_parameters += ", %s" % content_arg
+        else:
+            formatted_parameters = content_arg
 
     docstring += """
     Examples

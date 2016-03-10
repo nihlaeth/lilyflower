@@ -216,8 +216,33 @@ def generate_docstring(class_name, attributes):
             args.append((
                 "List([SignedInt(0), SignedInt(1), SignedInt(2)])",
                 List([SignedInt(0), SignedInt(1), SignedInt(2)])))
+        elif issubclass(arg.type_, str):
+            args.append(("'test string'", 'test string'))
         else:
             raise InvalidArgument("do not recognize type %r" % arg.type_)
+    formatted_parameters = ", ".join(param[0] for param in args)
+    content = ""
+    content_arg = ""
+    if attributes.allowed_content is not None:
+        # put something in the content
+        # separator between tag/arguments and content
+        if len(attributes.arguments) > 0 or attributes.lily_name != "":
+            content += " "
+        content += "%s " % attributes.delimiter_open
+        # figure out what to put inside
+        if 'markup' in attributes.allowed_content:
+            if 'Italic' not in imports_this:
+                imports_this.append("Italic")
+            content_arg += "[Italic()]"
+            content += r"\italic { }"
+        elif 'text' in attributes.allowed_content:
+            content_arg = "['test string']"
+            content += "test string"
+        content += " %s" % attributes.delimiter_close
+    if len(formatted_parameters) > 0:
+        formatted_parameters += ", %s" % content_arg
+    else:
+        formatted_parameters = content_arg
 
     docstring += """
     Examples
@@ -238,12 +263,12 @@ def generate_docstring(class_name, attributes):
         {result}
     """.format(
         name=class_name,
-        parameters=", ".join(param[0] for param in args),
+        parameters=formatted_parameters,
         result="%s%s%s%s" % (
             attributes.lily_name,
             " " if len(args) > 0 else "",
             " ".join(format(param[1]) for param in args),
-            " { }" if attributes.allowed_content is not None else ""))
-    # TODO: handle position & content arguments here!
+            content))
+    # TODO: handle position argument
 
     return docstring

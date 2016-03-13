@@ -109,11 +109,9 @@ python setup.py html
 
 ## TODO
 - [ ] add math to Node
-- [ ] add weakref to Node for object tree traversal
 - [ ] add support for objects with an open and close part (spanners, crescendo, etc.)
 - [ ] create lilypond data classes (duration, pitch, octave)
 - [ ] integrate tone classes into Node
-- [ ] implement inherited duration & octave (through tree traversal)
 - [ ] clean out all the old classes
 - [ ] add support for multi-measure rests
 - [ ] add all notecommands (accents and such)
@@ -127,6 +125,7 @@ python setup.py html
 - [ ] test everything
 
 ## Planned features
+- [ ] give Nodes knowledge of context (tree traversal)
 - [ ] add parser/generators for quick object tree generation
 - [ ] expensive & permanent transpose and reverse by having lilypond interpret and parsing result
 - [ ] template functions to save time (only write music)

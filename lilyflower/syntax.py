@@ -70,6 +70,7 @@ class Spec(object, DictMixin):
             'music',
             'markup',
             'attachment',
+            'accent',
             'lyrics',
             'chordmode',
             'comment',
@@ -168,6 +169,7 @@ markup_t = ('markup', 'attachment')
 markup_c = ('markup', 'comment', 'setting', 'variable')
 markup_a = ('markup', 'variable')
 music_c = ('music', 'comment')
+accent_t = ('attachment', 'accent')
 
 # arguments
 arg1 = Argument('arg1', markup_a, False)
@@ -355,7 +357,9 @@ SPEC.custom_tab_clef(
     None)
 SPEC.doubleflat(r'\doubleflat', markup_t, None, None)
 SPEC.doublesharp(r'\doublesharp', markup_t, None, None)
-SPEC.fermata(r'\fermata', markup_t, None, None)
+# fermata is listed under accents as well as markup
+# to make things simpler, we place it under accents only.
+# SPEC.fermata(r'\fermata', markup_t, None, None)
 SPEC.flat(r'\flat', markup_t, None, None)
 SPEC.musicglyph(r'\musicglyph', markup_t, (glyph_name,), None)
 SPEC.natural(r'\natural', markup_t, None, None)
@@ -455,3 +459,50 @@ SPEC.with_dimensions(
     (xext, yext),
     markup_c)
 SPEC.with_link(r'\with-link', markup_t, (label,), markup_c)
+
+
+# accents
+SPEC.accent(r'\accent', accent_t, None, None)
+SPEC.espressivo(r'\espressivo', accent_t, None, None)
+SPEC.marcato(r'marcato', accent_t, None, None)
+SPEC.portato(r'\portato', accent_t, None, None)
+SPEC.staccatissimo(r'\staccatissimo', accent_t, None, None)
+SPEC.staccato(r'\staccato', accent_t, None, None)
+SPEC.tenuto(r'\tenuto', accent_t, None, None)
+SPEC.prall(r'\prall', accent_t, None, None)
+SPEC.mordent(r'\mordent', accent_t, None, None)
+SPEC.prallmordent(r'\prallmordent', accent_t, None, None)
+SPEC.turn(r'\turn', accent_t, None, None)
+SPEC.upprall(r'\upprall', accent_t, None, None)
+SPEC.downprall(r'\downprall', accent_t, None, None)
+SPEC.upmordent(r'\upmordent', accent_t, None, None)
+SPEC.downmordent(r'\downmordent', accent_t, None, None)
+SPEC.lineprall(r'\lineprall', accent_t, None, None)
+SPEC.prallprall(r'\prallprall', accent_t, None, None)
+SPEC.pralldown(r'\pralldown', accent_t, None, None)
+SPEC.prallup(r'\prallup', accent_t, None, None)
+SPEC.reverseturn(r'\reverseturn', accent_t, None, None)
+SPEC.trill(r'\trill', accent_t, None, None)
+SPEC.shortfermata(r'\shortfermata', accent_t, None, None)
+SPEC.fermata(r'\fermata', accent_t, None, None)
+SPEC.longfermata(r'\longfermata', accent_t, None, None)
+SPEC.verylongfermata(r'\verylongfermata', accent_t, None, None)
+SPEC.upbow(r'\upbow', accent_t, None, None)
+SPEC.downbow(r'\downbow', accent_t, None, None)
+SPEC.flageolet(r'\flageolet', accent_t, None, None)
+SPEC.snappizzicato(r'\snappizzicato', accent_t, None, None)
+SPEC.open(r'\open', accent_t, None, None)
+SPEC.halfopen(r'\halfopen', accent_t, None, None)
+SPEC.stopped(r'\stopped', accent_t, None, None)
+SPEC.lheel(r'\lheel', accent_t, None, None)
+SPEC.rheel(r'\rheel', accent_t, None, None)
+SPEC.ltoe(r'\ltoe', accent_t, None, None)
+SPEC.rtoe(r'\rtoe', accent_t, None, None)
+SPEC.segno(r'\segno', accent_t, None, None)
+SPEC.coda(r'\coda', accent_t, None, None)
+SPEC.vardoda(r'\vardoda', accent_t, None, None)
+SPEC.ictus(r'\ictus', accent_t, None, None)
+SPEC.accentus(r'\accentus', accent_t, None, None)
+SPEC.circulus(r'\circulus', accent_t, None, None)
+SPEC.semicirculus(r'\semicirculus', accent_t, None, None)
+SPEC.signumcongruentiae(r'\signumcongruentiae', accent_t, None, None)

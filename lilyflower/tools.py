@@ -235,9 +235,6 @@ def generate_docstring(class_name, attributes):
                 imports_this.append("Italic")
             content_arg += "[Italic()]"
             content += r"\italic { }"
-        elif 'text' in attributes.allowed_content:
-            content_arg = "['test string']"
-            content += "test string"
         content += " %s" % attributes.delimiter_close
         if len(formatted_parameters) > 0:
             formatted_parameters += ", %s" % content_arg

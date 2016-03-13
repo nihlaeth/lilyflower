@@ -67,7 +67,6 @@ class Spec(object, DictMixin):
 
         # this list will likely change in the future
         valid_types = [
-            'text',
             'music',
             'markup',
             'attachment',
@@ -221,7 +220,6 @@ procedure = Argument('procedure', Procedure, False)
 # TODO: create scheme stencil
 stencil = Argument('stencil', None, False)
 color = Argument('color', Color, False)
-text = Argument('text', str, False)
 
 # markup container
 SPEC.markup(r'\markup', markup_t, None, markup_c)
@@ -457,12 +455,3 @@ SPEC.with_dimensions(
     (xext, yext),
     markup_c)
 SPEC.with_link(r'\with-link', markup_t, (label,), markup_c)
-
-# comment
-SPEC.comment(
-    '',
-    ('comment',),
-    None,
-    ('text',),
-    delimiter_open='%',
-    delimiter_close='')

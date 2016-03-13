@@ -4,7 +4,7 @@ import re
 from lilyflower.syntax import SPEC
 from lilyflower.node import Node
 from lilyflower.tools import property_to_class, generate_docstring
-from lilyflower.errors import InvalidArgument
+from lilyflower.errors import InvalidArgument, InvalidContent
 
 for key in SPEC:
     class_name = property_to_class(key)
@@ -92,3 +92,64 @@ class LilyFile(Node):
         result += "\\version %s\n\n" % self._version
         result += "\n".join(format(item) for item in self._content)
         return result
+
+
+class Comment(Node):
+
+    r"""
+    Comment block.
+
+    Usage:
+        `Comment(content)`
+
+    Parameters
+    ============
+    content: list, str
+
+    Examples
+    ========
+    .. testsetup::
+
+        from lilyflower.dom import Comment
+
+    .. doctest::
+
+        >>> print format(Comment(["single line"]))
+        % single line
+        >>> print format(Comment(["a", "multi-line", "comment"]))
+        %{
+          a
+          multi-line
+          comment
+        %}
+    """
+
+    _types = ('comment',)
+    _allowed_content = ('text',)
+    _delimiter_open = "%"
+    _delimiter_close = ""
+
+    def _validate_content(self, item):
+        """See if string."""
+        # TODO: issue warning when string contains newline
+        if not isinstance(item, basestring):
+            raise InvalidContent("expected string, not %r" % item)
+        return True
+
+    def __format__(self, format_spec):
+        """Return lilypond code."""
+        indent_level = 0
+        if format_spec != "":
+            indent_level = int(format_spec)
+        if len(self._content) == 0:
+            return "%"
+        elif len(self._content) == 1:
+            return "%% %s" % self._content[0]
+        else:
+            result = "%s%%{\n" % ("  " * indent_level)
+            for item in self._content:
+                result += "%s%s\n" % (
+                    ("  " * (indent_level + 1)),
+                    item)
+            result += "%s%%}" % ("  " * indent_level)
+            return result

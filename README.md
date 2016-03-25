@@ -31,6 +31,8 @@ Command and container classes won't be defined individually, but generated from 
 
 Also, I'm going to try and make use of the work the awesome folks at python-ly did. It currently isn't possible to generate .ly code with their tools, but what they do, they do superbly. No need to invent the wheel twice.
 
+Update: I found something that fits my needs after all: music21. So for now, this project is abandoned.
+
 ## Design decisions
 ### Whitespace
 Situation: len(Node.\_content) == 1
